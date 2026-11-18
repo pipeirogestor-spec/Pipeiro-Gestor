@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PipeiroGestor - Ativação Mensal do Gestor</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="stylesheet" href="cadastro-style.css">
+</head>
+<body style="background: #070a13; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+  <div class="auth-container" style="width: 100%; max-width: 480px; padding: 20px;">
+    <div class="auth-card" style="background: rgba(18, 24, 38, 0.95); border: 1px solid rgba(0, 255, 128, 0.3); border-radius: 20px; padding: 30px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      
+      <!-- Logotipo Neon -->
+      <div style="margin-bottom: 20px;">
+        <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 120px; width: 100%; height: auto; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));">
+      </div>
+
+      <h2 style="color: #00ff80; font-size: 1.4rem; margin-bottom: 8px;">💳 Ativação Mensal do Gestor</h2>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px;">Efetue o pagamento via PIX para liberar o seu acesso completo:</p>
+
+      <!-- Valor em Destaque -->
+      <div style="background: rgba(0, 255, 128, 0.08); border: 1px dashed #00ff80; border-radius: 12px; padding: 12px; margin-bottom: 20px;">
+          <span style="font-size: 0.75rem; color: #94a3b8; display: block;">Valor da Assinatura</span>
+          <strong style="font-size: 1.6rem; color: #00ff80;">R$ 49,90</strong>
+      </div>
+
+      <!-- QR Code Limpo Gerado via API -->
+      <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126730014br.gov.bcb.pix0114577011690001960233Assinatura%20painel%20 Pipeiro%20Gestor520400005303986540549.905802BR592557701169%20ANDREA%20ANGELO%20FE6010bonsucesso62290525SU202611170004433219053906304C2FE" alt="QR Code Pix" style="width: 150px; height: 150px; display: block; border-radius: 6px;">
+      </div>
+
+      <!-- Chave PIX (CNPJ) Box -->
+      <div style="background: #0b0f19; border: 1px solid #2d3748; border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left;">
+          <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">CHAVE PIX (CNPJ):</span>
+          <strong style="font-size: 0.95rem; color: #fff; display: block; margin-bottom: 8px;">57.701.169/0001-96</strong>
+          <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">FAVORECIDO / INSTITUIÇÃO:</span>
+          <span style="font-size: 0.85rem; color: #e2e8f0; display: block;">SUMP SOC. DE CREDITO DIRETO SA</span>
+      </div>
+
+      <!-- Campo Pix Copia e Cola -->
+      <div style="margin-bottom: 20px; text-align: left;">
+          <label style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">Pix Copia e Cola:</label>
+          <div style="display: flex; gap: 6px;">
+              <input type="text" id="pixCopiaECola" value="00020126730014br.gov.bcb.pix0114577011690001960233Assinatura painel  Pipeiro Gestor520400005303986540549.905802BR592557701169 ANDREA ANGELO FE6010bonsucesso62290525SU202611170004433219053906304C2FE" readonly style="flex: 1; background: #0b0f19; border: 1px solid #2d3748; color: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.75rem;">
+              <button type="button" onclick="copiarPix()" id="btnCopiar" style="background: #00ff80; color: #0b0f19; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem;">Copiar</button>
+          </div>
+      </div>
+
+      <!-- Nome do Titular do Pix -->
+      <div style="margin-bottom: 20px; text-align: left;">
+          <label for="nomeTitular" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 6px;">NOME DO TITULAR DA CONTA DO PIX *</label>
+          <input type="text" id="nomeTitular" placeholder="Ex: Nome de quem fez a transferência" style="width: 100%; padding: 12px; background: #0b0f19; border: 1px solid #2d3748; border-radius: 8px; color: #fff; box-sizing: border-box; font-size: 0.9rem;" required>
+          <span style="font-size: 0.7rem; color: #718096; display: block; margin-top: 4px;">Informe caso tenha pago pela conta de outra pessoa.</span>
+      </div>
+
+      <!-- Botão de Confirmação -->
+      <button type="button" onclick="enviarComprovante()" style="width: 100%; padding: 14px; background: #00ff88; color: #070a13; border: none; border-radius: 10px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 0 20px rgba(0,255,136,0.3); transition: 0.2s;">
+        Já Fiz o Pagamento / Enviar Comprovante
+      </button>
+
+      <!-- Voltar -->
+      <div style="margin-top: 20px;">
+        <a href="cadastro.html" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">← Voltar para o Login</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function copiarPix() {
+        const inputPix = document.getElementById('pixCopiaECola');
+        inputPix.select();
+        inputPix.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(inputPix.value);
+        
+        const btn = document.getElementById('btnCopiar');
+        btn.innerText = 'Copiado!';
+        btn.style.background = '#00cc66';
+        
+        setTimeout(() => {
+            btn.innerText = 'Copiar';
+            btn.style.background = '#00ff80';
+        }, 2000);
+    }
+
+    function enviarComprovante() {
+        const titularInput = document.getElementById('nomeTitular');
+        const titular = titularInput.value.trim();
+        
+        if(!titular) {
+            alert('Por favor, informe o nome do titular da conta do Pix.');
+            titularInput.focus();
+            return;
+        }
+
+        // Recupera o e-mail do cliente pendente guardado no cadastro
+        const emailPendente = localStorage.getItem('pipeiro_cliente_pendente');
+
+        if (emailPendente) {
+            // Busca a base de dados unificada de assinantes
+            let listaAssinantes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+            let cliente = listaAssinantes.find(c => c.email === emailPendente);
+
+            if (cliente) {
+                // Atualiza os dados do cliente para pendente de análise no admin e guarda o titular do pix
+                cliente.status = 'pendente';
+                cliente.titularPix = titular;
+                
+                // Salva de volta no localStorage
+                localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaAssinantes));
+            }
+        }
+
+        alert('✅ Comprovante registado com sucesso! O seu acesso será liberado assim que o administrador confirmar o pagamento.');
+        
+        // Limpa o temporário e redireciona de volta para a tela de login
+        localStorage.removeItem('pipeiro_cliente_pendente');
+        window.location.href = 'cadastro.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ação / Rifa | PipeiroGestor</title>
+  <link rel="stylesheet" href="rifa-style.css">
+</head>
+<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding-bottom: 90px;">
+
+  <!-- BARRA DE TOPO FIXA COM LOGO OFICIAL, TUTORIAL E SUPORTE -->
+  <header style="background: #111827; border-bottom: 1px solid #1e293b; padding: 12px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+    
+    <!-- LOGO PIPEIROGESTOR OFICIAL (IGUAL AO GESTOR) -->
+    <div style="display: flex; align-items: center; gap: 10px; cursor:https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" id="logoHeaderImg" style="height: 36px; width: auto; object-fit: contain;" />
+    </div>
+
+    <!-- BOTÕES DE AÇÃO NO TOPO -->
+    <div style="display: flex; gap: 8px;">
+      <button onclick="abrirModalComoFunciona()" style="background: #1e293b; color: #38bdf8; border: 1px solid #0284c7; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        💡 Como Funciona
+      </button>
+
+      <a id="btnSuporteWppHeader" href="#" target="_blank" style="display: flex; align-items: center; gap: 5px; background: #25d366; color: #fff; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">
+        📱 Suporte
+      </a>
+    </div>
+  </header>
+
+  <!-- CRONÔMETRO DE URGÊNCIA -->
+  <div style="background: linear-gradient(90deg, #ef4444, #dc2626); color: #fff; padding: 8px; text-align: center; font-weight: bold; font-size: 13px;">
+    ⚡ Suas cotas ficam reservadas por: <span id="contadorRegressivoTopo" style="background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; font-family: monospace;">10:00</span>
+  </div>
+
+  <main style="max-width: 600px; margin: 20px auto; padding: 0 15px;">
+
+    <!-- CARD PRINCIPAL DE DETALHES -->
+    <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+      
+      <h1 id="tituloPremio" style="color: #00ff88; margin-top: 0; font-size: 22px;">Carregando ação...</h1>
+
+      <!-- Bloco do Carrossel de Imagens do Prêmio -->
+      <div class="carrossel-container" style="position: relative; width: 100%; max-width: 500px; margin: 15px auto; border-radius: 10px; overflow: hidden; background: #0f172a; border: 1px solid #1e293b; padding: 10px;">
+        <img id="imgPremioCarrossel" src="" alt="Foto do Prêmio" style="width: 100%; max-height: 250px; object-fit: contain; border-radius: 8px; display: none;">
+        
+        <!-- Botão Anterior -->
+        <button type="button" id="btnAnteriorFoto" onclick="mudarFotoCarrossel(-1)" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 16px;">❮</button>
+        
+        <!-- Botão Próximo -->
+        <button type="button" id="btnProximaFoto" onclick="mudarFotoCarrossel(1)" style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 16px;">❯</button>
+        
+        <!-- Indicador de Fotos (Ex: 1 / 3) -->
+        <div id="indicadorFoto" style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.8); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 12px; display: none;">1 / 1</div>
+      </div>
+
+      <!-- DESCRIÇÃO E REGULAMENTO -->
+      <div style="background: #0f172a; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #00ff88;">
+        <span style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase;">Regulamento / Detalhes:</span>
+        <p id="descricaoPremio" style="color: #cbd5e1; font-size: 13px; margin: 5px 0 0 0; line-height: 1.4; white-space: pre-line;"></p>
+      </div>
+
+      <!-- VALOR E PROGRESSO -->
+      <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #1e293b;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <div>
+            <span style="color: #94a3b8; font-size: 12px; display: block;">Valor por cota:</span>
+            <strong id="valorPorCota" style="color: #00ff88; font-size: 24px;">R$ --,--</strong>
+          </div>
+          <span style="background: rgba(0,255,136,0.1); color: #00ff88; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid rgba(0,255,136,0.2);">
+            🔒 Sorteio Oficial
+          </span>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-bottom: 6px;">
+          <span>Progresso de vendas:</span>
+          <span id="porcentagemVendida">0% reservado</span>
+        </div>
+        <div style="background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden;">
+          <div id="barraProgresso" style="background: linear-gradient(90deg, #00ff88, #10b981); width: 0%; height: 100%; transition: width 0.4s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO DE COTAS -->
+    <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; margin-top: 20px;">
+      <h3 style="margin-top: 0; color: #e2e8f0; font-size: 16px;">🎟️ Escolha seus Números</h3>
+      <div id="gridCotas" class="cotas-grid"></div>
+    </div>
+
+    <!-- 1. CONSULTA DE MEUS NÚMEROS -->
+    <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; margin-top: 20px; text-align: center;">
+      <h4 style="margin: 0 0 6px 0; color: #00ff88; font-size: 15px;">🔍 Já comprou nesta ação?</h4>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0 0 12px 0;">Digite seu WhatsApp para consultar seus números reservados:</p>
+      
+      <div style="display: flex; gap: 8px; max-width: 400px; margin: 0 auto;">
+        <input type="tel" id="inputBuscarMeusNumeros" placeholder="Ex: 21999999999" style="flex: 1; padding: 10px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none;" />
+        <button onclick="buscarMeusNumeros()" style="padding: 10px 18px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; transition: background 0.2s ease;">
+          Buscar
+        </button>
+      </div>
+      <div id="resultadoBuscaNumeros" style="margin-top: 10px; font-size: 13px; color: #cbd5e1;"></div>
+    </div>
+
+    <!-- 2. SOBRE O ORGANIZADOR DA AÇÃO -->
+    <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+      <div>
+        <span style="font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: bold; display: block;">Organizador Responsável:</span>
+        <strong id="nomeOrganizadorDisplay" style="color: #fff; font-size: 16px;">PipeiroGestor Oficial</strong>
+      </div>
+      <a id="btnContatoOrganizador" href="#" target="_blank" style="padding: 8px 16px; background: #1e293b; border: 1px solid #334155; color: #25d366; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+        💬 Falar com Organizador
+      </a>
+    </div>
+
+    <!-- 3. GARANTIA E SEGURANÇA -->
+    <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 15px 20px; margin-top: 20px; text-align: center;">
+      <div style="display: flex; justify-content: center; gap: 20px; color: #94a3b8; font-size: 12px; flex-wrap: wrap;">
+        <span>🔒 Pagamento Seguro via PIX</span>
+        <span>⚡ Reserva Instantânea</span>
+        <span>🏆 Sorteio Transparente</span>
+      </div>
+    </div>
+
+    <!-- 4. RODAPÉ -->
+    <footer style="text-align: center; margin-top: 30px; color: #64748b; font-size: 12px;">
+      <p>© 2026 PipeiroGestor - Sistema de Gestão de Rifas e Festivais</p>
+    </footer>
+
+  </main>
+
+  <!-- CARRINHO FLUTUANTE DE COMPRA -->
+  <div id="carrinhoFloat" style="display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: #111827; border: 1px solid #00ff88; padding: 12px 20px; border-radius: 30px; box-shadow: 0 6px 25px rgba(0,255,136,0.35); align-items: center; gap: 15px; z-index: 999; width: 90%; max-width: 450px; justify-content: space-between;">
+    <div>
+      <span id="textoQtdSelecionadas" style="display: block; font-size: 11px; color: #94a3b8;">0 cota(s)</span>
+      <strong id="valorTotalCarrinho" style="font-size: 18px; color: #00ff88;">R$ 0,00</strong>
+    </div>
+    <button onclick="abrirPassoIdentificacao()" style="padding: 10px 18px; background: #00ff88; color: #000; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 14px;">
+      Continuar ➡️
+    </button>
+  </div>
+
+  <!-- MODAL DE CHECKOUT EM ETAPAS (PASSO A PASSO) -->
+  <div id="modalCheckout" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px);">
+    <div style="background: #111827; border: 1px solid #1e293b; padding: 25px; border-radius: 14px; color: #fff; max-width: 420px; width: 90%; position: relative;">
+      
+      <button onclick="fecharCheckout()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✕</button>
+
+      <!-- PASSO 1: IDENTIFICAÇÃO DO COMPRADOR -->
+      <div id="etapaIdentificacao">
+        <h3 style="color: #00ff88; margin-top: 0; text-align: center; font-size: 18px;">👤 Seus Dados de Contato</h3>
+        <p style="text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Preencha para vincular seus números reservados:</p>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px;">Nome Completo *</label>
+          <input type="text" id="inputNomeComprador" placeholder="Digite seu nome" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box;" />
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px;">WhatsApp (com DDD) *</label>
+          <input type="tel" id="inputWppComprador" placeholder="Ex: 21999999999" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box;" />
+        </div>
+
+        <button onclick="registrarPedidoNoGestor()" style="width: 100%; padding: 12px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px;">
+          Avançar para Pagamento ➡️
+        </button>
+      </div>
+
+      <!-- PASSO 2: EXIBIÇÃO DA CHAVE PIX DA CAMPANHA -->
+      <div id="etapaPagamentoPix" style="display: none;">
+        <h3 style="color: #00ff88; margin-top: 0; text-align: center; font-size: 18px;">💳 Pagamento via PIX</h3>
+        <p style="text-align: center; color: #94a3b8; font-size: 12px; margin-bottom: 15px;">Copie a chave e faça o pagamento no app do seu banco:</p>
+
+        <!-- BOX DE EXIBIÇÃO DO PIX -->
+        <div style="background: #0f172a; border: 1px dashed #00ff88; padding: 15px; border-radius: 8px; text-align: center; margin: 15px 0;">
+          <span id="tipoChavePixDisplay" style="display: block; color: #94a3b8; font-size: 11px; text-transform: uppercase;">Tipo: PIX</span>
+          <strong id="textoChavePix" style="display: block; font-size: 18px; color: #00ff88; margin: 8px 0; word-break: break-all;">-</strong>
+          <span id="titularPixDisplay" style="display: block; color: #cbd5e1; font-size: 12px;">Titular: -</span>
+        </div>
+
+        <button onclick="copiarChavePix()" style="width: 100%; padding: 12px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 12px; font-size: 14px;">
+          📋 Copiar Chave PIX
+        </button>
+
+        <button onclick="enviarComprovanteWpp()" style="width: 100%; padding: 12px; background: #25d366; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;">
+          📱 Enviar Comprovante no WhatsApp
+        </button>
+
+        <button onclick="location.reload()" style="background: transparent; border: 1px solid #475569; color: #cbd5e1; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;">
+          🔄 Concluir / Fazer Novo Pedido
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL "COMO FUNCIONA" -->
+  <div id="modalComoFunciona" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px);">
+    <div style="background: #111827; border: 1px solid #1e293b; padding: 25px; border-radius: 14px; color: #fff; max-width: 400px; width: 90%; position: relative;">
+      
+      <button onclick="fecharModalComoFunciona()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✕</button>
+
+      <h3 style="color: #00ff88; margin-top: 0; text-align: center;">💡 Como Funciona?</h3>
+      
+      <div style="margin-top: 15px; font-size: 13px; color: #cbd5e1; line-height: 1.6;">
+        <p>1️⃣ <strong>Escolha seus números:</strong> Toque sobre as cotas desejadas para selecioná-las.</p>
+        <p>2️⃣ <strong>Confirme seus dados:</strong> Digite seu Nome e WhatsApp para vincular a reserva ao seu perfil.</p>
+        <p>3️⃣ <strong>Faça o Pix:</strong> Copie a chave Pix do organizador e realize a transferência no seu banco.</p>
+        <p>4️⃣ <strong>Envie o Comprovante:</strong> Clique no botão verde para enviar o comprovante diretamente no WhatsApp e garantir sua participação!</p>
+      </div>
+
+      <button onclick="fecharModalComoFunciona()" style="width: 100%; padding: 10px; background: #334155; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px;">
+        Entendi!
+      </button>
+    </div>
+  </div>
+<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+  <script src="rifa-script.js"></script>
+</body>
+</html>

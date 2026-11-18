@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PipeiroGestor - Painel do Organizador</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="stylesheet" href="gestor-style.css">
+</head>
+<body>
+  <!-- TELA DE CARREGAMENTO (SPLASH SCREEN) -->
+  <div id="splash-screen">
+    <div class="splash-content">
+      <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" class="splash-logo" alt="PipeiroGestor" />
+      <p id="splash-frase" class="splash-frase">Preparando o festival de pipas...</p>
+      <div class="splash-progress-bar">
+        <div id="splash-progress-fill" class="splash-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA DE TOPO EXCLUSIVA PARA CELULAR -->
+  <header class="mobile-header">
+    <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor" class="mobile-logo">
+    <button class="btn-menu-mobile" onclick="toggleMenuMobile()"><i class="fas fa-bars">☰</i></button>
+  </header>
+
+  <div class="app">
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="sidebar" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div class="brand">
+          <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" class="brand-logo" alt="PipeiroGestor Logo" />
+        </div>
+
+        <nav class="nav">
+          <a href="#visao-geral" class="nav-item active" onclick="event.preventDefault(); navegarParaAba('visao-geral')">
+            <span class="icon">📊</span>
+            <span>Visão Geral</span>
+          </a>
+          <a href="#nova-campanha" class="nav-item" onclick="event.preventDefault(); navegarParaAba('form-container')">
+            <span class="icon">🚀</span>
+            <span>Criar Campanha</span>
+          </a>
+          <a href="#minhas-campanhas-section" class="nav-item" onclick="event.preventDefault(); navegarParaAba('minhas-campanhas-section')">
+            <span class="icon">📁</span>
+            <span>Minhas Campanhas</span>
+          </a>
+          <a href="#pedidos" class="nav-item" onclick="event.preventDefault(); navegarParaAba('pedidos')">
+            <span class="icon">🧾</span>
+            <span>Pedidos & Comprovantes</span>
+          </a>
+          <a href="#configuracoes" class="nav-item" onclick="event.preventDefault(); navegarParaAba('configuracoes')">
+            <span class="icon">⚙️</span>
+            <span>Configurações</span>
+          </a>
+          <a href="#ajuda" class="nav-item" onclick="abrirModalAjuda(event)">
+            <span class="icon">📖</span>
+            <span>Como Usar / Tutorial</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- BOTÃO DE TERMINAR SESSÃO NO FINAL DA SIDEBAR -->
+      <div style="padding: 15px;">
+        <button onclick="fazerLogout()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          🚪 Terminar Sessão
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL (MAIN) -->
+    <main class="main">
+      <!-- CABEÇALHO DO PAINEL -->
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">PIPEIROGESTOR / ADMINISTRAÇÃO</span>
+          <h1 id="page-title">Visão Geral</h1>
+          <p class="muted">Gerencie suas rifas de pipas e validações manuais em um só lugar.</p>
+        </div>
+        <button class="primary-button" id="new-campaign" onclick="navegarParaAba('form-container')">
+          + Nova campanha
+        </button>
+      </header>
+
+      <!-- SEÇÃO DE MÉTRICAS / RESUMO (PARTE DA VISÃO GERAL) -->
+      <section class="stats-grid">
+        <div class="stat-card" onclick="gerenciarArrecadacaoHoje()" title="Clique para gerenciar ou zerar">
+          <span class="stat-label">Arrecadado Hoje</span>
+          <h2 class="stat-value" id="totalHojeDisplay">R$ 0,00</h2>
+          <span class="stat-sub">Vendas registradas hoje (Clique para zerar)</span>
+        </div>
+
+        <div class="stat-card" onclick="gerenciarTotalArrecadado()" title="Clique para gerenciar ou zerar">
+          <span class="stat-label">Total Arrecadado</span>
+          <h2 class="stat-value" id="totalGeralDisplay">R$ 0,00</h2>
+          <span class="stat-sub">Soma de todas as ações (Clique para zerar)</span>
+        </div>
+
+        <div class="stat-card" onclick="gerenciarCotasVendidas()" title="Clique para gerenciar ou zerar">
+          <span class="stat-label">Cotas Vendidas</span>
+          <h2 class="stat-value" id="cotasVendidasDisplay">0</h2>
+          <span class="stat-sub">Total de bilhetes vendidos (Clique para zerar)</span>
+        </div>
+
+        <div class="stat-card" onclick="navegarParaAba('minhas-campanhas-section')">
+          <span class="stat-label">Campanhas Ativas</span>
+          <h2 class="stat-value" id="totalAtivasDisplay" style="color: #00ff88;">0</h2>
+          <span class="stat-sub">Campanhas rodando agora</span>
+        </div>
+
+        <div class="stat-card" onclick="navegarParaAba('minhas-campanhas-section')">
+          <span class="stat-label">Campanhas Inativas</span>
+          <h2 class="stat-value" id="totalInativasDisplay" style="color: #f59e0b;">0</h2>
+          <span class="stat-sub">Pausadas ou encerradas</span>
+        </div>
+
+        <div class="stat-card warning" onclick="navegarParaAba('pedidos')">
+          <span class="stat-label">Pagamentos Pendentes</span>
+          <h2 class="stat-value" id="pedidosPendentesDisplay" style="color: #3b82f6;">0 Pedidos</h2>
+          <span class="stat-sub">Aguardando validação</span>
+        </div>
+      </section>
+
+      <!-- PAINEL DE DASHBOARD DA HOME (PARTE DA VISÃO GERAL) -->
+      <section id="home-dashboard-widgets" style="margin-top: 25px;">
+        <div style="background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="color: #fff; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+            🚀 Campanhas Ativas em Destaque
+          </h3>
+          <div id="homeCampanhasAtivasGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+            <p style="color: #94a3b8; font-size: 13px;">Carregando campanhas ativas...</p>
+          </div>
+        </div>
+
+        <div style="background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: #fff; font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+              💵 Últimas Vendas Aprovadas
+            </h3>
+            <button type="button" onclick="limparHistoricoVendas()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">
+              🗑️ Limpar Histórico
+            </button>
+          </div>
+          <div id="homeUltimasVendasList" class="lista-vendas-scroll" style="display: flex; flex-direction: column; gap: 10px;">
+            <p style="color: #94a3b8; font-size: 13px;">Nenhuma venda recente registrada.</p>
+          </div>
+        </div>
+
+        <div style="background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: #fff; font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+              🏆 Top Ganhadores / Sorteios Realizados
+            </h3>
+            <button type="button" onclick="limparTopGanhadores()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">
+              🗑️ Limpar Ganhadores
+            </button>
+          </div>
+          <div id="homeTopGanhadoresList" style="display: flex; flex-direction: column; gap: 10px;">
+            <p style="color: #94a3b8; font-size: 13px;">Nenhum ganhador registrado no momento.</p>
+          </div>
+        </div>
+
+        <div style="background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+          <h4 style="color: #00ff88; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            💡 Dica de Ouro para Vender Mais
+          </h4>
+          <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin: 0;">
+            Divulgue o link da sua rifa nos grupos de WhatsApp e compartilhe fotos ou vídeos reais dos prêmios no story do Instagram para gerar desejo imediato e esgotar suas cotas rapidamente!
+          </p>
+        </div>
+      </section>
+
+      <!-- FORMULÁRIO DE CADASTRO DE NOVA AÇÃO -->
+      <div id="form-container" class="card-form-container" style="display: none; margin-bottom: 30px;">
+        <div class="form-header">
+          <h2>Criar Nova Ação / Campanha</h2>
+          <p>Preencha os dados abaixo para publicar sua rifa e gerar o link de vendas para seus compradores.</p>
+        </div>
+
+        <form id="formCriarAcao" onsubmit="event.preventDefault();">
+          <fieldset class="form-section">
+            <legend>Informações Principais</legend>
+
+            <div class="form-group">
+              <label for="tituloAcao">Título da Ação *</label>
+              <input type="text" id="tituloAcao" placeholder="Ex: Porco Premiado R$ 5.000 no PIX" required />
+            </div>
+
+            <div class="form-group">
+              <label for="descricaoAcao">Descrição / Regulamento</label>
+              <textarea id="descricaoAcao" rows="3" placeholder="Descreva os prêmios, data do sorteio e regras..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Fotos do Prêmio / Banner da Ação (Até 3 fotos) *</label>
+              <div class="file-upload-box" onclick="document.getElementById('fotoPremio').click()" style="border: 2px dashed #00ff88; padding: 20px; text-align: center; border-radius: 8px; background: #0f172a; cursor: pointer;">
+                <input type="file" id="fotoPremio" accept="image/*" multiple onchange="atualizarNomeFoto(this)" style="display: none;" />
+                <span id="textoUploadFoto" style="color: #00ff88; font-weight: bold; pointer-events: none;">
+                  📷 Clique aqui para selecionar as fotos do prêmio (até 3 fotos)
+                </span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="precoUnitario">Preço por Número (R$) *</label>
+                <input type="number" id="precoUnitario" step="0.01" min="0.10" placeholder="10.00" required />
+              </div>
+
+              <div class="form-group">
+                <label for="temaCotas">Estilo Visual das Cotas *</label>
+                <select id="temaCotas" required>
+                  <option value="numeros">Apenas Números (Padrão)</option>
+                  <option value="animais">Números com Animais (Fazendinha/Porquinho)</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>2. Tabela de Promoções (Pacotes de Desconto)</legend>
+            <p class="section-help">Configure descontos automáticos quando o comprador selecionar mais cotas.</p>
+
+            <div id="containerPromocoes">
+              <div class="promocao-item">
+                <input type="number" placeholder="Qtd Cotas (Ex: 3)" class="promocao-qtd" />
+                <span>cotas por R$</span>
+                <input type="number" step="0.01" placeholder="Valor Total (Ex: 25.00)" class="promocao-valor" />
+              </div>
+            </div>
+
+            <button type="button" class="btn-secondary" onclick="adicionarLinhaPromocao()">+ Adicionar Nova Promoção</button>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend>3. Dados de Recebimento PIX</legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tipoChavePix">Tipo de Chave *</label>
+                <select id="tipoChavePix" required>
+                  <option value="CPF">CPF / CNPJ</option>
+                  <option value="Celular">Telefone / WhatsApp</option>
+                  <option value="E-mail">E-mail</option>
+                  <option value="Chave Aleatória">Chave Aleatória / Copia e Cola</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="chavePix">Chave PIX / Código Copia e Cola *</label>
+                <input type="text" id="chavePix" placeholder="Digite a chave PIX ou cole o código" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="titularPix">Nome do Titular da Conta *</label>
+              <input type="text" id="titularPix" placeholder="Nome completo que aparece no banco" required />
+            </div>
+          </fieldset>
+
+          <div style="margin-top: 25px;">
+            <button type="button" onclick="gerarLinkAcao()" style="width: 100%; padding: 16px; background: #00ff88; color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);">
+              💾 Publicar Ação e Gerar Link
+            </button>
+          </div>
+        </form>
+
+        <!-- CAIXA DE LINK GERADO RESPONSIVA -->
+        <div id="boxLinkGerado" style="display: none; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-top: 20px; box-sizing: border-box; width: 100%;">
+          <div style="text-align: center; margin-bottom: 15px;">
+            <span style="background: rgba(0,255,136,0.15); color: #00ff88; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">🎉 Ação Criada com Sucesso!</span>
+            <h3 style="color: #fff; font-size: 16px; margin: 10px 0 5px 0;">Sua campanha já está online</h3>
+            <p style="color: #94a3b8; font-size: 12px; margin: 0;">Copie o link abaixo e divulgue para seus clientes:</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 15px; box-sizing: border-box;">
+            <input type="text" id="inputUrlGerada" readonly style="width: 100%; background: #0b0f19; border: 1px solid #334155; color: #00ff88; padding: 12px; border-radius: 8px; font-size: 12px; box-sizing: border-box; outline: none; text-align: center;">
+            
+            <button type="button" onclick="copiarLink()" style="width: 100%; background: #00ff88; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 0 15px rgba(0,255,136,0.3); display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box;">
+              📋 Copiar Link da Campanha
+            </button>
+          </div>
+
+          <a id="btnShareWhatsapp" href="#" target="_blank" style="display: block; width: 100%; background: #25d366; color: #fff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; box-sizing: border-box; box-shadow: 0 0 15px rgba(37,211,102,0.3);">
+            💬 Compartilhar no WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- TABELA DE PEDIDOS E PENDÊNCIAS DE VALIDAÇÃO -->
+      <section id="pedidos" class="data-section" style="display: none; margin-bottom: 30px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+          <input type="text" id="inputBuscaPedidos" onkeyup="filtrarPedidosGestor()" placeholder="🔍 Pesquisar por nome ou WhatsApp..." style="padding: 12px; flex: 1; min-width: 220px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #fff;">
+          
+          <select id="filtroCampanhaPedidos" onchange="carregarPedidosEComprovantes()" style="padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; cursor: pointer;">
+            <option value="todas">🎯 Todas as Campanhas</option>
+          </select>
+        </div>
+
+        <div class="section-header">
+          <div class="pendentes-header-group">
+            <span class="section-tag-verde">3 Aguardando Validação</span>
+            <h2 class="editorial-title-pendentes">Pedidos & Validações Pendentes</h2>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Comprador</th>
+                <th>Telefone / WhatsApp</th>
+                <th>Cotas Reservadas</th>
+                <th>Valor Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" style="text-align: center; color: #8b9bb4; padding: 25px;">
+                  Nenhum pedido pendente no momento.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SEÇÃO CONFIGURAÇÕES DO GESTOR -->
+      <section id="configuracoes" class="section-container" style="display: none;">
+        <div class="section-header" style="margin-bottom: 25px;">
+          <h2 style="color: #00ff88; font-size: 22px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;">
+            ⚙️ Configurações do Gestor
+          </h2>
+          <p style="color: #94a3b8; font-size: 14px; margin: 0;">
+            Personalize seus dados de perfil, chave PIX padrão e informações de suporte.
+          </p>
+        </div>
+
+        <form id="formConfiguracoes" onsubmit="salvarConfiguracoes(event)">
+          <fieldset class="form-section" style="background: #111827; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <legend style="color: #00ff88; font-weight: bold; padding: 0 10px;">Perfil e Marca</legend>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+              <label for="cfgNomeOrganizador" style="color: #e2e8f0; display: block; margin-bottom: 6px; font-weight: bold;">Nome do Organizador / Marca *</label>
+              <input type="text" id="cfgNomeOrganizador" placeholder="Ex: Pipeiro Gestor" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
+            </div>
+
+            <div class="form-group">
+              <label for="cfgWhatsappSuporte" style="color: #e2e8f0; display: block; margin-bottom: 6px; font-weight: bold;">WhatsApp de Suporte (para compradores) *</label>
+              <input type="tel" id="cfgWhatsappSuporte" placeholder="Ex: 21974056744" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section" style="background: #111827; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <legend style="color: #00ff88; font-weight: bold; padding: 0 10px;">2. Configuração PIX Padrão</legend>
+            <p style="color: #94a3b8; font-size: 13px; margin-top: 0; margin-bottom: 15px;">
+              Esses dados serão usados como padrão para preencher automaticamente as novas rifas que você criar.
+            </p>
+
+            <div class="form-row" style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+              <div class="form-group" style="flex: 1; min-width: 200px;">
+                <label for="cfgTipoChavePix" style="color: #e2e8f0; display: block; margin-bottom: 6px; font-weight: bold;">Tipo de Chave Padrão</label>
+                <select id="cfgTipoChavePix" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;">
+                  <option value="CPF">CPF / CNPJ</option>
+                  <option value="CELULAR">Telefone / Celular</option>
+                  <option value="EMAIL">E-mail</option>
+                  <option value="ALEATORIA">Chave Aleatória</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="flex: 2; min-width: 250px;">
+                <label for="cfgChavePix" style="color: #e2e8f0; display: block; margin-bottom: 6px; font-weight: bold;">Chave PIX Padrão *</label>
+                <input type="text" id="cfgChavePix" placeholder="Digite sua chave PIX" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cfgTitularPix" style="color: #e2e8f0; display: block; margin-bottom: 6px; font-weight: bold;">Nome do Titular da Conta *</label>
+              <input type="text" id="cfgTitularPix" placeholder="Ex: Vinícius Silva" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
+            </div>
+          </fieldset>
+
+          <div style="text-align: right; margin-top: 10px;">
+            <button type="submit" style="padding: 14px 28px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);">
+              💾 Salvar Configurações
+            </button>
+          </div>
+        </form>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(239, 68, 68, 0.05); border: 1px solid #ef4444; border-radius: 12px;">
+          <h3 style="color: #ef4444; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            ⚠️ Zona de Perigo / Manutenção
+          </h3>
+          <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px; line-height: 1.4;">
+            Precisa de reiniciar o sistema ou limpar os dados de teste? Esta ação limpa o histórico local do gestor de forma permanente.
+          </p>
+          <button type="button" onclick="confirmarLimpezaTotalSistema()" style="background-color: #ef4444; color: #ffffff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">
+            🗑️ Limpar Todos os Dados / Reset do Sistema
+          </button>
+        </div>
+      </section>
+
+      <!-- SEÇÃO: MINHAS CAMPANHAS CRIADAS -->
+      <section id="minhas-campanhas-section" class="dashboard-section" style="display: none; margin-top: 40px; padding: 20px; background: #0f172a; border-radius: 12px; border: 1px solid #1e293b;">
+        <div class="section-header" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 style="color: #fff; font-size: 20px; margin: 0 0 4px 0;">📁 Minhas Campanhas Criadas</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin: 0;">Gerencie, edite, pause ou exclua suas ações ativas.</p>
+          </div>
+          
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="filtrarCampanhasGestor('todas')" class="btn-filtro active-filtro" style="padding: 6px 12px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">Todas</button>
+            <button onclick="filtrarCampanhasGestor('ativas')" class="btn-filtro" style="padding: 6px 12px; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">Ativas</button>
+            <button onclick="filtrarCampanhasGestor('pausadas')" class="btn-filtro" style="padding: 6px 12px; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">Pausadas</button>
+            <button onclick="exportarRelatorioCSV()" style="padding: 6px 12px; background: #10b981; color: #fff; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px;">📥 Exportar CSV</button>
+          </div>
+        </div>
+
+        <div id="listaMinhasCampanhas" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+          <p style="color: #94a3b8;">Nenhuma campanha criada ainda. Crie uma preenchendo o formulário!</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL DE GUIA / TUTORIAL DO GESTOR -->
+  <div class="modal-overlay" id="modalAjuda" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 9, 13, 0.85); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+    <div class="modal-content" style="background: var(--bg-card, #121f2c); border: 1px solid var(--neon-green, #00ff88); border-radius: 20px; width: 90%; max-width: 600px; padding: 30px; box-shadow: 0 0 30px rgba(0, 255, 136, 0.4); max-height: 85vh; overflow-y: auto; color: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="color: var(--neon-green, #00ff88); font-size: 20px;">Manual do PipeiroGestor</h2>
+        <button onclick="fecharModalAjuda()" style="background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer;">&times;</button>
+      </div>
+      
+      <div style="font-size: 14px; line-height: 1.6; color: #cbd5e1;">
+        <p style="margin-bottom: 15px;">Bem-vindo ao <strong>PipeiroGestor</strong>! Aqui está o passo a passo completo para você criar suas ações de sucesso e lucrar com zero taxa:</p>
+        
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00ff88;">
+          <strong>🚀 1. Criando uma Campanha:</strong><br>
+          Vá em "Criar Campanha", preencha o título, o valor por cota e selecione o tipo de chave PIX e estilo de cotas. Insira sua chave PIX e clique em publicar.
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00ff88;">
+          <strong>📢 2. Divulgando para os Compradores:</strong><br>
+          Copie o link gerado ou clique no botão direto do WhatsApp.
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #00ff88;">
+          <strong>🧾 3. Validando Comprovantes:</strong><br>
+          Gerencie os pedidos na tabela para dar baixa na sua arrecadação.
+        </div>
+      </div>
+
+      <button onclick="fecharModalAjuda()" style="width: 100%; background: var(--neon-green, #00ff88); color: #0a1118; border: none; padding: 12px; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px;">Entendido, Vamos Faturar!</button>
+    </div>
+  </div>
+
+  <!-- MODAL CUSTOMIZADA PARA CONFIRMAÇÃO DE RESET -->
+  <div id="modalResetPersonalizado" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 9, 13, 0.85); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 500;">
+    <div style="background: #121f2c; border: 1px solid #00ff88; border-radius: 16px; width: 90%; max-width: 420px; padding: 25px; box-shadow: 0 0 30px rgba(0, 255, 136, 0.3); text-align: center; color: #fff;">
+      <div style="font-size: 32px; margin-bottom: 10px;">⚠️</div>
+      <h3 id="modalResetTitulo" style="color: #00ff88; font-size: 18px; margin-bottom: 10px;">Confirmação de Reset</h3>
+      <p id="modalResetTexto" style="color: #94a3b8; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">Desejas realmente zerar este valor?</p>
+      
+      <div style="display: flex; gap: 10px;">
+        <button type="button" onclick="fecharModalReset()" style="flex: 1; background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+          Cancelar
+        </button>
+        <button type="button" id="btnConfirmarResetModal" style="flex: 1; background: #00ff88; color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,136,0.3);">
+          Sim, Zerar
+        </button>
+      </div>
+    </div>
+  </div>
+<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+  <script src="gestor-script.js"></script>
+</body>
+</html>

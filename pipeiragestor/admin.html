@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PipeiroGestor - Painel Master (Super Admin)</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="stylesheet" href="gestor-style.css">
+</head>
+<body style="background: #0a0f1d; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px;">
+
+  <div style="max-width: 1200px; margin: 0 auto;">
+    
+    <!-- Cabeçalho do Master Admin -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="Logo" style="max-width: 50px; height: auto;">
+        <div>
+          <h1 style="margin: 0; font-size: 20px; color: #00ff88;">👑 PipeiroGestor - Painel Master SaaS</h1>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #94a3b8;">Central de controlo global de assinantes, faturamento e ativações PIX.</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="abrirModalNovoCliente()" style="background: #00ff88; color: #000; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; box-shadow: 0 0 10px rgba(0,255,136,0.3);">➕ Novo Assinante</button>
+        <button onclick="fazerLogoutAdmin()" style="background: #ef4444; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; box-shadow: 0 0 10px rgba(239,68,68,0.3);">🚪 Terminar Sessão</button>
+      </div>
+    </div>
+
+    <!-- Estatísticas Globais do SaaS (4 Cards Executivos) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
+      <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b;">
+        <span style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase;">Total de Assinantes</span>
+        <h2 id="statTotalAssinantes" style="color: #fff; font-size: 26px; margin: 8px 0 0 0;">0</h2>
+      </div>
+      <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b;">
+        <span style="font-size: 11px; color: #f59e0b; font-weight: bold; text-transform: uppercase;">Pendentes / Análise PIX</span>
+        <h2 id="statPendentes" style="color: #f59e0b; font-size: 26px; margin: 8px 0 0 0;">0</h2>
+      </div>
+      <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b;">
+        <span style="font-size: 11px; color: #00ff88; font-weight: bold; text-transform: uppercase;">Assinantes Ativos</span>
+        <h2 id="statAtivos" style="color: #00ff88; font-size: 26px; margin: 8px 0 0 0;">0</h2>
+      </div>
+      <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1e293b;">
+        <span style="font-size: 11px; color: #3b82f6; font-weight: bold; text-transform: uppercase;">Faturamento Mensal (MRR)</span>
+        <h2 id="statFaturamento" style="color: #3b82f6; font-size: 26px; margin: 8px 0 0 0;">R$ 0,00</h2>
+      </div>
+    </div>
+
+    <!-- Secção da Tabela de Gestão de Clientes -->
+    <div style="background: #111827; border: 1px solid #1e293b; padding: 25px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);">
+      
+      <!-- Cabeçalho da Tabela & Filtros -->
+      <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div>
+          <h2 style="color: #fff; font-size: 18px; margin: 0 0 4px 0;">📋 Base de Dados de Assinantes</h2>
+          <p style="color: #94a3b8; font-size: 13px; margin: 0;">Valide o titular do PIX, aprove acessos ou faça contacto direto via WhatsApp.</p>
+        </div>
+        
+        <!-- Barra de Pesquisa e Botões de Filtro Rápido -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <input type="text" id="inputPesquisaAdmin" placeholder="🔍 Pesquisar por nome ou e-mail..." onkeyup="filtrarAssinantesAdmin()" style="padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none; width: 220px;">
+          <button onclick="carregarPainelMaster()" style="padding: 10px 14px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;" title="Atualizar dados">🔄</button>
+        </div>
+      </div>
+
+      <!-- Filtros Rápidos por Estado -->
+      <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+        <button onclick="definirFiltroEstado('todos', event)" class="btn-filtro-admin ativo" style="padding: 6px 14px; background: #3b82f6; color: #fff; border: 1px solid #3b82f6; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">Todos</button>
+        <button onclick="definirFiltroEstado('pendente', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">🟡 Pendentes</button>
+        <button onclick="definirFiltroEstado('aprovado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">🟢 Ativos</button>
+        <button onclick="definirFiltroEstado('bloqueado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">🔴 Bloqueados</button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 1px solid #1e293b; color: #94a3b8; font-size: 12px; text-transform: uppercase;">
+              <th style="padding: 12px;">Gestor / Cliente</th>
+              <th style="padding: 12px;">Contacto (E-mail / WhatsApp)</th>
+              <th style="padding: 12px;">Titular do PIX Informado</th>
+              <th style="padding: 12px;">Estado da Assinatura</th>
+              <th style="padding: 12px; text-align: center;">Ações de Controlo</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaMasterBody">
+            <tr>
+              <td colspan="5" style="text-align: center; color: #8b9bb4; padding: 30px;">A carregar base de clientes...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL PARA ADICIONAR CLIENTE MANUALMENTE -->
+  <div id="modalNovoCliente" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 20px;">
+    <div style="background: #111827; border: 1px solid #1e293b; padding: 30px; border-radius: 16px; width: 100%; max-width: 450px; color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.5);">
+      <h3 style="color: #00ff88; margin-top: 0; margin-bottom: 15px; font-size: 18px;">➕ Adicionar Assinante Manualmente</h3>
+      <p style="color: #94a3b8; font-size: 12px; margin-bottom: 20px;">Crie e aprove a conta de um cliente que pagou diretamente por PIX fora da plataforma.</p>
+      
+      <div style="margin-bottom: 15px; text-align: left;">
+        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 5px;">NOME DO GESTOR</label>
+        <input type="text" id="modalNome" placeholder="Ex: Carlos Silva" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+      </div>
+
+      <div style="margin-bottom: 15px; text-align: left;">
+        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 5px;">E-MAIL DE ACESSO</label>
+        <input type="email" id="modalEmail" placeholder="exemplo@email.com" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+      </div>
+
+      <div style="margin-bottom: 15px; text-align: left;">
+        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 5px;">WHATSAPP</label>
+        <input type="text" id="modalWhatsapp" placeholder="(21) 99999-9999" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+      </div>
+
+      <div style="margin-bottom: 20px; text-align: left;">
+        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 5px;">SENHA DE ACESSO</label>
+        <input type="text" id="modalSenha" placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none;">
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button onclick="salvarClienteManual()" style="flex: 1; padding: 12px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">✅ Criar e Aprovar</button>
+        <button onclick="fecharModalNovoCliente()" style="padding: 12px; background: #334155; color: #cbd5e1; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let filtroEstadoAtual = 'todos';
+
+    // Proteção de Rota: Apenas o Super Admin pode aceder a este ficheiro
+    (function verificarSegurancaAdmin() {
+      const logado = localStorage.getItem('pipeiro_logado');
+      const adminAtual = localStorage.getItem('pipeiro_admin_atual');
+      const EMAIL_SUPER_ADMIN = "precision.digital.oficial@gmail.com";
+
+      if (logado !== 'true' || adminAtual !== EMAIL_SUPER_ADMIN) {
+        alert('⚠️ Acesso restrito! Apenas o administrador master pode aceder a esta área.');
+        window.location.href = 'cadastro.html';
+      }
+    })();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarPainelMaster();
+    });
+
+    function definirFiltroEstado(estado, event) {
+      filtroEstadoAtual = estado;
+      
+      document.querySelectorAll('.btn-filtro-admin').forEach(btn => {
+        btn.style.background = '#1e293b';
+        btn.style.color = '#94a3b8';
+        btn.style.borderColor = '#334155';
+      });
+
+      if (event && event.target) {
+        event.target.style.background = '#3b82f6';
+        event.target.style.color = '#fff';
+        event.target.style.borderColor = '#3b82f6';
+      }
+
+      carregarPainelMaster();
+    }
+
+    function carregarPainelMaster() {
+      const tbody = document.getElementById('tabelaMasterBody');
+      if (!tbody) return;
+
+      const listaClientesStr = localStorage.getItem('pipeiro_assinantes');
+      if (!listaClientesStr) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #8b9bb4; padding: 30px;">Nenhum assinante registado.</td></tr>`;
+        document.getElementById('statTotalAssinantes').innerText = '0';
+        document.getElementById('statPendentes').innerText = '0';
+        document.getElementById('statAtivos').innerText = '0';
+        document.getElementById('statFaturamento').innerText = 'R$ 0,00';
+        return;
+      }
+
+      const listaClientes = JSON.parse(listaClientesStr);
+      let totalAssinantes = listaClientes.length;
+      let totalPendentes = 0;
+      let totalAtivos = 0;
+
+      let htmlRows = '';
+
+      listaClientes.forEach(cliente => {
+        const status = cliente.status || cliente.statusPagamento || 'pendente';
+
+        if (status === 'aprovado' || status === 'ativo') totalAtivos++;
+        if (status === 'pendente') totalPendentes++;
+
+        if (filtroEstadoAtual !== 'todos' && status !== filtroEstadoAtual) {
+          return;
+        }
+
+        let badgeStatus = '';
+        let btnAcoes = '';
+        const titularPixText = cliente.titularPix ? `<span style="color: #00ff88; font-weight: bold;">${cliente.titularPix}</span>` : `<span style="color: #64748b; font-style: italic;">Não informado</span>`;
+
+        const wppLimpo = cliente.whatsapp ? cliente.whatsapp.replace(/\D/g, '') : '';
+        const linkWpp = wppLimpo ? `https://api.whatsapp.com/send?phone=55${wppLimpo}&text=${encodeURIComponent('Olá ' + cliente.nome + ', sobre a sua assinatura no PipeiroGestor:')}` : '#';
+
+        if (status === 'aprovado' || status === 'ativo') {
+          badgeStatus = `<span style="background: rgba(0,255,136,0.1); color: #00ff88; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(0,255,136,0.2);">🟢 Ativo / Aprovado</span>`;
+          btnAcoes = `
+            <button onclick="alterarStatus('${cliente.email}', 'bloqueado')" style="background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px;">🔒 Bloquear</button>
+            <button onclick="removerCliente('${cliente.email}')" style="background: #334155; color: #cbd5e1; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;" title="Eliminar registo">🗑️</button>
+          `;
+        } else if (status === 'pendente') {
+          badgeStatus = `<span style="background: rgba(245,158,11,0.1); color: #f59e0b; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(245,158,11,0.2);">🟡 Pagamento Informado</span>`;
+          btnAcoes = `
+            <button onclick="alterarStatus('${cliente.email}', 'aprovado')" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px; box-shadow: 0 0 10px rgba(0,255,136,0.3);">✅ Aprovar Acesso</button>
+            <button onclick="alterarStatus('${cliente.email}', 'bloqueado')" style="background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold;">❌ Recusar</button>
+          `;
+        } else {
+          badgeStatus = `<span style="background: rgba(239,68,68,0.1); color: #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(239,68,68,0.2);">🔴 Inadimplente / Bloqueado</span>`;
+          btnAcoes = `
+            <button onclick="alterarStatus('${cliente.email}', 'aprovado')" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px;">✅ Reativar</button>
+            <button onclick="removerCliente('${cliente.email}')" style="background: #334155; color: #cbd5e1; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;" title="Eliminar registo">🗑️</button>
+          `;
+        }
+
+        htmlRows += `
+          <tr style="border-bottom: 1px solid #1e293b;">
+            <td style="padding: 14px; color: #fff; font-weight: bold;">${cliente.nome}</td>
+            <td style="padding: 14px; font-size: 13px; color: #94a3b8;">
+              <div>📧 ${cliente.email}</div>
+              <div style="margin-top: 4px;">📱 <a href="${linkWpp}" target="_blank" style="color: #00ff88; text-decoration: none;" title="Chamar no WhatsApp">${cliente.whatsapp || 'Não informado'} 💬</a></div>
+            </td>
+            <td style="padding: 14px; font-size: 13px;">${titularPixText}</td>
+            <td style="padding: 14px;">${badgeStatus}</td>
+            <td style="padding: 14px; text-align: center;">${btnAcoes}</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = htmlRows || `<tr><td colspan="5" style="text-align: center; color: #8b9bb4; padding: 30px;">Nenhum assinante encontrado com este filtro.</td></tr>`;
+
+      document.getElementById('statTotalAssinantes').innerText = totalAssinantes;
+      document.getElementById('statPendentes').innerText = totalPendentes;
+      document.getElementById('statAtivos').innerText = totalAtivos;
+
+      const faturamentoTotal = totalAtivos * 49.90;
+      document.getElementById('statFaturamento').innerText = `R$ ${faturamentoTotal.toFixed(2).replace('.', ',')}`;
+    }
+
+    function filtrarAssinantesAdmin() {
+      const termo = document.getElementById('inputPesquisaAdmin').value.toLowerCase();
+      const linhas = document.querySelectorAll('#tabelaMasterBody tr');
+
+      linhas.forEach(linha => {
+        const texto = linha.textContent.toLowerCase();
+        if (texto.includes(termo)) {
+          linha.style.display = "";
+        } else {
+          linha.style.display = "none";
+        }
+      });
+    }
+
+    function abrirModalNovoCliente() {
+      document.getElementById('modalNovoCliente').style.display = 'flex';
+    }
+
+    function fecharModalNovoCliente() {
+      document.getElementById('modalNovoCliente').style.display = 'none';
+    }
+
+    function salvarClienteManual() {
+      const nome = document.getElementById('modalNome').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      const whatsapp = document.getElementById('modalWhatsapp').value.trim();
+      const senha = document.getElementById('modalSenha').value.trim();
+
+      if (!nome || !email || !whatsapp || !senha) {
+        alert('Por favor, preencha todos os campos do novo assinante.');
+        return;
+      }
+
+      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+      if (listaClientes.some(c => c.email === email)) {
+        alert('Já existe um cliente cadastrado com este e-mail.');
+        return;
+      }
+
+      const novoCliente = {
+        id: Date.now(),
+        nome: nome,
+        email: email,
+        whatsapp: whatsapp,
+        senha: senha,
+        status: 'aprovado',
+        titularPix: nome + ' (Manual Admin)',
+        data: new Date().toLocaleDateString('pt-BR')
+      };
+
+      listaClientes.push(novoCliente);
+      localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+
+      fecharModalNovoCliente();
+      alert('✅ Assinante criado e acesso aprovado com sucesso!');
+      carregarPainelMaster();
+    }
+
+    // Função corrigida: Altera apenas o status e preserva a senha e dados do cliente intactos
+    function alterarStatus(emailCliente, novoStatus) {
+      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+      let cliente = listaClientes.find(c => c.email === emailCliente);
+      
+      if (cliente) {
+        cliente.status = novoStatus;
+        localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+        carregarPainelMaster();
+        alert(`✅ Acesso do cliente atualizado para: ${novoStatus.toUpperCase()}`);
+      } else {
+        alert('⚠️ Cliente não encontrado.');
+      }
+    }
+
+    function removerCliente(emailCliente) {
+      if (!confirm('Deseja eliminar permanentemente este cliente do sistema?')) return;
+      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+      listaClientes = listaClientes.filter(c => c.email !== emailCliente);
+      localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+      carregarPainelMaster();
+    }
+
+    function fazerLogoutAdmin() {
+      localStorage.removeItem('pipeiro_logado');
+      localStorage.removeItem('pipeiro_admin_atual');
+      window.location.href = 'cadastro.html';
+    }
+    <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+  </script>
+</body>
+</html>
