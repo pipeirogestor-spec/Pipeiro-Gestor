@@ -84,7 +84,7 @@
     }
   </style>
 </head>
-<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0;">
+<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; padding-bottom: 60px;">
 
   <!-- CONTAINER PRINCIPAL DE AUTENTICAÇÃO -->
   <div class="auth-container" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
@@ -188,9 +188,19 @@
     </div>
   </div>
 
-  <!-- LIGAÇÃO AO SCRIPT EXTERNO DE CADASTRO E LOGIN -->
+  <!-- RODAPÉ FIXO -->
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+
+  <!-- LIGAÇÃO AOS SCRIPTS -->
   <script src="cadastro-script.js"></script>
-  
   <script>
     // Função universal do Olhinho para alternar a visibilidade da senha
     function alternarVisibilidadeSenha(idInput, botao) {
@@ -222,14 +232,6 @@
       document.getElementById('authDesc').innerText = 'Entre com os seus dados para gerir o seu negócio.';
       document.getElementById('switchText').innerHTML = 'Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Criar Conta</a>';
     }
-<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
-    <div style="display: flex; gap: 20px;">
-      <span>Termos de Uso</span>
-      <span>Política de Privacidade</span>
-    </div>
-    <div>
-      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
-    </div>
-  </footer>
+  </script>
 </body>
 </html>

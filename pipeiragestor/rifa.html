@@ -4,15 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ação / Rifa | PipeiroGestor</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
   <link rel="stylesheet" href="rifa-style.css">
 </head>
-<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding-bottom: 90px;">
+<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding-bottom: 120px;">
 
   <!-- BARRA DE TOPO FIXA COM LOGO OFICIAL, TUTORIAL E SUPORTE -->
   <header style="background: #111827; border-bottom: 1px solid #1e293b; padding: 12px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
     
-    <!-- LOGO PIPEIROGESTOR OFICIAL (IGUAL AO GESTOR) -->
-    <div style="display: flex; align-items: center; gap: 10px; cursor:https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" id="logoHeaderImg" style="height: 36px; width: auto; object-fit: contain;" />
+    <!-- LOGO PIPEIROGESTOR OFICIAL (CORRIGIDA) -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" id="logoHeaderImg" style="height: 36px; width: auto; object-fit: contain;" />
     </div>
 
     <!-- BOTÕES DE AÇÃO NO TOPO -->
@@ -121,15 +123,10 @@
       </div>
     </div>
 
-    <!-- 4. RODAPÉ -->
-    <footer style="text-align: center; margin-top: 30px; color: #64748b; font-size: 12px;">
-      <p>© 2026 PipeiroGestor - Sistema de Gestão de Rifas e Festivais</p>
-    </footer>
-
   </main>
 
-  <!-- CARRINHO FLUTUANTE DE COMPRA -->
-  <div id="carrinhoFloat" style="display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: #111827; border: 1px solid #00ff88; padding: 12px 20px; border-radius: 30px; box-shadow: 0 6px 25px rgba(0,255,136,0.35); align-items: center; gap: 15px; z-index: 999; width: 90%; max-width: 450px; justify-content: space-between;">
+  <!-- CARRINHO FLUTUANTE DE COMPRA (POSICIONADO ACIMA DO RODAPÉ) -->
+  <div id="carrinhoFloat" style="display: none; position: fixed; bottom: 55px; left: 50%; transform: translateX(-50%); background: #111827; border: 1px solid #00ff88; padding: 12px 20px; border-radius: 30px; box-shadow: 0 6px 25px rgba(0,255,136,0.35); align-items: center; gap: 15px; z-index: 999; width: 90%; max-width: 450px; justify-content: space-between;">
     <div>
       <span id="textoQtdSelecionadas" style="display: block; font-size: 11px; color: #94a3b8;">0 cota(s)</span>
       <strong id="valorTotalCarrinho" style="font-size: 18px; color: #00ff88;">R$ 0,00</strong>
@@ -213,7 +210,9 @@
       </button>
     </div>
   </div>
-<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+
+  <!-- RODAPÉ FIXO -->
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
     <div style="display: flex; gap: 20px;">
       <span>Termos de Uso</span>
       <span>Política de Privacidade</span>
@@ -222,6 +221,7 @@
       <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
     </div>
   </footer>
+
   <script src="rifa-script.js"></script>
 </body>
 </html>

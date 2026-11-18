@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
   <link rel="stylesheet" href="gestor-style.css">
 </head>
-<body style="background: #0a0f1d; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px;">
+<body style="background: #0a0f1d; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; padding-bottom: 70px;">
 
   <div style="max-width: 1200px; margin: 0 auto;">
     
@@ -125,6 +125,16 @@
       </div>
     </div>
   </div>
+
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
 
   <script>
     let filtroEstadoAtual = 'todos';
@@ -303,7 +313,6 @@
       carregarPainelMaster();
     }
 
-    // Função corrigida: Altera apenas o status e preserva a senha e dados do cliente intactos
     function alterarStatus(emailCliente, novoStatus) {
       let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
       let cliente = listaClientes.find(c => c.email === emailCliente);
@@ -331,15 +340,6 @@
       localStorage.removeItem('pipeiro_admin_atual');
       window.location.href = 'cadastro.html';
     }
-    <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
-    <div style="display: flex; gap: 20px;">
-      <span>Termos de Uso</span>
-      <span>Política de Privacidade</span>
-    </div>
-    <div>
-      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
-    </div>
-  </footer>
   </script>
 </body>
 </html>
