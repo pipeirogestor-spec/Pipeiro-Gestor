@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PipeiroGestor - Cadastro e Login do Assinante</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="stylesheet" href="cadastro-style.css">
+  <style>
+    /* ========================================================= */
+    /* ESTILOS E RESPONSIVIDADE PROFISSIONAL (MOBILE & DESKTOP)  */
+    /* ========================================================= */
+    .auth-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      width: 100%;
+      max-width: 950px;
+      background: #111827;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Bloco visual exclusivo para o topo no telemóvel (Logo + Título + Texto) */
+    .mobile-brand-header {
+      display: none;
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    /* Adaptação inteligente para telemóveis */
+    @media (max-width: 768px) {
+      .auth-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .auth-benefits-card {
+        display: none !important; /* Esconde a coluna lateral pesada no telemóvel */
+      }
+      .mobile-brand-header {
+        display: block !important; /* Mostra a marca completa no topo no telemóvel */
+      }
+      .auth-card {
+        padding: 25px 20px !important;
+      }
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-wrapper input {
+      width: 100%;
+      padding-right: 45px !important;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #94a3b8;
+      font-size: 16px;
+      outline: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .toggle-password:hover {
+      color: #00ff88;
+    }
+
+    /* OCULTA O SELO DA NETLIFY GRATUITAMENTE E EVITA SOBREPOSIÇÃO */
+    #netlify-badge, a[href*="netlify.com/-/?utm_source=badge"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>
+</head>
+<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; padding-bottom: 60px;">
+
+  <!-- CONTAINER PRINCIPAL DE AUTENTICAÇÃO -->
+  <div class="auth-container" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+    <div class="auth-grid">
+      
+      <!-- COLUNA ESQUERDA: FORMULÁRIOS DE CADASTRO E LOGIN -->
+      <div class="auth-card" style="padding: 40px; display: flex; flex-direction: column; justify-content: center;">
+        
+        <!-- LOGO E TEXTO DESCRITIVO VISÍVEIS NO TOPO APENAS NO TELEMÓVEL -->
+        <div class="mobile-brand-header">
+          <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 130px; width: 100%; height: auto; filter: drop-shadow(0 0 15px rgba(0,255,136,0.5)); margin-bottom: 10px;">
+          <h3 style="color: #fff; font-size: 20px; margin: 0 0 8px 0; font-weight: bold;">PipeiroGestor</h3>
+          <p style="color: #94a3b8; font-size: 13px; max-width: 300px; line-height: 1.5; margin: 0 auto;">
+            A plataforma definitiva para automação, gestão de rifas e controlo total das suas vendas em tempo real com zero taxas.
+          </p>
+        </div>
+
+        <!-- TÍTULO DINÂMICO DA PÁGINA -->
+        <h2 id="authTitle" style="color: #00ff88; margin-top: 0; font-size: 24px; margin-bottom: 8px;">Aceder ao Painel</h2>
+        <p id="authDesc" class="card-desc" style="color: #94a3b8; font-size: 13px; margin-bottom: 25px;">Entre com os seus dados para gerir o seu negócio.</p>
+
+        <!-- FORMULÁRIO DE LOGIN (APARECE POR DEFEITO) -->
+        <div id="boxLogin">
+          <form onsubmit="realizarLogin(event)">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">E-mail de Acesso *</label>
+              <input type="email" id="loginEmail" placeholder="Seu e-mail cadastrado" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Sua Senha *</label>
+              <div class="password-wrapper">
+                <input type="password" id="loginSenha" placeholder="Sua senha" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('loginSenha', this)">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 14px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 0 20px rgba(0,255,136,0.35); transition: background 0.2s;">
+              ENTRAR NO PAINEL 🚀
+            </button>
+          </form>
+        </div>
+
+        <!-- FORMULÁRIO DE CADASTRO (CONTROLADO PELO SCRIPT JS / OCULTO INICIALMENTE) -->
+        <div id="boxCadastro" style="display: none;">
+          <form id="formCadastro" onsubmit="realizarCadastro(event)">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Nome Completo *</label>
+              <input type="text" id="cadNome" placeholder="Ex: João da Silva" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">E-mail Profissional *</label>
+              <input type="email" id="cadEmail" placeholder="seu@email.com" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">WhatsApp (com DDD) *</label>
+              <input type="tel" id="cadWhatsapp" placeholder="Ex: 21999999999" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Criar Senha Segura *</label>
+              <div class="password-wrapper">
+                <input type="password" id="cadSenha" placeholder="Mínimo 6 caracteres" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadSenha', this)">👁️</button>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Confirmar Senha *</label>
+              <div class="password-wrapper">
+                <input type="password" id="cadConfirmaSenha" placeholder="Digite a senha novamente" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadConfirmaSenha', this)">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 14px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 0 20px rgba(0,255,136,0.35); transition: background 0.2s;">
+              REGISTRAR E ATIVAR CONTA ➡️
+            </button>
+          </form>
+        </div>
+
+        <!-- BOTÃO DE ALTERNÂNCIA ENTRE LOGIN E CADASTRO -->
+        <div class="auth-switch" style="margin-top: 25px; text-align: center; font-size: 13px; color: #94a3b8;">
+          <span id="switchText">Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Criar Conta</a></span>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA: LOGOTIPO E DESTAQUE VISUAL (VISÍVEL NO PC) -->
+      <div class="auth-benefits-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #161e31 0%, #0f172a 100%); padding: 40px; border-left: 1px solid #1e293b;">
+        <div style="margin-bottom: 25px;">
+          <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 180px; width: 100%; height: auto; filter: drop-shadow(0 0 20px rgba(0,255,136,0.5));">
+        </div>
+        <h3 style="color: #fff; font-size: 22px; margin-bottom: 12px; font-weight: bold;">PipeiroGestor</h3>
+        <p style="color: #94a3b8; font-size: 14px; max-width: 320px; line-height: 1.6; margin: 0;">
+          A plataforma definitiva para automação, gestão de rifas e controlo total das suas vendas em tempo real com zero taxas.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RODAPÉ FIXO -->
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
+    <div style="display: flex; gap: 20px;">
+      <span>Termos de Uso</span>
+      <span>Política de Privacidade</span>
+    </div>
+    <div>
+      <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+    </div>
+  </footer>
+
+  <!-- LIGAÇÃO AOS SCRIPTS -->
+  <script src="cadastro-script.js"></script>
+  <script>
+    // Função universal do Olhinho para alternar a visibilidade da senha
+    function alternarVisibilidadeSenha(idInput, botao) {
+      const input = document.getElementById(idInput);
+      if (input.type === 'password') {
+        input.type = 'text';
+        botao.innerText = '🙈';
+      } else {
+        input.type = 'password';
+        botao.innerText = '👁️';
+      }
+    }
+
+    // Funções para alternar de forma limpa entre Login e Cadastro na mesma página
+    function alternarParaCadastro(e) {
+      e.preventDefault();
+      document.getElementById('boxLogin').style.display = 'none';
+      document.getElementById('boxCadastro').style.display = 'block';
+      document.getElementById('authTitle').innerText = 'Criar Sua Conta';
+      document.getElementById('authDesc').innerText = 'Preencha os dados abaixo para aceder ao painel do gestor.';
+      document.getElementById('switchText').innerHTML = 'Já possui uma conta? <a href="#" onclick="alternarParaLogin(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Faça Login</a>';
+    }
+
+    function alternarParaLogin(e) {
+      e.preventDefault();
+      document.getElementById('boxCadastro').style.display = 'none';
+      document.getElementById('boxLogin').style.display = 'block';
+      document.getElementById('authTitle').innerText = 'Aceder ao Painel';
+      document.getElementById('authDesc').innerText = 'Entre com os seus dados para gerir o seu negócio.';
+      document.getElementById('switchText').innerHTML = 'Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Criar Conta</a>';
+    }
+  </script>
+</body>
+</html>

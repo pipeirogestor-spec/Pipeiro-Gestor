@@ -1,0 +1,218 @@
+:root {
+  --bg-main: #0a0f1d;
+  --bg-card: #111827;
+  --neon-green: #00ff88;
+  --neon-glow: rgba(0, 255, 136, 0.3);
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --border-color: #1e293b;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.auth-logo-box {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-logo {
+  max-width: 180px;
+  height: auto;
+  filter: drop-shadow(0 0 15px var(--neon-glow));
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+@media (max-width: 768px) {
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auth-card, .auth-benefits-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-card h2, .auth-benefits-card h3 {
+  color: var(--text-main);
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: var(--neon-green);
+}
+
+.btn-auth-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--neon-green);
+  color: #0a0f1d;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 15px var(--neon-glow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.btn-auth-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.auth-switch a {
+  color: var(--neon-green);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+}
+
+.benefits-list li {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.benefits-list li strong {
+  color: var(--text-main);
+}
+
+/* ANIMAÇÃO DE PULSAÇÃO E BRILHO NEON PARA A LOGOTIPO */
+@keyframes pulseLogo {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.3));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.7));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.3));
+  }
+}
+/* ========================================================= */
+/* POLIMENTO VISUAL - GLASSMORPHISM E NEON (PIPEIROGESTOR) */
+/* ========================================================= */
+
+/* Efeito Glassmorphism corporativo para cards e caixas */
+.auth-card, .campanha-gestao-card, div[style*="background: #111827"] {
+  background: rgba(17, 24, 39, 0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8) !important;
+  transition: all 0.3s ease;
+}
+
+/* Transição suave e brilho neon nos botões principais de ação */
+button, .btn-filtro, .btn-filtro-admin {
+  transition: all 0.25s ease-in-out !important;
+}
+
+button:hover, .btn-filtro:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4) !important;
+}
+
+/* Inputs com foco elegante em verde neon */
+input:focus, select:focus, textarea:focus {
+  border-color: #00ff88 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+}
+/* Remove completamente o selo da Netlify de qualquer página */
+.netlify-badge, 
+#netlify-badge, 
+a[href*="netlify.com"], 
+div[style*="z-index: 99999"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
