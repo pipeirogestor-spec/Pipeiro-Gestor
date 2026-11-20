@@ -1,11 +1,17 @@
 :root {
-  --bg-main: #0a0f1d;
-  --bg-card: #111827;
-  --neon-green: #00ff88;
-  --neon-glow: rgba(0, 255, 136, 0.3);
-  --text-main: #ffffff;
-  --text-muted: #94a3b8;
-  --border-color: #1e293b;
+  --bg-main: #080B09;
+  --bg-surface: #0D120F;
+  --bg-card: #111813;
+  --bg-input: #0A0F0C;
+  --neon-green: #A6FF45;
+  --neon-green-hover: #C0FF81;
+  --neon-glow: rgba(166, 255, 69, 0.22);
+  --text-main: #F5F8F4;
+  --text-muted: #A1AAA2;
+  --border-color: rgba(255, 255, 255, 0.09);
+  --border-neon: rgba(166, 255, 69, 0.35);
+  --font-main: 'DM Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
 }
 
 body {
@@ -13,7 +19,7 @@ body {
   padding: 0;
   background-color: var(--bg-main);
   color: var(--text-main);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-main);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,7 +28,7 @@ body {
 
 .auth-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 960px;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -56,15 +62,18 @@ body {
   }
 }
 
-.auth-card, .auth-benefits-card {
+.auth-card,
+.auth-benefits-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 30px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
 }
 
-.auth-card h2, .auth-benefits-card h3 {
+.auth-card h2,
+.auth-benefits-card h3 {
+  font-family: var(--font-display);
   color: var(--text-main);
   font-size: 20px;
   margin-top: 0;
@@ -84,7 +93,7 @@ body {
 .form-group label {
   display: block;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--text-muted);
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -93,38 +102,42 @@ body {
 .form-group input {
   width: 100%;
   padding: 12px;
-  background-color: #0f172a;
-  border: 1px solid #334155;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-main);
   font-size: 14px;
   box-sizing: border-box;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .form-group input:focus {
   border-color: var(--neon-green);
+  box-shadow: 0 0 0 3px rgba(166, 255, 69, 0.14);
 }
 
 .btn-auth-primary {
   width: 100%;
   padding: 14px;
   background-color: var(--neon-green);
-  color: #0a0f1d;
+  color: #0b1208;
   border: none;
   border-radius: 8px;
+  font-family: var(--font-display);
   font-weight: 800;
-  font-size: 14px;
+  font-size: 13px;
+  letter-spacing: 0.6px;
   cursor: pointer;
-  box-shadow: 0 0 15px var(--neon-glow);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 22px var(--neon-glow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   margin-top: 10px;
 }
 
 .btn-auth-primary:hover {
+  background-color: var(--neon-green-hover);
   transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 10px 28px rgba(166, 255, 69, 0.24);
 }
 
 .auth-switch {
@@ -137,7 +150,7 @@ body {
 .auth-switch a {
   color: var(--neon-green);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .auth-switch a:hover {
@@ -165,54 +178,58 @@ body {
 @keyframes pulseLogo {
   0% {
     transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.3));
+    filter: drop-shadow(0 0 15px rgba(166, 255, 69, 0.2));
   }
   50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.7));
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 26px rgba(166, 255, 69, 0.42));
   }
   100% {
     transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.3));
+    filter: drop-shadow(0 0 15px rgba(166, 255, 69, 0.2));
   }
 }
-/* ========================================================= */
-/* POLIMENTO VISUAL - GLASSMORPHISM E NEON (PIPEIROGESTOR) */
-/* ========================================================= */
 
-/* Efeito Glassmorphism corporativo para cards e caixas */
-.auth-card, .campanha-gestao-card, div[style*="background: #111827"] {
-  background: rgba(17, 24, 39, 0.85) !important;
+/* ========================================================= */
+/* POLIMENTO VISUAL - SUPERFÍCIE ESCURA E NEON (PIPEIROGESTOR) */
+/* ========================================================= */
+.auth-card,
+.campanha-gestao-card,
+div[style*="background: #111827"] {
+  background: rgba(17, 24, 19, 0.92) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid var(--border-color) !important;
   transition: all 0.3s ease;
 }
 
-/* Transição suave e brilho neon nos botões principais de ação */
-button, .btn-filtro, .btn-filtro-admin {
+button,
+.btn-filtro,
+.btn-filtro-admin {
   transition: all 0.25s ease-in-out !important;
 }
 
-button:hover, .btn-filtro:hover {
+button:hover,
+.btn-filtro:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4) !important;
+  box-shadow: 0 0 18px rgba(166, 255, 69, 0.22) !important;
 }
 
-/* Inputs com foco elegante em verde neon */
-input:focus, select:focus, textarea:focus {
-  border-color: #00ff88 !important;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--neon-green) !important;
+  box-shadow: 0 0 0 3px rgba(166, 255, 69, 0.14);
 }
-/* Remove completamente o selo da Netlify de qualquer página */
-.netlify-badge, 
-#netlify-badge, 
-a[href*="netlify.com"], 
-div[style*="z-index: 99999"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    position: absolute !important;
-    left: -9999px !important;
+
+/* Remove completamente o selo da Netlify sem esconder alertas */
+.netlify-badge,
+#netlify-badge,
+a[href*="netlify.com"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
 }
