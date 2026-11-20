@@ -15,7 +15,7 @@ function alternarParaLogin(event) {
   const boxLogin = document.getElementById('boxLogin');
   const switchText = document.getElementById('switchText');
 
-  if (authTitle) authTitle.innerText = 'Aceder ao Painel';
+  if (authTitle) authTitle.innerText = 'Acessar ao Painel';
   if (authDesc) authDesc.innerText = 'Entre com os seus dados para gerir o seu negócio.';
   if (boxCadastro) boxCadastro.style.display = 'none';
   if (boxLogin) boxLogin.style.display = 'block';
@@ -35,7 +35,7 @@ function alternarParaCadastro(event) {
   const switchText = document.getElementById('switchText');
 
   if (authTitle) authTitle.innerText = 'Criar Sua Conta';
-  if (authDesc) authDesc.innerText = 'Preencha os dados abaixo para aceder ao painel do gestor.';
+  if (authDesc) authDesc.innerText = 'Preencha os dados abaixo para Acessar ao painel do gestor.';
   if (boxCadastro) boxCadastro.style.display = 'block';
   if (boxLogin) boxLogin.style.display = 'none';
 
