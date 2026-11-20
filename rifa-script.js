@@ -20,6 +20,11 @@ let promocoesCampanha = [];
 let imagensCampanhaPublica = [];
 let indiceFotoAtual = 0;
 
+function formatarMoedaBR(valor) {
+  const num = Number(valor) || 0;
+  return `R$ ${num.toFixed(2).replace(".", ",")}`;
+}
+
 // =========================================================
 // 1. INICIALIZAÇÃO E CRONÔMETRO DE URGÊNCIA
 // =========================================================
@@ -92,7 +97,10 @@ function carregarDadosCampanhaPublica() {
     }
   }
 
-  if (!slug) return;
+  if (!slug) {
+    gerarGridCotas(totalCotasCampanha);
+    return;
+  }
 
   let dadosSalvos = null;
 
@@ -118,6 +126,7 @@ function carregarDadosCampanhaPublica() {
   if (!dadosSalvos) {
     const elTitulo = document.getElementById('tituloPremio');
     if (elTitulo) elTitulo.textContent = "Ação não encontrada ou expirada.";
+    gerarGridCotas(totalCotasCampanha);
     return;
   }
 
@@ -138,7 +147,7 @@ function carregarDadosCampanhaPublica() {
     if (campanha.preco) {
       precoUnitarioCota = parseFloat(campanha.preco);
       const elPreco = document.getElementById('valorPorCota');
-      if (elPreco) elPreco.textContent = `R$ ${precoUnitarioCota.toFixed(2)}`;
+      if (elPreco) elPreco.textContent = formatarMoedaBR(precoUnitarioCota);
     }
 
     if (campanha.promocoes && Array.isArray(campanha.promocoes)) {
@@ -147,7 +156,7 @@ function carregarDadosCampanhaPublica() {
       promocoesCampanha = campanha.descontos;
     }
 
-    estiloTemaCotas = "animais";
+    estiloTemaCotas = campanha.temaCotas || campanha.estiloTemaCotas || "animais";
 
     imagensCampanhaPublica = [];
     indiceFotoAtual = 0;
@@ -326,7 +335,7 @@ function atualizarCarrinhoECalculadora() {
   const total = calcularPrecoTotal(qtd);
 
   if (textoQtd) textoQtd.textContent = `${qtd} cota(s) selecionada(s)`;
-  if (textoValor) textoValor.textContent = `R$ ${total.toFixed(2)}`;
+  if (textoValor) textoValor.textContent = formatarMoedaBR(total);
 
   if (carrinho) {
     carrinho.style.display = qtd > 0 ? 'flex' : 'none';
@@ -449,7 +458,7 @@ function enviarComprovanteWpp() {
   const wpp = document.getElementById('inputWppComprador')?.value.trim();
 
   const cotasTexto = cotasSelecionadas.sort((a, b) => parseInt(a) - parseInt(b)).join(', ');
-  const valorTotal = calcularPrecoTotal(cotasSelecionadas.length).toFixed(2);
+  const valorTotal = calcularPrecoTotal(cotasSelecionadas.length).toFixed(2).replace('.', ',');
 
   const mensagem = `Olá. Realizei o pedido das minhas cotas:\n\n` +
     `Nome: ${nome}\n` +
@@ -647,6 +656,13 @@ function marcarCotasOcupadas() {
       btn.style.borderColor = 'rgba(255,255,255,0.06)';
       btn.style.cursor = 'not-allowed';
       btn.title = st === 'aprovado' ? "Cota já paga" : "Cota aguardando aprovação";
+    } else if (btn.disabled) {
+      btn.disabled = false;
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.cursor = 'pointer';
+      btn.title = '';
     }
   });
 

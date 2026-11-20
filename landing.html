@@ -1,55 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b09">
   <title>PipeiroGestor - A Plataforma Definitiva de Gestão de Rifas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cadastro-style.css">
   <style>
-    body {
-      background: #0a0f1d;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      padding-bottom: 60px; /* Espaço para o rodapé fixo */
+    :root {
+      --bg: #080B09;
+      --bg2: #0D120F;
+      --card: #111813;
+      --green: #A6FF45;
+      --green2: #75D92B;
+      --white: #F5F8F4;
+      --muted: #A1AAA2;
+      --border: rgba(255,255,255,.09);
+      --font: 'DM Sans', sans-serif;
+      --display: 'Space Grotesk', sans-serif;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.pg-landing-body {
+      display: block !important;
+      background:
+        radial-gradient(ellipse at 75% 20%, rgba(166,255,69,.09), transparent 45%),
+        var(--bg) !important;
+      color: var(--white) !important;
+      font-family: var(--font) !important;
+      margin: 0 !important;
+      padding: 0 0 64px 0 !important;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
     .hero-container {
       max-width: 1100px;
       margin: 0 auto;
       padding: 60px 20px;
       text-align: center;
     }
+
+    .pg-logo-wrap {
+      margin-bottom: 24px;
+    }
+
+    .pg-hero-logo {
+      max-width: 100px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 18px rgba(166,255,69,.28));
+    }
+
     .hero-badge {
       display: inline-block;
-      background: rgba(0, 255, 136, 0.1);
-      color: #00ff88;
-      border: 1px solid rgba(0, 255, 136, 0.3);
+      background: rgba(166, 255, 69, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(166, 255, 69, 0.32);
       padding: 6px 16px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
       margin-bottom: 20px;
       text-transform: uppercase;
     }
+
     h1 {
-      font-size: 42px;
-      margin-bottom: 20px;
-      line-height: 1.2;
+      font-family: var(--display);
+      font-size: clamp(32px, 5vw, 46px);
+      margin: 0 0 20px 0;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      color: var(--white);
     }
+
     h1 span {
-      color: #00ff88;
-      text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+      color: var(--green);
+      text-shadow: 0 0 24px rgba(166, 255, 69, 0.24);
     }
+
     p.hero-desc {
       font-size: 16px;
-      color: #94a3b8;
+      color: var(--muted);
       max-width: 700px;
       margin: 0 auto 35px auto;
-      line-height: 1.6;
+      line-height: 1.65;
     }
+
     .cta-buttons {
       display: flex;
       justify-content: center;
@@ -57,34 +102,47 @@
       margin-bottom: 60px;
       flex-wrap: wrap;
     }
+
     .btn-primary {
-      background: #00ff88;
-      color: #000;
+      background: var(--green);
+      color: #0b1208;
       padding: 14px 30px;
       border-radius: 8px;
-      font-weight: bold;
+      font-family: var(--display);
+      font-weight: 800;
       text-decoration: none;
-      font-size: 15px;
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-      transition: transform 0.3s ease;
+      font-size: 13px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 0 24px rgba(166, 255, 69, 0.22);
+      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
     }
+
     .btn-primary:hover {
-      transform: translateY(-3px);
+      background: #c0ff81;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(166, 255, 69, 0.28);
     }
+
     .btn-secondary {
-      background: #1e293b;
-      color: #fff;
+      background: var(--bg2);
+      color: var(--white);
       padding: 14px 30px;
       border-radius: 8px;
-      font-weight: bold;
+      font-family: var(--display);
+      font-weight: 700;
       text-decoration: none;
-      font-size: 15px;
-      border: 1px solid #334155;
-      transition: transform 0.3s ease;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--border);
+      transition: transform 0.25s ease, border-color 0.25s ease;
     }
+
     .btn-secondary:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
+      border-color: rgba(166, 255, 69, 0.35);
     }
+
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -92,44 +150,82 @@
       text-align: left;
       margin-top: 40px;
     }
+
     .feature-card {
-      background: rgba(17, 24, 39, 0.85);
-      border: 1px solid #1e293b;
+      background: var(--card) !important;
+      border: 1px solid var(--border) !important;
       padding: 30px;
       border-radius: 14px;
       backdrop-filter: blur(12px);
-      transition: border-color 0.3s ease;
+      transition: border-color 0.25s ease, transform 0.25s ease;
     }
+
     .feature-card:hover {
-      border-color: #00ff88;
+      border-color: rgba(166, 255, 69, 0.38) !important;
+      transform: translateY(-3px);
     }
+
     .feature-card h3 {
-      color: #00ff88;
+      font-family: var(--display);
+      color: var(--green);
       margin-top: 0;
       font-size: 18px;
       margin-bottom: 10px;
     }
+
     .feature-card p {
-      color: #94a3b8;
+      color: var(--muted);
       font-size: 13px;
       margin: 0;
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+
+    .pg-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(8, 11, 9, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999999;
+      box-sizing: border-box;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pg-footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .pg-footer {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        padding: 10px 14px;
+      }
     }
   </style>
 </head>
-<body>
+<body class="pg-landing-body">
 
   <div class="hero-container">
-    
+
     <!-- Logotipo -->
-    <div style="margin-bottom: 25px;">
-      <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 90px; height: auto; filter: drop-shadow(0 0 15px rgba(0,255,136,0.5));">
+    <div class="pg-logo-wrap">
+      <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" class="pg-hero-logo" referrerpolicy="no-referrer">
     </div>
 
     <div class="hero-badge">🚀 O SaaS Definitivo para Organizadores</div>
-    
+
     <h1>Automatize e Escale Suas Rifas com <span>Zero Taxas</span></h1>
-    
+
     <p class="hero-desc">
       Crie campanhas profissionais em segundos, automatize o envio de PIX, valide comprovantes e tenha controlo absoluto das vendas em tempo real na palma da sua mão.
     </p>
@@ -158,8 +254,8 @@
   </div>
 
   <!-- RODAPÉ FIXO -->
-  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
-    <div style="display: flex; gap: 20px;">
+  <footer class="pg-footer">
+    <div class="pg-footer-links">
       <span>Termos de Uso</span>
       <span>Política de Privacidade</span>
     </div>

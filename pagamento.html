@@ -3,74 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b09">
   <title>PipeiroGestor - Ativação Mensal do Gestor</title>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cadastro-style.css">
-</head>
-<body style="background: #070a13; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 50px;">
+  <style>
+    :root {
+      --bg: #080B09;
+      --bg2: #0D120F;
+      --card: #111813;
+      --green: #A6FF45;
+      --green2: #C0FF81;
+      --white: #F5F8F4;
+      --muted: #A1AAA2;
+      --border: rgba(255,255,255,.09);
+      --font: 'DM Sans', sans-serif;
+      --display: 'Space Grotesk', sans-serif;
+    }
 
-  <div class="auth-container" style="width: 100%; max-width: 480px; padding: 20px;">
-    <div class="auth-card" style="background: rgba(18, 24, 38, 0.95); border: 1px solid rgba(0, 255, 128, 0.3); border-radius: 20px; padding: 30px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-      
+    * {
+      box-sizing: border-box;
+    }
+
+    body.pg-pay-body {
+      background:
+        radial-gradient(ellipse at 75% 25%, rgba(166,255,69,.08), transparent 45%),
+        var(--bg) !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0 !important;
+      padding: 24px 0 68px 0 !important;
+      font-family: var(--font) !important;
+      color: var(--white) !important;
+    }
+
+    .pg-pay-container {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+    }
+
+    .pg-pay-card {
+      background: var(--card) !important;
+      border: 1px solid rgba(166, 255, 69, 0.25) !important;
+      border-radius: 16px;
+      padding: 30px !important;
+      text-align: center;
+      color: var(--white);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.65) !important;
+    }
+
+    .pg-pay-logo-wrap {
+      margin-bottom: 18px;
+    }
+
+    .pg-pay-logo {
+      max-width: 120px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 16px rgba(166, 255, 69, 0.28));
+    }
+
+    .pg-pay-title {
+      font-family: var(--display);
+      color: var(--green);
+      font-size: 1.4rem;
+      margin: 0 0 8px 0;
+    }
+
+    .pg-pay-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 22px 0;
+      line-height: 1.5;
+    }
+
+    .pg-pay-price-box {
+      background: rgba(166, 255, 69, 0.08);
+      border: 1px dashed rgba(166, 255, 69, 0.45);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .pg-pay-price-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: block;
+    }
+
+    .pg-pay-price-val {
+      font-family: var(--display);
+      font-size: 1.65rem;
+      color: var(--green);
+    }
+
+    .pg-qr-wrap {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .pg-qr-img {
+      width: 150px;
+      height: 150px;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .pg-pix-info-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .pg-pix-meta-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .pg-pix-cnpj {
+      font-size: 0.95rem;
+      color: var(--white);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .pg-pix-fav {
+      font-size: 0.85rem;
+      color: var(--white);
+      display: block;
+    }
+
+    .pg-copy-row {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .pg-copy-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .pg-copy-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pg-copy-input {
+      flex: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      outline: none;
+    }
+
+    .pg-btn-copy {
+      background: var(--green);
+      color: #0b1208;
+      border: none;
+      padding: 0 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s ease;
+    }
+
+    .pg-btn-copy:hover {
+      background: var(--green2);
+    }
+
+    .pg-titular-wrap {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .pg-titular-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .pg-titular-input {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .pg-titular-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(166, 255, 69, 0.14);
+    }
+
+    .pg-titular-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 4px;
+    }
+
+    .pg-btn-confirm {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      color: #0b1208;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      box-shadow: 0 0 22px rgba(166, 255, 69, 0.22);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .pg-btn-confirm:hover {
+      background: var(--green2);
+      transform: translateY(-2px);
+    }
+
+    .pg-back-wrap {
+      margin-top: 20px;
+    }
+
+    .pg-back-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .pg-back-link:hover {
+      color: var(--green);
+    }
+
+    .pg-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(8, 11, 9, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999999;
+      box-sizing: border-box;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pg-footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .pg-footer {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        padding: 10px 14px;
+      }
+    }
+  </style>
+</head>
+<body class="pg-pay-body">
+
+  <div class="auth-container pg-pay-container">
+    <div class="auth-card pg-pay-card">
+
       <!-- Logotipo Neon -->
-      <div style="margin-bottom: 20px;">
-        <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 120px; width: 100%; height: auto; filter: drop-shadow(0 0 15px rgba(0,255,136,0.4));">
+      <div class="pg-pay-logo-wrap">
+        <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" class="pg-pay-logo" referrerpolicy="no-referrer">
       </div>
 
-      <h2 style="color: #00ff80; font-size: 1.4rem; margin-bottom: 8px;">💳 Ativação Mensal do Gestor</h2>
-      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px;">Efetue o pagamento via PIX para liberar o seu acesso completo:</p>
+      <h2 class="pg-pay-title">💳 Ativação Mensal do Gestor</h2>
+      <p class="pg-pay-desc">Efetue o pagamento via PIX para liberar o seu acesso completo:</p>
 
       <!-- Valor em Destaque -->
-      <div style="background: rgba(0, 255, 128, 0.08); border: 1px dashed #00ff80; border-radius: 12px; padding: 12px; margin-bottom: 20px;">
-          <span style="font-size: 0.75rem; color: #94a3b8; display: block;">Valor da Assinatura</span>
-          <strong style="font-size: 1.6rem; color: #00ff80;">R$ 49,90</strong>
+      <div class="pg-pay-price-box">
+        <span class="pg-pay-price-label">Valor da Assinatura</span>
+        <strong class="pg-pay-price-val">R$ 49,90</strong>
       </div>
 
       <!-- QR Code Limpo Gerado via API -->
-      <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126730014br.gov.bcb.pix0114577011690001960233Assinatura%20painel%20 Pipeiro%20Gestor520400005303986540549.905802BR592557701169%20ANDREA%20ANGELO%20FE6010bonsucesso62290525SU202611170004433219053906304C2FE" alt="QR Code Pix" style="width: 150px; height: 150px; display: block; border-radius: 6px;">
+      <div class="pg-qr-wrap">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126730014br.gov.bcb.pix0114577011690001960233Assinatura%20painel%20 Pipeiro%20Gestor520400005303986540549.905802BR592557701169%20ANDREA%20ANGELO%20FE6010bonsucesso62290525SU202611170004433219053906304C2FE" alt="QR Code Pix" class="pg-qr-img">
       </div>
 
       <!-- Chave PIX (CNPJ) Box -->
-      <div style="background: #0b0f19; border: 1px solid #2d3748; border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left;">
-          <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">CHAVE PIX (CNPJ):</span>
-          <strong style="font-size: 0.95rem; color: #fff; display: block; margin-bottom: 8px;">57.701.169/0001-96</strong>
-          <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 2px;">FAVORECIDO / INSTITUIÇÃO:</span>
-          <span style="font-size: 0.85rem; color: #e2e8f0; display: block;">SUMP SOC. DE CREDITO DIRETO SA</span>
+      <div class="pg-pix-info-box">
+        <span class="pg-pix-meta-label">CHAVE PIX (CNPJ):</span>
+        <strong class="pg-pix-cnpj">57.701.169/0001-96</strong>
+        <span class="pg-pix-meta-label">FAVORECIDO / INSTITUIÇÃO:</span>
+        <span class="pg-pix-fav">SUMP SOC. DE CREDITO DIRETO SA</span>
       </div>
 
       <!-- Campo Pix Copia e Cola -->
-      <div style="margin-bottom: 20px; text-align: left;">
-          <label style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">Pix Copia e Cola:</label>
-          <div style="display: flex; gap: 6px;">
-              <input type="text" id="pixCopiaECola" value="00020126730014br.gov.bcb.pix0114577011690001960233Assinatura painel  Pipeiro Gestor520400005303986540549.905802BR592557701169 ANDREA ANGELO FE6010bonsucesso62290525SU202611170004433219053906304C2FE" readonly style="flex: 1; background: #0b0f19; border: 1px solid #2d3748; color: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.75rem;">
-              <button type="button" onclick="copiarPix()" id="btnCopiar" style="background: #00ff80; color: #0b0f19; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem;">Copiar</button>
-          </div>
+      <div class="pg-copy-row">
+        <label for="pixCopiaECola" class="pg-copy-label">Pix Copia e Cola:</label>
+        <div class="pg-copy-group">
+          <input type="text" id="pixCopiaECola" value="00020126730014br.gov.bcb.pix0114577011690001960233Assinatura painel  Pipeiro Gestor520400005303986540549.905802BR592557701169 ANDREA ANGELO FE6010bonsucesso62290525SU202611170004433219053906304C2FE" readonly class="pg-copy-input">
+          <button type="button" onclick="copiarPix()" id="btnCopiar" class="pg-btn-copy">Copiar</button>
+        </div>
       </div>
 
       <!-- Nome do Titular do Pix -->
-      <div style="margin-bottom: 20px; text-align: left;">
-          <label for="nomeTitular" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 6px;">NOME DO TITULAR DA CONTA DO PIX *</label>
-          <input type="text" id="nomeTitular" placeholder="Ex: Nome de quem fez a transferência" style="width: 100%; padding: 12px; background: #0b0f19; border: 1px solid #2d3748; border-radius: 8px; color: #fff; box-sizing: border-box; font-size: 0.9rem;" required>
-          <span style="font-size: 0.7rem; color: #718096; display: block; margin-top: 4px;">Informe caso tenha pago pela conta de outra pessoa.</span>
+      <div class="pg-titular-wrap">
+        <label for="nomeTitular" class="pg-titular-label">NOME DO TITULAR DA CONTA DO PIX *</label>
+        <input type="text" id="nomeTitular" placeholder="Ex: Nome de quem fez a transferência" class="pg-titular-input" required>
+        <span class="pg-titular-hint">Informe caso tenha pago pela conta de outra pessoa.</span>
       </div>
 
       <!-- Botão de Confirmação -->
-      <button type="button" onclick="enviarComprovante()" style="width: 100%; padding: 14px; background: #00ff88; color: #070a13; border: none; border-radius: 10px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 0 20px rgba(0,255,136,0.3); transition: 0.2s;">
+      <button type="button" onclick="enviarComprovante()" class="pg-btn-confirm">
         Já Fiz o Pagamento / Enviar Comprovante
       </button>
 
       <!-- Voltar -->
-      <div style="margin-top: 20px;">
-        <a href="cadastro.html" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">← Voltar para o Login</a>
+      <div class="pg-back-wrap">
+        <a href="cadastro.html" class="pg-back-link">← Voltar para o Login</a>
       </div>
 
     </div>
   </div>
 
   <!-- RODAPÉ FIXO -->
-  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
-    <div style="display: flex; gap: 20px;">
+  <footer class="pg-footer">
+    <div class="pg-footer-links">
       <span>Termos de Uso</span>
       <span>Política de Privacidade</span>
     </div>
@@ -81,56 +371,49 @@
 
   <script>
     function copiarPix() {
-        const inputPix = document.getElementById('pixCopiaECola');
-        inputPix.select();
-        inputPix.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(inputPix.value);
-        
-        const btn = document.getElementById('btnCopiar');
-        btn.innerText = 'Copiado!';
-        btn.style.background = '#00cc66';
-        
-        setTimeout(() => {
-            btn.innerText = 'Copiar';
-            btn.style.background = '#00ff80';
-        }, 2000);
+      const inputPix = document.getElementById('pixCopiaECola');
+      inputPix.select();
+      inputPix.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(inputPix.value);
+
+      const btn = document.getElementById('btnCopiar');
+      btn.innerText = 'Copiado!';
+      btn.style.background = '#75D92B';
+
+      setTimeout(() => {
+        btn.innerText = 'Copiar';
+        btn.style.background = '#A6FF45';
+      }, 2000);
     }
 
     function enviarComprovante() {
-        const titularInput = document.getElementById('nomeTitular');
-        const titular = titularInput.value.trim();
-        
-        if(!titular) {
-            alert('Por favor, informe o nome do titular da conta do Pix.');
-            titularInput.focus();
-            return;
+      const titularInput = document.getElementById('nomeTitular');
+      const titular = titularInput.value.trim();
+
+      if (!titular) {
+        alert('Por favor, informe o nome do titular da conta do Pix.');
+        titularInput.focus();
+        return;
+      }
+
+      const emailPendente = localStorage.getItem('pipeiro_cliente_pendente');
+
+      if (emailPendente) {
+        let listaAssinantes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+        let cliente = listaAssinantes.find(c => c.email === emailPendente);
+
+        if (cliente) {
+          cliente.status = 'pendente';
+          cliente.titularPix = titular;
+          localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaAssinantes));
         }
+      }
 
-        // Recupera o e-mail do cliente pendente guardado no cadastro
-        const emailPendente = localStorage.getItem('pipeiro_cliente_pendente');
+      alert('✅ Comprovante registado com sucesso! O seu acesso será liberado assim que o administrador confirmar o pagamento.');
 
-        if (emailPendente) {
-            // Busca a base de dados unificada de assinantes
-            let listaAssinantes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-            let cliente = listaAssinantes.find(c => c.email === emailPendente);
-
-            if (cliente) {
-                // Atualiza os dados do cliente para pendente de análise no admin e guarda o titular do pix
-                cliente.status = 'pendente';
-                cliente.titularPix = titular;
-                
-                // Salva de volta no localStorage
-                localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaAssinantes));
-            }
-        }
-
-        alert('✅ Comprovante registado com sucesso! O seu acesso será liberado assim que o administrador confirmar o pagamento.');
-        
-        // Limpa o temporário e redireciona de volta para a tela de login
-        localStorage.removeItem('pipeiro_cliente_pendente');
-        window.location.href = 'cadastro.html';
+      localStorage.removeItem('pipeiro_cliente_pendente');
+      window.location.href = 'cadastro.html';
     }
   </script>
 </body>
 </html>
-;

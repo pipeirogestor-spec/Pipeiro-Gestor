@@ -144,7 +144,6 @@ header {
   font-size: 12px;
 }
 
-.barra-reserva span,
 #contadorRegressivoTopo {
   background: rgba(166, 255, 69, 0.12);
   color: var(--neon);

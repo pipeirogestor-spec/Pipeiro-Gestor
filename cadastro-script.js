@@ -9,49 +9,50 @@ const SENHA_SUPER_ADMIN = "admin123";
 // Função para alternar para a tela de Login
 function alternarParaLogin(event) {
   if (event) event.preventDefault();
-  const authCard = document.querySelector('.auth-card');
-  const formCadastro = document.getElementById('formCadastro');
+  const authTitle = document.getElementById('authTitle');
+  const authDesc = document.getElementById('authDesc');
+  const boxCadastro = document.getElementById('boxCadastro');
   const boxLogin = document.getElementById('boxLogin');
-  
-  if (boxLogin.style.display === 'none') {
-    authCard.querySelector('h2').innerText = 'Aceder ao Painel';
-    authCard.querySelector('.card-desc').innerText = 'Insira os seus dados de acesso para entrar.';
-    if (formCadastro) formCadastro.style.display = 'none';
-    boxLogin.style.display = 'block';
-    
-    const authSwitch = authCard.querySelector('.auth-switch');
-    if (authSwitch) {
-      authSwitch.innerHTML = `Não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)">Cadastre-se</a>`;
-    }
+  const switchText = document.getElementById('switchText');
+
+  if (authTitle) authTitle.innerText = 'Aceder ao Painel';
+  if (authDesc) authDesc.innerText = 'Entre com os seus dados para gerir o seu negócio.';
+  if (boxCadastro) boxCadastro.style.display = 'none';
+  if (boxLogin) boxLogin.style.display = 'block';
+
+  if (switchText) {
+    switchText.innerHTML = `Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)">Criar Conta</a>`;
   }
 }
 
 // Função para alternar para a tela de Cadastro
 function alternarParaCadastro(event) {
   if (event) event.preventDefault();
-  const authCard = document.querySelector('.auth-card');
-  const formCadastro = document.getElementById('formCadastro');
+  const authTitle = document.getElementById('authTitle');
+  const authDesc = document.getElementById('authDesc');
+  const boxCadastro = document.getElementById('boxCadastro');
   const boxLogin = document.getElementById('boxLogin');
-  
-  authCard.querySelector('h2').innerText = 'Criar Sua Conta';
-  authCard.querySelector('.card-desc').innerText = 'Preencha os dados abaixo para aceder ao painel do gestor.';
-  if (formCadastro) formCadastro.style.display = 'block';
+  const switchText = document.getElementById('switchText');
+
+  if (authTitle) authTitle.innerText = 'Criar Sua Conta';
+  if (authDesc) authDesc.innerText = 'Preencha os dados abaixo para aceder ao painel do gestor.';
+  if (boxCadastro) boxCadastro.style.display = 'block';
   if (boxLogin) boxLogin.style.display = 'none';
-  
-  const authSwitch = authCard.querySelector('.auth-switch');
-  if (authSwitch) {
-    authSwitch.innerHTML = `Já possui uma conta? <a href="#" onclick="alternarParaLogin(event)">Faça Login</a>`;
+
+  if (switchText) {
+    switchText.innerHTML = `Já possui uma conta? <a href="#" onclick="alternarParaLogin(event)">Faça Login</a>`;
   }
 }
 
 // Função de Registo / Cadastro do Assinante
 function realizarCadastro(event) {
   if (event) event.preventDefault();
-  
+
   const nomeInput = document.getElementById('cadNome');
   const emailInput = document.getElementById('cadEmail');
   const whatsappInput = document.getElementById('cadWhatsapp');
   const senhaInput = document.getElementById('cadSenha');
+  const confirmaSenhaInput = document.getElementById('cadConfirmaSenha');
 
   if (!nomeInput || !emailInput || !whatsappInput || !senhaInput) return;
 
@@ -59,6 +60,7 @@ function realizarCadastro(event) {
   const email = emailInput.value.trim();
   const whatsapp = whatsappInput.value.trim();
   const senha = senhaInput.value.trim();
+  const confirmaSenha = confirmaSenhaInput ? confirmaSenhaInput.value.trim() : senha;
 
   if (!nome || !email || !whatsapp || !senha) {
     alert('Por favor, preencha todos os campos.');
@@ -70,9 +72,14 @@ function realizarCadastro(event) {
     return;
   }
 
+  if (confirmaSenhaInput && senha !== confirmaSenha) {
+    alert('As senhas não conferem. Digite a mesma senha nos dois campos.');
+    return;
+  }
+
   // Utiliza a chave unificada 'pipeiro_assinantes' em todo o sistema
   let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-  
+
   const emailExistente = listaClientes.find(c => c.email === email);
   if (emailExistente) {
     alert('Este e-mail já está cadastrado. Faça login.');
@@ -93,11 +100,11 @@ function realizarCadastro(event) {
   listaClientes.push(novoCliente);
   localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
   localStorage.setItem('pipeiro_cliente_pendente', email);
-  
+
   // Salva temporariamente os dados ativos para o fluxo
   localStorage.setItem('pipeiro_whatsapp_ativo', whatsapp);
   localStorage.setItem('pipeiro_nome_ativo', nome);
-  
+
   if (email === EMAIL_SUPER_ADMIN) {
     alert('Conta de Super Admin configurada! Faça login com a senha master.');
     alternarParaLogin();
@@ -143,7 +150,9 @@ function realizarLogin(event) {
     return;
   }
 
-  const senhaValida = (emailInput === EMAIL_SUPER_ADMIN) ? (senhaInput === SENHA_SUPER_ADMIN || senhaInput === cliente.senha) : (cliente.senha === senhaInput);
+  const senhaValida = (emailInput === EMAIL_SUPER_ADMIN)
+    ? (senhaInput === SENHA_SUPER_ADMIN || senhaInput === cliente.senha)
+    : (cliente.senha === senhaInput);
 
   if (!senhaValida) {
     alert('Senha incorreta. Tente novamente.');
@@ -169,6 +178,6 @@ function realizarLogin(event) {
   if (cliente.email === EMAIL_SUPER_ADMIN) {
     window.location.href = 'admin.html';
   } else {
-    window.location.href = 'index.html'; // Painel do gestor / app do assinante
+    window.location.href = 'index.html';
   }
 }
