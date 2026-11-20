@@ -3,48 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b09">
   <title>PipeiroGestor - Cadastro e Login do Assinante</title>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cadastro-style.css">
   <style>
-    /* ========================================================= */
-    /* ESTILOS E RESPONSIVIDADE PROFISSIONAL (MOBILE & DESKTOP)  */
-    /* ========================================================= */
+    :root {
+      --bg: #080B09;
+      --bg2: #0D120F;
+      --card: #111813;
+      --green: #A6FF45;
+      --green2: #75D92B;
+      --white: #F5F8F4;
+      --muted: #A1AAA2;
+      --border: rgba(255,255,255,.09);
+      --font: 'DM Sans', sans-serif;
+      --display: 'Space Grotesk', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.pg-auth-body {
+      background:
+        radial-gradient(ellipse at 75% 35%, rgba(166,255,69,.08), transparent 45%),
+        var(--bg) !important;
+      color: var(--white) !important;
+      font-family: var(--font) !important;
+      margin: 0 !important;
+      padding: 0 0 64px 0 !important;
+      overflow-x: hidden;
+    }
+
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 20px;
+    }
+
     .auth-grid {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       width: 100%;
-      max-width: 950px;
-      background: #111827;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
+      max-width: 960px;
+      background: var(--card) !important;
+      border: 1px solid rgba(166,255,69,.22) !important;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 25px 80px rgba(0,0,0,.65) !important;
     }
 
-    /* Bloco visual exclusivo para o topo no telemóvel (Logo + Título + Texto) */
-    .mobile-brand-header {
-      display: none;
-      text-align: center;
-      margin-bottom: 25px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #1e293b;
+    .auth-card {
+      padding: 40px !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--card);
     }
 
-    /* Adaptação inteligente para telemóveis */
-    @media (max-width: 768px) {
-      .auth-grid {
-        grid-template-columns: 1fr !important;
-      }
-      .auth-benefits-card {
-        display: none !important; /* Esconde a coluna lateral pesada no telemóvel */
-      }
-      .mobile-brand-header {
-        display: block !important; /* Mostra a marca completa no topo no telemóvel */
-      }
-      .auth-card {
-        padding: 25px 20px !important;
-      }
+    .pg-auth-title {
+      font-family: var(--display);
+      color: var(--green) !important;
+      margin: 0 0 8px 0 !important;
+      font-size: 26px !important;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .pg-auth-desc {
+      color: var(--muted) !important;
+      font-size: 13px !important;
+      margin: 0 0 24px 0 !important;
+      line-height: 1.6;
+    }
+
+    .pg-field {
+      margin-bottom: 16px;
+    }
+
+    .pg-field-last {
+      margin-bottom: 24px;
+    }
+
+    .pg-label {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .pg-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      outline: none;
+      font-family: var(--font);
+      font-size: 14px;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .pg-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(166,255,69,.14);
     }
 
     .password-wrapper {
@@ -52,30 +124,180 @@
       display: flex;
       align-items: center;
     }
+
     .password-wrapper input {
       width: 100%;
-      padding-right: 45px !important;
+      padding-right: 44px !important;
     }
+
     .toggle-password {
       position: absolute;
-      right: 12px;
+      right: 10px;
       background: none;
       border: none;
       cursor: pointer;
-      color: #94a3b8;
-      font-size: 16px;
-      outline: none;
-      padding: 0;
+      color: var(--muted);
+      font-size: 15px;
+      padding: 4px 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100%;
-    }
-    .toggle-password:hover {
-      color: #00ff88;
+      transition: color .2s ease;
     }
 
-    /* OCULTA O SELO DA NETLIFY GRATUITAMENTE E EVITA SOBREPOSIÇÃO */
+    .toggle-password:hover {
+      color: var(--green);
+    }
+
+    .pg-btn-submit {
+      width: 100%;
+      min-height: 50px;
+      padding: 14px 20px;
+      background: var(--green) !important;
+      color: #0b1208 !important;
+      border: none !important;
+      border-radius: 8px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 28px rgba(166,255,69,.16) !important;
+      transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+
+    .pg-btn-submit:hover {
+      background: #c0ff81 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(166,255,69,.24) !important;
+    }
+
+    .auth-switch {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .auth-switch a {
+      color: var(--green) !important;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .auth-switch a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-benefits-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at center, rgba(166,255,69,.11) 0%, var(--bg2) 72%) !important;
+      padding: 40px;
+      border-left: 1px solid var(--border) !important;
+    }
+
+    .auth-benefits-card h3 {
+      font-family: var(--display);
+      color: var(--white);
+      font-size: 24px;
+      margin: 0 0 12px 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .auth-benefits-card p {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 320px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .pg-logo-img {
+      max-width: 150px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 18px rgba(166,255,69,.28));
+    }
+
+    .mobile-brand-header {
+      display: none;
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-brand-header .pg-logo-img {
+      max-width: 110px;
+      margin-bottom: 10px;
+    }
+
+    .mobile-brand-header h3 {
+      font-family: var(--display);
+      color: var(--white);
+      font-size: 20px;
+      margin: 0 0 6px 0;
+      font-weight: 700;
+    }
+
+    .mobile-brand-header p {
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 300px;
+      line-height: 1.5;
+      margin: 0 auto;
+    }
+
+    .pg-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(8,11,9,.96) !important;
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border) !important;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999999;
+      font-size: 12px;
+      color: var(--muted) !important;
+    }
+
+    .pg-footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .auth-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .auth-benefits-card {
+        display: none !important;
+      }
+      .mobile-brand-header {
+        display: block !important;
+      }
+      .auth-card {
+        padding: 26px 20px !important;
+      }
+      .pg-footer {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        padding: 10px 14px;
+      }
+    }
+
     #netlify-badge, a[href*="netlify.com/-/?utm_source=badge"] {
       display: none !important;
       visibility: hidden !important;
@@ -84,104 +306,104 @@
     }
   </style>
 </head>
-<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; padding-bottom: 60px;">
+<body class="pg-auth-body">
 
   <!-- CONTAINER PRINCIPAL DE AUTENTICAÇÃO -->
-  <div class="auth-container" style="min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+  <div class="auth-container">
     <div class="auth-grid">
-      
+
       <!-- COLUNA ESQUERDA: FORMULÁRIOS DE CADASTRO E LOGIN -->
-      <div class="auth-card" style="padding: 40px; display: flex; flex-direction: column; justify-content: center;">
-        
+      <div class="auth-card">
+
         <!-- LOGO E TEXTO DESCRITIVO VISÍVEIS NO TOPO APENAS NO TELEMÓVEL -->
         <div class="mobile-brand-header">
-          <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 130px; width: 100%; height: auto; filter: drop-shadow(0 0 15px rgba(0,255,136,0.5)); margin-bottom: 10px;">
-          <h3 style="color: #fff; font-size: 20px; margin: 0 0 8px 0; font-weight: bold;">PipeiroGestor</h3>
-          <p style="color: #94a3b8; font-size: 13px; max-width: 300px; line-height: 1.5; margin: 0 auto;">
-            A plataforma definitiva para automação, gestão de rifas e controlo total das suas vendas em tempo real com zero taxas.
+          <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" class="pg-logo-img" referrerpolicy="no-referrer">
+          <h3>PipeiroGestor</h3>
+          <p>
+            A plataforma de automação, gestão de campanhas e controle total das suas vendas em tempo real.
           </p>
         </div>
 
         <!-- TÍTULO DINÂMICO DA PÁGINA -->
-        <h2 id="authTitle" style="color: #00ff88; margin-top: 0; font-size: 24px; margin-bottom: 8px;">Aceder ao Painel</h2>
-        <p id="authDesc" class="card-desc" style="color: #94a3b8; font-size: 13px; margin-bottom: 25px;">Entre com os seus dados para gerir o seu negócio.</p>
+        <h2 id="authTitle" class="pg-auth-title">Aceder ao Painel</h2>
+        <p id="authDesc" class="card-desc pg-auth-desc">Entre com os seus dados para gerir o seu negócio.</p>
 
         <!-- FORMULÁRIO DE LOGIN (APARECE POR DEFEITO) -->
         <div id="boxLogin">
           <form onsubmit="realizarLogin(event)">
-            <div style="margin-bottom: 15px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">E-mail de Acesso *</label>
-              <input type="email" id="loginEmail" placeholder="Seu e-mail cadastrado" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            <div class="pg-field">
+              <label for="loginEmail" class="pg-label">E-mail de Acesso *</label>
+              <input type="email" id="loginEmail" class="pg-input" placeholder="Seu e-mail cadastrado" required>
             </div>
 
-            <div style="margin-bottom: 25px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Sua Senha *</label>
+            <div class="pg-field-last">
+              <label for="loginSenha" class="pg-label">Sua Senha *</label>
               <div class="password-wrapper">
-                <input type="password" id="loginSenha" placeholder="Sua senha" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
-                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('loginSenha', this)">👁️</button>
+                <input type="password" id="loginSenha" class="pg-input" placeholder="Sua senha" required>
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('loginSenha', this)" aria-label="Mostrar ou ocultar senha">👁</button>
               </div>
             </div>
 
-            <button type="submit" style="width: 100%; padding: 14px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 0 20px rgba(0,255,136,0.35); transition: background 0.2s;">
-              ENTRAR NO PAINEL 🚀
+            <button type="submit" class="pg-btn-submit">
+              ENTRAR NO PAINEL →
             </button>
           </form>
         </div>
 
-        <!-- FORMULÁRIO DE CADASTRO (CONTROLADO PELO SCRIPT JS / OCULTO INICIALMENTE) -->
+        <!-- FORMULÁRIO DE CADASTRO (OCULTO INICIALMENTE) -->
         <div id="boxCadastro" style="display: none;">
           <form id="formCadastro" onsubmit="realizarCadastro(event)">
-            <div style="margin-bottom: 15px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Nome Completo *</label>
-              <input type="text" id="cadNome" placeholder="Ex: João da Silva" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            <div class="pg-field">
+              <label for="cadNome" class="pg-label">Nome Completo *</label>
+              <input type="text" id="cadNome" class="pg-input" placeholder="Ex: João da Silva" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">E-mail Profissional *</label>
-              <input type="email" id="cadEmail" placeholder="seu@email.com" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            <div class="pg-field">
+              <label for="cadEmail" class="pg-label">E-mail Profissional *</label>
+              <input type="email" id="cadEmail" class="pg-input" placeholder="seu@email.com" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">WhatsApp (com DDD) *</label>
-              <input type="tel" id="cadWhatsapp" placeholder="Ex: 21999999999" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
+            <div class="pg-field">
+              <label for="cadWhatsapp" class="pg-label">WhatsApp (com DDD) *</label>
+              <input type="tel" id="cadWhatsapp" class="pg-input" placeholder="Ex: 21999999999" required>
             </div>
 
-            <div style="margin-bottom: 15px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Criar Senha Segura *</label>
+            <div class="pg-field">
+              <label for="cadSenha" class="pg-label">Criar Senha Segura *</label>
               <div class="password-wrapper">
-                <input type="password" id="cadSenha" placeholder="Mínimo 6 caracteres" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
-                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadSenha', this)">👁️</button>
+                <input type="password" id="cadSenha" class="pg-input" placeholder="Mínimo 6 caracteres" required>
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadSenha', this)" aria-label="Mostrar ou ocultar senha">👁</button>
               </div>
             </div>
 
-            <div style="margin-bottom: 25px;">
-              <label style="display: block; font-size: 12px; color: #94a3b8; margin-bottom: 5px; font-weight: bold; text-transform: uppercase;">Confirmar Senha *</label>
+            <div class="pg-field-last">
+              <label for="cadConfirmaSenha" class="pg-label">Confirmar Senha *</label>
               <div class="password-wrapper">
-                <input type="password" id="cadConfirmaSenha" placeholder="Digite a senha novamente" required style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; font-size: 14px;">
-                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadConfirmaSenha', this)">👁️</button>
+                <input type="password" id="cadConfirmaSenha" class="pg-input" placeholder="Digite a senha novamente" required>
+                <button type="button" class="toggle-password" onclick="alternarVisibilidadeSenha('cadConfirmaSenha', this)" aria-label="Mostrar ou ocultar senha">👁</button>
               </div>
             </div>
 
-            <button type="submit" style="width: 100%; padding: 14px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 0 20px rgba(0,255,136,0.35); transition: background 0.2s;">
-              REGISTRAR E ATIVAR CONTA ➡️
+            <button type="submit" class="pg-btn-submit">
+              REGISTRAR E ATIVAR CONTA →
             </button>
           </form>
         </div>
 
         <!-- BOTÃO DE ALTERNÂNCIA ENTRE LOGIN E CADASTRO -->
-        <div class="auth-switch" style="margin-top: 25px; text-align: center; font-size: 13px; color: #94a3b8;">
-          <span id="switchText">Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Criar Conta</a></span>
+        <div class="auth-switch">
+          <span id="switchText">Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)">Criar Conta</a></span>
         </div>
       </div>
 
       <!-- COLUNA DIREITA: LOGOTIPO E DESTAQUE VISUAL (VISÍVEL NO PC) -->
-      <div class="auth-benefits-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #161e31 0%, #0f172a 100%); padding: 40px; border-left: 1px solid #1e293b;">
-        <div style="margin-bottom: 25px;">
-          <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" style="max-width: 180px; width: 100%; height: auto; filter: drop-shadow(0 0 20px rgba(0,255,136,0.5));">
+      <div class="auth-benefits-card">
+        <div style="margin-bottom: 24px;">
+          <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" class="pg-logo-img" referrerpolicy="no-referrer">
         </div>
-        <h3 style="color: #fff; font-size: 22px; margin-bottom: 12px; font-weight: bold;">PipeiroGestor</h3>
-        <p style="color: #94a3b8; font-size: 14px; max-width: 320px; line-height: 1.6; margin: 0;">
-          A plataforma definitiva para automação, gestão de rifas e controlo total das suas vendas em tempo real com zero taxas.
+        <h3>PipeiroGestor</h3>
+        <p>
+          A plataforma de automação, gestão de campanhas e controle total das suas vendas em tempo real.
         </p>
       </div>
 
@@ -189,8 +411,8 @@
   </div>
 
   <!-- RODAPÉ FIXO -->
-  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; background: #070a12; border-top: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999999; box-sizing: border-box; font-size: 12px; color: #94a3b8;">
-    <div style="display: flex; gap: 20px;">
+  <footer class="pg-footer">
+    <div class="pg-footer-links">
       <span>Termos de Uso</span>
       <span>Política de Privacidade</span>
     </div>
@@ -202,26 +424,25 @@
   <!-- LIGAÇÃO AOS SCRIPTS -->
   <script src="cadastro-script.js"></script>
   <script>
-    // Função universal do Olhinho para alternar a visibilidade da senha
     function alternarVisibilidadeSenha(idInput, botao) {
       const input = document.getElementById(idInput);
+      if (!input) return;
       if (input.type === 'password') {
         input.type = 'text';
-        botao.innerText = '🙈';
+        botao.innerText = '●';
       } else {
         input.type = 'password';
-        botao.innerText = '👁️';
+        botao.innerText = '👁';
       }
     }
 
-    // Funções para alternar de forma limpa entre Login e Cadastro na mesma página
     function alternarParaCadastro(e) {
       e.preventDefault();
       document.getElementById('boxLogin').style.display = 'none';
       document.getElementById('boxCadastro').style.display = 'block';
       document.getElementById('authTitle').innerText = 'Criar Sua Conta';
       document.getElementById('authDesc').innerText = 'Preencha os dados abaixo para aceder ao painel do gestor.';
-      document.getElementById('switchText').innerHTML = 'Já possui uma conta? <a href="#" onclick="alternarParaLogin(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Faça Login</a>';
+      document.getElementById('switchText').innerHTML = 'Já possui uma conta? <a href="#" onclick="alternarParaLogin(event)">Faça Login</a>';
     }
 
     function alternarParaLogin(e) {
@@ -230,7 +451,7 @@
       document.getElementById('boxLogin').style.display = 'block';
       document.getElementById('authTitle').innerText = 'Aceder ao Painel';
       document.getElementById('authDesc').innerText = 'Entre com os seus dados para gerir o seu negócio.';
-      document.getElementById('switchText').innerHTML = 'Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)" style="color: #00ff88; text-decoration: none; font-weight: bold;">Criar Conta</a>';
+      document.getElementById('switchText').innerHTML = 'Ainda não tem uma conta? <a href="#" onclick="alternarParaCadastro(event)">Criar Conta</a>';
     }
   </script>
 </body>

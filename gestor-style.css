@@ -857,11 +857,10 @@ select#tipoChavePix option {
   }
 }
 
-/* Remove selo da Netlify */
+/* Remove selo da Netlify sem esconder alertas do gestor */
 .netlify-badge,
 #netlify-badge,
-a[href*="netlify.com"],
-div[style*="z-index: 99999"] {
+a[href*="netlify.com"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
