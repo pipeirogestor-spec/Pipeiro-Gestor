@@ -18,21 +18,22 @@ function getChaveIsolada(chaveBase) {
 (function verificarAutenticacao() {
   const estaLogado = localStorage.getItem('pipeiro_logado');
   if (estaLogado !== 'true') {
-    alert('⚠️ Acesso restrito! Por favor, faça login ou cadastre-se para aceder ao painel.');
+    alert('Acesso restrito. Por favor, faça login ou cadastre-se para acessar o painel.');
     window.location.href = 'cadastro.html';
   }
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
   iniciarSplashScreen();
-  carregarDadosSalvosPersistentes(); // Garante o carregamento limpo dos resets
+  carregarDadosSalvosPersistentes();
   carregarMinhasCampanhas();
   configurarNavegacaoSidebar();
   carregarConfiguracoesSalvas();
   carregarPedidosEComprovantes();
   atualizarEstatisticasFinanceirasGestor();
   carregarResumoHomeCards();
-  verificarSeEhSuperAdmin(); // Verifica e carrega o painel master se for o Super Admin
+  verificarSeEhSuperAdmin();
+  iniciarEscutaNovosPedidos();
 });
 
 // =========================================================
@@ -56,7 +57,7 @@ function carregarDadosSalvosPersistentes() {
   const ganhadoresSalvos = localStorage.getItem(getChaveIsolada('topGanhadoresPipeiro'));
   const listaGanhadores = document.getElementById('homeTopGanhadoresList');
   if (listaGanhadores && ganhadoresSalvos === "vazio") {
-    listaGanhadores.innerHTML = '<p style="color: #94a3b8; font-size: 13px;">Nenhum ganhador registrado no momento.</p>';
+    listaGanhadores.innerHTML = '<p style="color: #9BA59C; font-size: 13px;">Nenhum ganhador registrado no momento.</p>';
   }
 }
 
@@ -78,7 +79,7 @@ function iniciarSplashScreen() {
   const splashScreen = document.getElementById("splash-screen");
 
   const tempoTotal = 2000;
-  const intervaloTempo = 30; 
+  const intervaloTempo = 30;
   const incremento = 100 / (tempoTotal / intervaloTempo);
 
   let indiceFrase = 0;
@@ -105,14 +106,14 @@ function iniciarSplashScreen() {
 function adicionarLinhaPromocao() {
   const container = document.getElementById('containerPromocoes');
   if (!container) return;
-  
+
   const div = document.createElement('div');
   div.className = 'promocao-item';
   div.style.cssText = "display: flex; gap: 10px; margin-bottom: 10px; align-items: center; margin-top: 10px;";
   div.innerHTML = `
-    <input type="number" placeholder="Qtd Cotas (Ex: 3)" class="promocao-qtd" style="flex: 1; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
-    <span style="color: #94a3b8;">cotas por R$</span>
-    <input type="number" step="0.01" placeholder="Valor Total (Ex: 25.00)" class="promocao-valor" style="flex: 1; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff;" />
+    <input type="number" placeholder="Qtd Cotas (Ex: 3)" class="promocao-qtd" style="flex: 1; padding: 10px; background: #0A0F0C; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; color: #F5F8F4;" />
+    <span style="color: #9BA59C;">cotas por R$</span>
+    <input type="number" step="0.01" placeholder="Valor Total (Ex: 25.00)" class="promocao-valor" style="flex: 1; padding: 10px; background: #0A0F0C; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; color: #F5F8F4;" />
   `;
   container.appendChild(div);
 }
@@ -137,11 +138,11 @@ function gerarLinkAcao() {
 
     const promocoes = [];
     const elementosPromocao = document.querySelectorAll('.promocao-item');
-    
+
     elementosPromocao.forEach(row => {
       const qtdInput = row.querySelector('.promocao-qtd');
       const valorInput = row.querySelector('.promocao-valor');
-      
+
       const qtd = parseInt(qtdInput?.value) || 0;
       const valor = parseFloat(valorInput?.value) || 0;
 
@@ -176,7 +177,7 @@ function gerarLinkAcao() {
         const chaveCampanhaIsolada = getChaveIsolada('campanha_' + slug);
         localStorage.setItem(chaveCampanhaIsolada, JSON.stringify(campanha));
       } catch (e) {
-        alert("⚠️ As imagens selecionadas são muito pesadas. Escolha fotos mais leves.");
+        alert("As imagens selecionadas são muito pesadas. Escolha fotos mais leves.");
         return;
       }
 
@@ -187,20 +188,37 @@ function gerarLinkAcao() {
       const inputUrl = document.getElementById('inputUrlGerada');
       const btnWpp = document.getElementById('btnShareWhatsapp');
 
-      if (inputUrl) inputUrl.value = urlFinal;
-      if (btnWpp) {
-        const msgShare = `🔥 *${titulo}*\n\nGaranta já suas cotas acedendo ao link:\n${urlFinal}`;
-        btnWpp.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(msgShare)}`;
+      if (boxLink) {
+        boxLink.style.background = '#0D120F';
+        boxLink.style.border = '1px solid rgba(255,255,255,0.09)';
+        boxLink.style.borderLeft = '4px solid #A6FF45';
+        boxLink.style.borderRadius = '14px';
+        boxLink.style.padding = '22px';
+        boxLink.style.display = 'block';
       }
-      if (boxLink) boxLink.style.display = 'block';
 
-      boxLink.scrollIntoView({ behavior: 'smooth' });
+      if (inputUrl) {
+        inputUrl.value = urlFinal;
+        inputUrl.style.background = '#0A0F0C';
+        inputUrl.style.border = '1px solid rgba(255,255,255,0.14)';
+        inputUrl.style.color = '#A6FF45';
+      }
+
+      if (btnWpp) {
+        const msgShare = `*${titulo}*\n\nGaranta já suas cotas acessando o link:\n${urlFinal}`;
+        btnWpp.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(msgShare)}`;
+        btnWpp.style.background = '#22C55E';
+        btnWpp.style.color = '#08120B';
+        btnWpp.style.fontWeight = '800';
+      }
+
+      if (boxLink) boxLink.scrollIntoView({ behavior: 'smooth' });
       carregarMinhasCampanhas();
       carregarResumoHomeCards();
     };
 
     const inputFoto = document.getElementById('fotoPremio');
-    
+
     if (inputFoto && inputFoto.files && inputFoto.files.length > 0) {
       const arquivos = Array.from(inputFoto.files).slice(0, 3);
       const imagensBase64 = [];
@@ -251,7 +269,7 @@ function gerarLinkAcao() {
 
   } catch (err) {
     console.error("Erro crítico ao gerar ação:", err);
-    alert("⚠️ Erro no script: " + err.message);
+    alert("Erro no script: " + err.message);
   }
 }
 
@@ -262,17 +280,17 @@ let filtroCampanhaAtual = 'todas';
 
 function filtrarCampanhasGestor(tipo) {
   filtroCampanhaAtual = tipo;
-  
+
   document.querySelectorAll('.btn-filtro').forEach(btn => {
-    btn.style.background = '#1e293b';
-    btn.style.color = '#94a3b8';
-    btn.style.borderColor = '#334155';
+    btn.style.background = '#111813';
+    btn.style.color = '#9BA59C';
+    btn.style.borderColor = 'rgba(255,255,255,0.09)';
   });
-  
+
   if (event && event.target) {
-    event.target.style.background = '#3b82f6';
-    event.target.style.color = '#fff';
-    event.target.style.borderColor = '#3b82f6';
+    event.target.style.background = '#A6FF45';
+    event.target.style.color = '#0D140A';
+    event.target.style.borderColor = '#A6FF45';
   }
 
   carregarMinhasCampanhas();
@@ -305,20 +323,20 @@ function carregarMinhasCampanhas() {
         if (container) {
           const card = document.createElement('div');
           card.className = 'campanha-gestao-card';
-          card.style.cssText = "background: #111827; border: 1px solid #1e293b; padding: 18px; border-radius: 10px; color: #fff; margin-bottom: 10px;";
+          card.style.cssText = "background: #111813; border: 1px solid rgba(255,255,255,0.09); padding: 18px; border-radius: 12px; color: #F5F8F4; margin-bottom: 10px;";
           card.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <h4 style="margin: 0; color: #fff; font-size: 16px;">${campanha.titulo}</h4>
-              <span style="font-size: 11px; padding: 3px 8px; border-radius: 12px; background: ${isPausada ? 'rgba(245, 158, 11, 0.15)' : 'rgba(0, 255, 136, 0.15)'}; color: ${isPausada ? '#f59e0b' : '#00ff88'}; font-weight: bold;">
+              <h4 style="margin: 0; color: #F5F8F4; font-size: 16px;">${campanha.titulo}</h4>
+              <span style="font-size: 11px; padding: 3px 10px; border-radius: 999px; background: ${isPausada ? 'rgba(234, 179, 8, 0.14)' : 'rgba(166, 255, 69, 0.12)'}; color: ${isPausada ? '#eab308' : '#A6FF45'}; font-weight: 700;">
                 ${isPausada ? 'Pausada / Inativa' : 'Ativa'}
               </span>
             </div>
-            <p style="margin: 0 0 10px 0; font-size: 13px; color: #94a3b8;">Preço por cota: <strong>R$ ${parseFloat(campanha.preco || 0).toFixed(2)}</strong></p>
+            <p style="margin: 0 0 12px 0; font-size: 13px; color: #9BA59C;">Preço por cota: <strong style="color: #A6FF45;">R$ ${parseFloat(campanha.preco || 0).toFixed(2)}</strong></p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <a href="rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}" target="_blank" style="padding: 6px 12px; background: #10b981; color: #fff; text-decoration: none; border-radius: 6px; font-size: 12px; font-weight: bold;">🔗 Ver Página</a>
-              <button onclick="editarCampanha('${slug}')" style="padding: 6px 12px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">✏️ Editar</button>
-              <button onclick="alternarPausarCampanha('${slug}')" style="padding: 6px 12px; background: #f59e0b; color: #000; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">${isPausada ? '▶️ Ativar' : '⏸️ Pausar'}</button>
-              <button onclick="excluirCampanha('${slug}')" style="padding: 6px 12px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">🗑️ Excluir</button>
+              <a href="rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}" target="_blank" style="padding: 7px 12px; background: #A6FF45; color: #0D140A; text-decoration: none; border-radius: 7px; font-size: 12px; font-weight: 800;">Ver Página</a>
+              <button onclick="editarCampanha('${slug}')" style="padding: 7px 12px; background: #0A0F0C; color: #F5F8F4; border: 1px solid rgba(255,255,255,0.14); border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 700;">Editar</button>
+              <button onclick="alternarPausarCampanha('${slug}')" style="padding: 7px 12px; background: rgba(234,179,8,0.14); color: #eab308; border: 1px solid rgba(234,179,8,0.3); border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 700;">${isPausada ? 'Ativar' : 'Pausar'}</button>
+              <button onclick="excluirCampanha('${slug}')" style="padding: 7px 12px; background: rgba(239,68,68,0.14); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 700;">Excluir</button>
             </div>
           `;
           container.appendChild(card);
@@ -330,7 +348,7 @@ function carregarMinhasCampanhas() {
   }
 
   if (container && container.children.length === 0) {
-    container.innerHTML = `<p style="color: #94a3b8; font-size: 13px;">Nenhuma campanha encontrada com este filtro.</p>`;
+    container.innerHTML = `<p style="color: #9BA59C; font-size: 13px;">Nenhuma campanha encontrada com este filtro.</p>`;
   }
 
   const elAtivas = document.getElementById('totalAtivasDisplay');
@@ -342,7 +360,7 @@ function carregarMinhasCampanhas() {
 function excluirCampanha(slug) {
   if (confirm("Tem certeza que deseja excluir esta campanha permanentemente?")) {
     localStorage.removeItem(getChaveIsolada('campanha_' + slug));
-    alert("Campanha excluída com sucesso!");
+    alert("Campanha excluída com sucesso.");
     carregarMinhasCampanhas();
     carregarResumoHomeCards();
   }
@@ -352,7 +370,7 @@ function alternarPausarCampanha(slug) {
   const chave = getChaveIsolada('campanha_' + slug);
   const dadosStr = localStorage.getItem(chave);
   if (!dadosStr) return;
-  
+
   let campanha = JSON.parse(dadosStr);
   campanha.pausada = !campanha.pausada;
   localStorage.setItem(chave, JSON.stringify(campanha));
@@ -364,7 +382,7 @@ function editarCampanha(slug) {
   const chave = getChaveIsolada('campanha_' + slug);
   const dadosStr = localStorage.getItem(chave);
   if (!dadosStr) return;
-  
+
   const campanha = JSON.parse(dadosStr);
   if (document.getElementById('tituloAcao')) document.getElementById('tituloAcao').value = campanha.titulo || '';
   if (document.getElementById('precoUnitario')) document.getElementById('precoUnitario').value = campanha.preco || '';
@@ -379,7 +397,7 @@ function editarCampanha(slug) {
     formEl.style.display = 'block';
     formEl.scrollIntoView({ behavior: 'smooth' });
   }
-  alert("✏️ Dados carregados no formulário! Edite e publique novamente.");
+  alert("Dados carregados no formulário. Edite e publique novamente.");
 }
 
 // =========================================================
@@ -406,7 +424,7 @@ function exportarRelatorioCSV() {
   }
 
   if (totalLinhas === 0) {
-    alert("⚠️ Não existem pedidos registados para exportar no momento.");
+    alert("Não existem pedidos registrados para exportar no momento.");
     return;
   }
 
@@ -417,7 +435,7 @@ function exportarRelatorioCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  alert("✅ Relatório de vendas exportado com sucesso!");
+  alert("Relatório de vendas exportado com sucesso.");
 }
 
 // =========================================================
@@ -488,11 +506,11 @@ function atualizarNomeFoto(input) {
   if (!span) return;
   if (input.files && input.files.length > 0) {
     const qtd = Math.min(input.files.length, 3);
-    span.textContent = `✅ ${qtd} foto(s) selecionada(s) para o carrossel!`;
-    span.style.color = "#00ff88";
+    span.textContent = `${qtd} foto(s) selecionada(s) para o carrossel`;
+    span.style.color = "#A6FF45";
   } else {
-    span.textContent = "📷 Clique aqui para selecionar as fotos do prêmio (até 3 fotos)";
-    span.style.color = "#00ff88";
+    span.textContent = "Clique aqui para selecionar as fotos do prêmio (até 3 fotos)";
+    span.style.color = "#A6FF45";
   }
 }
 
@@ -502,10 +520,10 @@ function copiarLink() {
   input.select();
   input.setSelectionRange(0, 99999);
   navigator.clipboard.writeText(input.value).then(() => {
-    alert('✅ Link copiado com sucesso! Agora é só enviar aos compradores.');
+    alert('Link copiado com sucesso. Agora é só enviar aos compradores.');
   }).catch(err => {
     console.error('Erro ao copiar link: ', err);
-    alert('⚠️ Não foi possível copiar automaticamente.');
+    alert('Não foi possível copiar automaticamente.');
   });
 }
 
@@ -562,7 +580,7 @@ function salvarConfiguracoes(event) {
 
   localStorage.setItem(getChaveIsolada('configuracoes'), JSON.stringify(config));
   preencherCamposDefaultCriacao(config);
-  alert("✅ Configurações do Gestor salvas com sucesso!");
+  alert("Configurações do Gestor salvas com sucesso.");
 }
 
 function preencherCamposDefaultCriacao(config) {
@@ -583,8 +601,8 @@ function carregarPedidosEComprovantes() {
   const selectFiltro = document.getElementById('filtroCampanhaPedidos');
   if (selectFiltro) {
     const valorSelecionadoAtual = selectFiltro.value;
-    selectFiltro.innerHTML = '<option value="todas">🎯 Todas as Campanhas</option>';
-    
+    selectFiltro.innerHTML = '<option value="todas">Todas as Campanhas</option>';
+
     const prefixoCampanha = getChaveIsolada('campanha_');
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -613,37 +631,37 @@ function carregarPedidosEComprovantes() {
     if (key && key.startsWith(prefixoPedido)) {
       try {
         const pedido = JSON.parse(localStorage.getItem(key));
-        
+
         if (campanhaSelecionadaFiltro !== 'todas' && pedido.slugAcao !== campanhaSelecionadaFiltro) {
-          continue; 
+          continue;
         }
 
         if (pedido.status === 'pendente') totalPendentes++;
 
         const tr = document.createElement('tr');
-        tr.style.borderBottom = "1px solid #1e293b";
+        tr.style.borderBottom = "1px solid rgba(255,255,255,0.09)";
         tr.innerHTML = `
-          <td style="padding: 12px; color: #fff; font-weight: bold;">${pedido.nomeComprador || 'Comprador'}</td>
-          <td style="padding: 12px; color: #94a3b8;">${pedido.whatsapp || '-'}</td>
-          <td style="padding: 12px; color: #00ff88; font-weight: bold;">${Array.isArray(pedido.cotas) ? pedido.cotas.join(', ') : pedido.cotas}</td>
-          <td style="padding: 12px; color: #fff;">R$ ${parseFloat(pedido.valorTotal || 0).toFixed(2)}</td>
+          <td style="padding: 12px; color: #F5F8F4; font-weight: 700;">${pedido.nomeComprador || 'Comprador'}</td>
+          <td style="padding: 12px; color: #9BA59C;">${pedido.whatsapp || '-'}</td>
+          <td style="padding: 12px; color: #A6FF45; font-weight: 700;">${Array.isArray(pedido.cotas) ? pedido.cotas.join(', ') : pedido.cotas}</td>
+          <td style="padding: 12px; color: #F5F8F4;">R$ ${parseFloat(pedido.valorTotal || 0).toFixed(2)}</td>
           <td style="padding: 12px;">
-            <span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; background: ${pedido.status === 'aprovado' ? 'rgba(0,255,136,0.15)' : 'rgba(245,158,11,0.15)'}; color: ${pedido.status === 'aprovado' ? '#00ff88' : '#f59e0b'};">
-              ${pedido.status === 'aprovado' ? '✅ Aprovado' : '⏳ Aguardando'}
+            <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: ${pedido.status === 'aprovado' ? 'rgba(166,255,69,0.12)' : 'rgba(234,179,8,0.14)'}; color: ${pedido.status === 'aprovado' ? '#A6FF45' : '#eab308'};">
+              ${pedido.status === 'aprovado' ? 'Aprovado' : 'Aguardando'}
             </span>
           </td>
           <td style="padding: 12px; display: flex; gap: 6px; align-items: center;">
             ${pedido.status !== 'aprovado' ? `
-              <button onclick="aprovarPedido('${key}')" style="padding: 6px 10px; background: #10b981; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; box-shadow: 0 0 10px rgba(16,185,129,0.3);">
-                ✔️ Aprovar
+              <button onclick="aprovarPedido('${key}')" style="padding: 6px 10px; background: #A6FF45; color: #0D140A; border: none; border-radius: 6px; cursor: pointer; font-weight: 800; font-size: 11px;">
+                Aprovar
               </button>
-              <button onclick="negarPedido('${key}')" style="padding: 6px 10px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; box-shadow: 0 0 10px rgba(239,68,68,0.3);">
-                ❌ Negar
+              <button onclick="negarPedido('${key}')" style="padding: 6px 10px; background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 11px;">
+                Negar
               </button>
             ` : `
-              <span style="color: #00ff88; font-size: 12px; font-weight: bold; margin-right: 6px;">Pago</span>
-              <button onclick="excluirPedidoAprovado('${key}')" title="Excluir da tabela" style="padding: 6px 10px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; box-shadow: 0 0 10px rgba(239,68,68,0.3);">
-                🗑️ Excluir
+              <span style="color: #A6FF45; font-size: 12px; font-weight: 700; margin-right: 6px;">Pago</span>
+              <button onclick="excluirPedidoAprovado('${key}')" title="Excluir da tabela" style="padding: 6px 10px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 11px;">
+                Excluir
               </button>
             `}
           </td>
@@ -664,8 +682,8 @@ function carregarPedidosEComprovantes() {
   if (tabelaBody.children.length === 0) {
     tabelaBody.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align: center; color: #8b9bb4; padding: 25px;">
-          Nenhum pedido registado para esta campanha no momento.
+        <td colspan="6" style="text-align: center; color: #9BA59C; padding: 25px;">
+          Nenhum pedido registrado para esta campanha no momento.
         </td>
       </tr>
     `;
@@ -682,7 +700,7 @@ function aprovarPedido(chavePedido) {
 
   localStorage.removeItem(getChaveIsolada('financeiro_zerado'));
   localStorage.removeItem(getChaveIsolada('cotas_zeradas'));
-  localStorage.removeItem(getChaveIsolada('arrecadadoHojePipeiro')); // Reseta o flag de zero do dia para recalcular
+  localStorage.removeItem(getChaveIsolada('arrecadadoHojePipeiro'));
 
   if (pedido.slugAcao) {
     const chaveCampanha = getChaveIsolada('campanha_' + pedido.slugAcao);
@@ -690,7 +708,7 @@ function aprovarPedido(chavePedido) {
     if (dadosCampanha) {
       const campanha = JSON.parse(dadosCampanha);
       campanha.cotasPagas = campanha.cotasPagas || [];
-      
+
       if (Array.isArray(pedido.cotas)) {
         pedido.cotas.forEach(c => {
           if (!campanha.cotasPagas.includes(c)) campanha.cotasPagas.push(c);
@@ -700,16 +718,16 @@ function aprovarPedido(chavePedido) {
     }
   }
 
-  alert("✅ Pedido aprovado com sucesso! As cotas foram marcadas como pagas e bloqueadas.");
+  alert("Pedido aprovado com sucesso. As cotas foram marcadas como pagas e bloqueadas.");
   carregarPedidosEComprovantes();
   atualizarEstatisticasFinanceirasGestor();
   carregarResumoHomeCards();
 }
 
 function negarPedido(chavePedido) {
-  if (confirm("Tem certeza que deseja negar este pedido? As cotas serão libertadas para nova compra.")) {
+  if (confirm("Tem certeza que deseja negar este pedido? As cotas serão liberadas para nova compra.")) {
     localStorage.removeItem(chavePedido);
-    alert("❌ Pedido negado e removido com sucesso. As cotas estão livres novamente.");
+    alert("Pedido negado e removido com sucesso. As cotas estão livres novamente.");
     carregarPedidosEComprovantes();
     atualizarEstatisticasFinanceirasGestor();
   }
@@ -735,7 +753,7 @@ function excluirPedidoAprovado(chavePedido) {
     }
 
     localStorage.removeItem(chavePedido);
-    alert("🗑️ Pedido removido da tabela com sucesso! O valor arrecadado foi guardado no total do gestor.");
+    alert("Pedido removido da tabela com sucesso.");
     carregarPedidosEComprovantes();
     atualizarEstatisticasFinanceirasGestor();
   }
@@ -747,11 +765,7 @@ function filtrarPedidosGestor() {
 
   linhas.forEach(linha => {
     const textoLinha = linha.textContent.toLowerCase();
-    if (textoLinha.includes(termo)) {
-      linha.style.display = "";
-    } else {
-      linha.style.display = "none";
-    }
+    linha.style.display = textoLinha.includes(termo) ? "" : "none";
   });
 }
 
@@ -824,11 +838,7 @@ function atualizarEstatisticasFinanceirasGestor() {
   }
 
   if (elHoje) {
-    if (hojeZeradoManualmente) {
-      elHoje.textContent = "R$ 0,00";
-    } else {
-      elHoje.textContent = `R$ ${arrecadadoHoje.toFixed(2)}`;
-    }
+    elHoje.textContent = hojeZeradoManualmente ? "R$ 0,00" : `R$ ${arrecadadoHoje.toFixed(2)}`;
   }
 }
 
@@ -838,7 +848,7 @@ function atualizarEstatisticasFinanceirasGestor() {
 function carregarResumoHomeCards() {
   const containerCampanhas = document.getElementById('homeCampanhasAtivasGrid');
   const containerVendas = document.getElementById('homeUltimasVendasList');
-  
+
   if (!containerCampanhas && !containerVendas) return;
 
   const prefixoCampanha = getChaveIsolada('campanha_');
@@ -859,15 +869,15 @@ function carregarResumoHomeCards() {
             const imgPremio = campanha.imagem || 'https://via.placeholder.com/150';
 
             const card = document.createElement('div');
-            card.style.cssText = "background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; display: flex; gap: 12px; align-items: center;";
+            card.style.cssText = "background: #111813; border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center;";
             card.innerHTML = `
               <img src="${imgPremio}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />
               <div style="flex: 1; overflow: hidden;">
-                <h4 style="color: #fff; font-size: 14px; margin: 0 0 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${campanha.titulo}</h4>
-                <p style="color: #00ff88; font-size: 12px; margin: 0 0 8px 0; font-weight: bold;">R$ ${parseFloat(campanha.preco || 0).toFixed(2)} a cota</p>
+                <h4 style="color: #F5F8F4; font-size: 14px; margin: 0 0 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${campanha.titulo}</h4>
+                <p style="color: #A6FF45; font-size: 12px; margin: 0 0 8px 0; font-weight: 700;">R$ ${parseFloat(campanha.preco || 0).toFixed(2)} a cota</p>
                 <div style="display: flex; gap: 6px;">
-                  <a href="rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}" target="_blank" style="padding: 4px 8px; background: #10b981; color: #fff; text-decoration: none; border-radius: 4px; font-size: 10px; font-weight: bold;">Ver</a>
-                  <button onclick="navigator.clipboard.writeText(window.location.origin + '/rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}'); alert('Link copiado!');" style="padding: 4px 8px; background: #3b82f6; color: #fff; border: none; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer;">Copiar Link</button>
+                  <a href="rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}" target="_blank" style="padding: 4px 10px; background: #A6FF45; color: #0D140A; text-decoration: none; border-radius: 6px; font-size: 11px; font-weight: 800;">Ver</a>
+                  <button onclick="navigator.clipboard.writeText(window.location.origin + '/rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}'); alert('Link copiado!');" style="padding: 4px 10px; background: #0A0F0C; color: #F5F8F4; border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Copiar Link</button>
                 </div>
               </div>
             `;
@@ -880,7 +890,7 @@ function carregarResumoHomeCards() {
     }
 
     if (countAtivas === 0) {
-      containerCampanhas.innerHTML = `<p style="color: #94a3b8; font-size: 13px; margin: 0;">Nenhuma campanha ativa no momento. Clique em "+ Nova campanha" para criar uma!</p>`;
+      containerCampanhas.innerHTML = `<p style="color: #9BA59C; font-size: 13px; margin: 0;">Nenhuma campanha ativa no momento. Clique em "+ Nova campanha" para criar uma.</p>`;
     }
   }
 
@@ -905,21 +915,21 @@ function carregarResumoHomeCards() {
     if (vendasRecentes.length > 0) {
       vendasRecentes.slice(-3).reverse().forEach(venda => {
         const item = document.createElement('div');
-        item.style.cssText = "display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 14px; border-radius: 8px; border: 1px solid #1e293b;";
+        item.style.cssText = "display: flex; justify-content: space-between; align-items: center; background: #111813; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.09);";
         item.innerHTML = `
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="background: rgba(0,255,136,0.15); color: #00ff88; padding: 6px; border-radius: 50%; font-size: 12px;">✅</span>
+            <span style="background: rgba(166,255,69,0.12); color: #A6FF45; padding: 5px 9px; border-radius: 999px; font-size: 11px; font-weight: 800;">PAGO</span>
             <div>
-              <p style="color: #fff; font-size: 13px; font-weight: bold; margin: 0;">${venda.nomeComprador || 'Comprador'} comprou cotas</p>
-              <p style="color: #94a3b8; font-size: 11px; margin: 2px 0 0 0;">Cotas: ${Array.isArray(venda.cotas) ? venda.cotas.join(', ') : venda.cotas}</p>
+              <p style="color: #F5F8F4; font-size: 13px; font-weight: 700; margin: 0;">${venda.nomeComprador || 'Comprador'} comprou cotas</p>
+              <p style="color: #9BA59C; font-size: 11px; margin: 2px 0 0 0;">Cotas: ${Array.isArray(venda.cotas) ? venda.cotas.join(', ') : venda.cotas}</p>
             </div>
           </div>
-          <span style="color: #00ff88; font-size: 13px; font-weight: bold;">+ R$ ${parseFloat(venda.valorTotal || 0).toFixed(2)}</span>
+          <span style="color: #A6FF45; font-size: 13px; font-weight: 800;">+ R$ ${parseFloat(venda.valorTotal || 0).toFixed(2)}</span>
         `;
         containerVendas.appendChild(item);
       });
     } else {
-      containerVendas.innerHTML = `<p style="color: #94a3b8; font-size: 13px; margin: 0;">Nenhuma venda aprovada registada recentemente.</p>`;
+      containerVendas.innerHTML = `<p style="color: #9BA59C; font-size: 13px; margin: 0;">Nenhuma venda aprovada registrada recentemente.</p>`;
     }
   }
 }
@@ -1007,7 +1017,7 @@ function fecharModalReset() {
 function gerenciarArrecadacaoHoje() {
   mostrarModalReset(
     "Zerar Arrecadado Hoje",
-    "Desejas realmente zerar o valor registrado como arrecadado hoje?",
+    "Deseja realmente zerar o valor registrado como arrecadado hoje?",
     function() {
       const el = document.getElementById('totalHojeDisplay');
       if (el) el.innerText = "R$ 0,00";
@@ -1019,11 +1029,11 @@ function gerenciarArrecadacaoHoje() {
 function gerenciarTotalArrecadado() {
   mostrarModalReset(
     "Zerar Total Arrecadado",
-    "Atenção: Esta ação irá limpar o histórico financeiro e zerar o montante total de forma definitiva. Desejas continuar?",
+    "Atenção: Esta ação irá limpar o histórico financeiro e zerar o montante total de forma definitiva. Deseja continuar?",
     function() {
       const el = document.getElementById('totalGeralDisplay');
       if (el) el.innerText = "R$ 0,00";
-      
+
       localStorage.setItem(getChaveIsolada('financeiro_zerado'), 'true');
       localStorage.removeItem(getChaveIsolada('historico_financeiro'));
 
@@ -1049,7 +1059,7 @@ function gerenciarTotalArrecadado() {
 function gerenciarCotasVendidas() {
   mostrarModalReset(
     "Zerar Cotas Vendidas",
-    "Desejas reiniciar a contagem total de bilhetes/cotas vendidos para zero de forma definitiva?",
+    "Deseja reiniciar a contagem total de bilhetes/cotas vendidos para zero de forma definitiva?",
     function() {
       const el = document.getElementById('cotasVendidasDisplay');
       if (el) el.innerText = "0";
@@ -1077,9 +1087,9 @@ function gerenciarCotasVendidas() {
 }
 
 function confirmarLimpezaTotalSistema() {
-  const confirmacao1 = confirm("⚠️ ATENÇÃO: Tens a certeza absoluta de que queres apagar todos os dados, campanhas e vendas registadas?");
+  const confirmacao1 = confirm("ATENÇÃO: Tem certeza absoluta de que deseja apagar todos os dados, campanhas e vendas registradas?");
   if (confirmacao1) {
-    const confirmacao2 = prompt("Para confirmar o reset total, escreve a palavra 'APAGAR' em maiúsculas:");
+    const confirmacao2 = prompt("Para confirmar o reset total, escreva a palavra 'APAGAR' em maiúsculas:");
     if (confirmacao2 === "APAGAR") {
       const prefixo = getChaveIsolada('');
       for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -1088,7 +1098,7 @@ function confirmarLimpezaTotalSistema() {
           localStorage.removeItem(key);
         }
       }
-      alert("🧹 Dados do gestor limpos com sucesso! A página será reiniciada.");
+      alert("Dados do gestor limpos com sucesso. A página será reiniciada.");
       location.reload();
     } else {
       alert("Operação de limpeza cancelada (palavra de confirmação incorreta).");
@@ -1097,24 +1107,24 @@ function confirmarLimpezaTotalSistema() {
 }
 
 function limparHistoricoVendas() {
-  if (confirm("Tens a certeza que queres limpar o histórico de vendas recentes?")) {
+  if (confirm("Tem certeza que deseja limpar o histórico de vendas recentes?")) {
     const listaVendas = document.getElementById('homeUltimasVendasList');
     if (listaVendas) {
-      listaVendas.innerHTML = '<p style="color: #94a3b8; font-size: 13px;">Nenhuma venda recente registrada.</p>';
+      listaVendas.innerHTML = '<p style="color: #9BA59C; font-size: 13px;">Nenhuma venda recente registrada.</p>';
     }
     localStorage.removeItem(getChaveIsolada('historicoVendasAprovadas'));
-    alert("Histórico de vendas limpo com sucesso!");
+    alert("Histórico de vendas limpo com sucesso.");
   }
 }
 
 function limparTopGanhadores() {
   mostrarModalReset(
     "Limpar Ganhadores",
-    "Tens a certeza que queres limpar a lista de ganhadores?",
+    "Tem certeza que deseja limpar a lista de ganhadores?",
     function() {
       const listaGanhadores = document.getElementById('homeTopGanhadoresList');
       if (listaGanhadores) {
-        listaGanhadores.innerHTML = '<p style="color: #94a3b8; font-size: 13px;">Nenhum ganhador registrado no momento.</p>';
+        listaGanhadores.innerHTML = '<p style="color: #9BA59C; font-size: 13px;">Nenhum ganhador registrado no momento.</p>';
       }
       localStorage.setItem(getChaveIsolada('topGanhadoresPipeiro'), 'vazio');
     }
@@ -1127,7 +1137,7 @@ function limparTopGanhadores() {
 function verificarSeEhSuperAdmin() {
   const adminAtual = localStorage.getItem('pipeiro_admin_atual');
   const seccaoAssinantes = document.getElementById('assinantes-section');
-  
+
   if (adminAtual === EMAIL_SUPER_ADMIN && seccaoAssinantes) {
     seccaoAssinantes.style.display = 'block';
     carregarListaAssinantesMaster();
@@ -1139,16 +1149,16 @@ function carregarListaAssinantesMaster() {
   if (!tbody) return;
 
   const listaClientesStr = localStorage.getItem('pipeiro_assinantes') || localStorage.getItem('Pipeiro_lista_clientes');
-  
+
   if (!listaClientesStr) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #8b9bb4; padding: 30px;">Nenhum assinante registado no sistema.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9BA59C; padding: 30px;">Nenhum assinante registrado no sistema.</td></tr>`;
     return;
   }
 
   const listaClientes = JSON.parse(listaClientesStr);
 
   if (listaClientes.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #8b9bb4; padding: 30px;">Nenhum assinante registado.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9BA59C; padding: 30px;">Nenhum assinante registrado.</td></tr>`;
     return;
   }
 
@@ -1158,34 +1168,36 @@ function carregarListaAssinantesMaster() {
     let badgeStatus = '';
     let btnAcoes = '';
     const statusCliente = cliente.status || cliente.statusPagamento || 'pendente';
-    const titularPixText = cliente.titularPix ? `<span style="color: #00ff88; font-weight: bold;">${cliente.titularPix}</span>` : `<span style="color: #64748b; font-style: italic;">Não informado</span>`;
+    const titularPixText = cliente.titularPix
+      ? `<span style="color: #A6FF45; font-weight: 700;">${cliente.titularPix}</span>`
+      : `<span style="color: #6B756D; font-style: italic;">Não informado</span>`;
 
     if (statusCliente === 'aprovado' || statusCliente === 'ativo') {
-      badgeStatus = `<span style="background: rgba(0,255,136,0.1); color: #00ff88; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(0,255,136,0.2);">🟢 Ativo / Aprovado</span>`;
+      badgeStatus = `<span style="background: rgba(166,255,69,0.1); color: #A6FF45; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(166,255,69,0.28);">Ativo / Aprovado</span>`;
       btnAcoes = `
-        <button onclick="alterarStatusCliente('${cliente.email}', 'bloqueado')" style="background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px;" title="Bloquear por falta de pagamento">🔒 Bloquear</button>
-        <button onclick="removerClienteMaster('${cliente.email}')" style="background: #334155; color: #cbd5e1; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;" title="Eliminar registo">🗑️</button>
+        <button onclick="alterarStatusCliente('${cliente.email}', 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 5px;" title="Bloquear por falta de pagamento">Bloquear</button>
+        <button onclick="removerClienteMaster('${cliente.email}')" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
       `;
     } else if (statusCliente === 'pendente') {
-      badgeStatus = `<span style="background: rgba(245,158,11,0.1); color: #f59e0b; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(245,158,11,0.2);">🟡 Pagamento Informado</span>`;
+      badgeStatus = `<span style="background: rgba(234,179,8,0.12); color: #eab308; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(234,179,8,0.28);">Pagamento Informado</span>`;
       btnAcoes = `
-        <button onclick="alterarStatusCliente('${cliente.email}', 'aprovado')" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px; box-shadow: 0 0 10px rgba(0,255,136,0.3);">✅ Aprovar Acesso</button>
-        <button onclick="alterarStatusCliente('${cliente.email}', 'bloqueado')" style="background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold;">❌ Recusar</button>
+        <button onclick="alterarStatusCliente('${cliente.email}', 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Aprovar Acesso</button>
+        <button onclick="alterarStatusCliente('${cliente.email}', 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Recusar</button>
       `;
     } else {
-      badgeStatus = `<span style="background: rgba(239,68,68,0.1); color: #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid rgba(239,68,68,0.2);">🔴 Inadimplente / Bloqueado</span>`;
+      badgeStatus = `<span style="background: rgba(239,68,68,0.12); color: #fca5a5; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(239,68,68,0.28);">Bloqueado</span>`;
       btnAcoes = `
-        <button onclick="alterarStatusCliente('${cliente.email}', 'aprovado')" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 5px;">✅ Reativar Acesso</button>
-        <button onclick="removerClienteMaster('${cliente.email}')" style="background: #334155; color: #cbd5e1; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;">🗑️</button>
+        <button onclick="alterarStatusCliente('${cliente.email}', 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Reativar Acesso</button>
+        <button onclick="removerClienteMaster('${cliente.email}')" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Excluir</button>
       `;
     }
 
     htmlRows += `
-      <tr style="border-bottom: 1px solid #1e293b;">
-        <td style="padding: 14px; color: #fff; font-weight: bold;">${cliente.nome}</td>
-        <td style="padding: 14px; font-size: 13px; color: #94a3b8;">
-          <div>📧 ${cliente.email}</div>
-          <div style="margin-top: 3px;">📱 ${cliente.whatsapp || 'Não informado'}</div>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.09);">
+        <td style="padding: 14px; color: #F5F8F4; font-weight: 700;">${cliente.nome}</td>
+        <td style="padding: 14px; font-size: 13px; color: #9BA59C;">
+          <div>E-mail: ${cliente.email}</div>
+          <div style="margin-top: 3px;">WhatsApp: ${cliente.whatsapp || 'Não informado'}</div>
         </td>
         <td style="padding: 14px; font-size: 13px;">${titularPixText}</td>
         <td style="padding: 14px;">${badgeStatus}</td>
@@ -1216,7 +1228,6 @@ function removerClienteMaster(emailCliente) {
   carregarListaAssinantesMaster();
 }
 
-// Função de Logout
 function fazerLogout() {
   if (confirm('Deseja realmente terminar a sessão?')) {
     localStorage.removeItem('pipeiro_logado');
@@ -1224,6 +1235,7 @@ function fazerLogout() {
     window.location.href = 'cadastro.html';
   }
 }
+
 // =========================================================
 // 12. TEMPO REAL & ALERTAS DE NOVAS COTAS (AUTOMÁTICO)
 // =========================================================
@@ -1234,7 +1246,6 @@ function iniciarEscutaNovosPedidos() {
     let totalPedidosAtual = 0;
     const prefixoPedido = getChaveIsolada('pedido_');
 
-    // Conta quantos pedidos existem atualmente no localStorage para este gestor
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith(prefixoPedido)) {
@@ -1242,54 +1253,40 @@ function iniciarEscutaNovosPedidos() {
       }
     }
 
-    // Se for a primeira leitura, apenas guarda o valor base
     if (ultimoTotalPedidos === -1) {
       ultimoTotalPedidos = totalPedidosAtual;
       return;
     }
 
-    // Se o total de pedidos aumentou, significa que chegou uma nova cota/venda!
     if (totalPedidosAtual > ultimoTotalPedidos) {
       ultimoTotalPedidos = totalPedidosAtual;
-
-      // Dispara o alerta visual na tela do gestor
       dispararAlertaNovaCota();
-
-      // Atualiza automaticamente a tabela e os indicadores financeiros sem F5
       carregarPedidosEComprovantes();
       atualizarEstatisticasFinanceirasGestor();
       carregarResumoHomeCards();
     }
-  }, 3000); // Verifica a cada 3 segundos de forma leve
+  }, 3000);
 }
 
 function dispararAlertaNovaCota() {
-  // Cria um banner flutuante de alerta no topo do painel
   let banner = document.getElementById('alertaNovaCotaFlutuante');
   if (!banner) {
     banner = document.createElement('div');
     banner.id = 'alertaNovaCotaFlutuante';
-    banner.style.cssText = "position: fixed; top: 20px; right: 20px; background: #10b981; color: #fff; padding: 15px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; font-weight: bold; display: flex; align-items: center; gap: 10px; animation: fadeInOut 0.5s ease;";
+    banner.style.cssText = "position: fixed; top: 20px; right: 20px; background: #111813; color: #F5F8F4; border: 1px solid #A6FF45; padding: 14px 18px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99999; font-weight: 700; display: flex; align-items: center; gap: 10px;";
     document.body.appendChild(banner);
   }
 
-  banner.innerHTML = `<span>🔔 Nova cota reservada ou comprada! Verifique os pedidos pendentes.</span>`;
+  banner.innerHTML = `<span style="color: #A6FF45;">Nova cota reservada ou comprada. Verifique os pedidos pendentes.</span>`;
   banner.style.display = 'flex';
 
-  // Oculta o banner após 6 segundos
   setTimeout(() => {
     banner.style.display = 'none';
   }, 6000);
 
-  // Tenta emitir um aviso sonoro subtil (se o navegador permitir)
   try {
     const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
     audio.volume = 0.5;
-    audio.play().catch(e => console.log("Áudio bloqueado pelo navegador até haver interação."));
+    audio.play().catch(() => {});
   } catch(e) {}
 }
-
-// Inicializa a escuta logo que o DOM estiver pronto
-document.addEventListener("DOMContentLoaded", () => {
-  iniciarEscutaNovosPedidos();
-});

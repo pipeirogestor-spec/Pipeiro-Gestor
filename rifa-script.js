@@ -15,8 +15,8 @@ let titularPixCampanha = "";
 let tipoChavePixCampanha = "PIX";
 let wppSuporteOrganizador = "";
 let totalCotasCampanha = 25;
-let estiloTemaCotas = "animais"; // Definido como animais para exibir os emojis
-let promocoesCampanha = []; // ARRAY DE PROMOÇÕES DA CAMPANHA
+let estiloTemaCotas = "animais";
+let promocoesCampanha = [];
 let imagensCampanhaPublica = [];
 let indiceFotoAtual = 0;
 
@@ -25,8 +25,14 @@ let indiceFotoAtual = 0;
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
   carregarDadosCampanhaPublica();
-  iniciarCronometroRegressivoTopo(600); // 10 Minutos (600 segundos)
-  marcarCotasOcupadas(); // Já bloqueia e marca as cotas ocupadas ao carregar a página
+  iniciarCronometroRegressivoTopo(600);
+  marcarCotasOcupadas();
+  adicionarAvisoTempoExpiracao();
+  aplicarDadosAssinanteSuporte();
+});
+
+window.addEventListener("storage", () => {
+  marcarCotasOcupadas();
 });
 
 function iniciarCronometroRegressivoTopo(segundosTotais) {
@@ -50,15 +56,15 @@ function iniciarCronometroRegressivoTopo(segundosTotais) {
     }
   }, 1000);
 }
+
 // =========================================================
-// 2. CARREGAMENTO DOS DADOS DA AÇÃO / GESTOR (CORRIGIDO)
+// 2. CARREGAMENTO DOS DADOS DA AÇÃO / GESTOR
 // =========================================================
 function carregarDadosCampanhaPublica() {
   const urlParams = new URLSearchParams(window.location.search);
   const slug = urlParams.get('acao');
   const gestorParam = urlParams.get('gestor');
 
-  // Tenta carregar as configurações gerais do organizador
   const configGestor = localStorage.getItem('pipeiro_configuracoes');
   if (configGestor) {
     try {
@@ -69,27 +75,25 @@ function carregarDadosCampanhaPublica() {
       if (elOrg && cfg.nomeOrganizador) {
         elOrg.textContent = cfg.nomeOrganizador;
       }
-    } catch(e) {
+    } catch (e) {
       console.error("Erro ao ler configuracoes do gestor:", e);
     }
   }
 
-  // Atualiza links de suporte do WhatsApp se houver número cadastrado
   if (wppSuporteOrganizador) {
     const numLimpo = wppSuporteOrganizador.replace(/\D/g, '');
     const btnSuporte = document.getElementById('btnSuporteWppHeader');
     if (btnSuporte) {
-      btnSuporte.href = `https://api.whatsapp.com/send?phone=55${numLimpo}&text=${encodeURIComponent('Olá! Preciso de suporte com a ação.')}`;
+      btnSuporte.href = `https://api.whatsapp.com/send?phone=55${numLimpo}&text=${encodeURIComponent('Olá. Preciso de suporte com a ação.')}`;
     }
     const btnContato = document.getElementById('btnContatoOrganizador');
     if (btnContato) {
-      btnContato.href = `https://api.whatsapp.com/send?phone=55${numLimpo}&text=${encodeURIComponent('Olá! Gostaria de informações sobre a ação.')}`;
+      btnContato.href = `https://api.whatsapp.com/send?phone=55${numLimpo}&text=${encodeURIComponent('Olá. Gostaria de informações sobre a ação.')}`;
     }
   }
 
   if (!slug) return;
 
-  // BUSCA INTELIGENTE DA CAMPANHA (Suporta chaves isoladas por gestor ou globais)
   let dadosSalvos = null;
 
   if (gestorParam) {
@@ -97,12 +101,10 @@ function carregarDadosCampanhaPublica() {
     dadosSalvos = localStorage.getItem(`pipeiro_${emailSanitizado}_campanha_${slug}`);
   }
 
-  // Se não encontrar pela chave isolada do gestor, tenta a chave global padrão
   if (!dadosSalvos) {
     dadosSalvos = localStorage.getItem('pipeiro_campanha_' + slug);
   }
 
-  // Se ainda assim não encontrar, varre o localStorage à procura de qualquer chave correspondente ao slug
   if (!dadosSalvos) {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -122,27 +124,23 @@ function carregarDadosCampanhaPublica() {
   try {
     const campanha = JSON.parse(dadosSalvos);
 
-    // Título da Ação
     if (campanha.titulo) {
       const elTitulo = document.getElementById('tituloPremio');
       if (elTitulo) elTitulo.textContent = campanha.titulo;
       document.title = `${campanha.titulo} | PipeiroGestor`;
     }
 
-    // Descrição e Regulamento
     if (campanha.descricao) {
       const elDesc = document.getElementById('descricaoPremio');
       if (elDesc) elDesc.textContent = campanha.descricao;
     }
 
-    // Preço da Cota
     if (campanha.preco) {
       precoUnitarioCota = parseFloat(campanha.preco);
       const elPreco = document.getElementById('valorPorCota');
       if (elPreco) elPreco.textContent = `R$ ${precoUnitarioCota.toFixed(2)}`;
     }
 
-    // Carrega Promoções / Descontos da Campanha
     if (campanha.promocoes && Array.isArray(campanha.promocoes)) {
       promocoesCampanha = campanha.promocoes;
     } else if (campanha.descontos && Array.isArray(campanha.descontos)) {
@@ -151,7 +149,6 @@ function carregarDadosCampanhaPublica() {
 
     estiloTemaCotas = "animais";
 
-    // Imagens do Prêmio / Carrossel
     imagensCampanhaPublica = [];
     indiceFotoAtual = 0;
 
@@ -163,7 +160,6 @@ function carregarDadosCampanhaPublica() {
 
     atualizarExibicaoCarrossel();
 
-    // Dados de Pagamento PIX
     chavePixCampanha = campanha.chavePix || '';
     titularPixCampanha = campanha.titular || '';
     tipoChavePixCampanha = campanha.tipoChave || 'PIX';
@@ -177,20 +173,58 @@ function carregarDadosCampanhaPublica() {
     const elTitular = document.getElementById('titularPixDisplay');
     if (elTitular) elTitular.textContent = `Titular: ${titularPixCampanha || 'Não informado'}`;
 
-    atualizarBarraProgressoInteligente(0, totalCotasCampanha);
     gerarGridCotas(totalCotasCampanha);
-    marcarCotasOcupadas(); // Aplica o bloqueio visual após gerar o grid
-
+    marcarCotasOcupadas();
   } catch (e) {
     console.error("Erro ao carregar dados da ação:", e);
   }
 }
 
 // =========================================================
-// 3. BARRA DE PROGRESSO & SELEÇÃO DE COTAS COM DESCONTO INTELIGENTE
+// 3. BARRA DE PROGRESSO & SELEÇÃO DE COTAS
 // =========================================================
-function atualizarBarraProgressoInteligente(cotasVendidas, totalCotas) {
-  const porcentagem = Math.round((cotasVendidas / totalCotas) * 100);
+function obterCotasOcupadasSet() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const slugAtual = urlParams.get('acao');
+  const gestorParam = urlParams.get('gestor');
+  const ocupadas = new Set();
+
+  if (!slugAtual) return ocupadas;
+
+  let prefixoGestor = '';
+  if (gestorParam) {
+    const emailSanitizado = decodeURIComponent(gestorParam).replace(/[^a-z0-9]/g, '_');
+    prefixoGestor = `pipeiro_${emailSanitizado}_pedido_`;
+  }
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && (key.startsWith('pipeiro_pedido_') || (prefixoGestor && key.startsWith(prefixoGestor)) || key.includes('_pedido_'))) {
+      try {
+        const pedido = JSON.parse(localStorage.getItem(key));
+        if (pedido && pedido.slugAcao === slugAtual && (pedido.status === 'pendente' || pedido.status === 'aprovado')) {
+          if (Array.isArray(pedido.cotas)) {
+            pedido.cotas.forEach(cotaNum => ocupadas.add(String(cotaNum).padStart(2, '0')));
+          }
+        }
+      } catch (e) {
+        console.error("Erro ao ler cotas ocupadas:", e);
+      }
+    }
+  }
+
+  return ocupadas;
+}
+
+function atualizarProgressoAutomatico() {
+  const ocupadas = obterCotasOcupadasSet();
+  const uniao = new Set([...ocupadas, ...cotasSelecionadas.map(c => String(c).padStart(2, '0'))]);
+  atualizarBarraProgressoInteligente(uniao.size, totalCotasCampanha);
+}
+
+function atualizarBarraProgressoInteligente(cotasComprometidas, totalCotas) {
+  const safeTotal = totalCotas > 0 ? totalCotas : 25;
+  const porcentagem = Math.min(100, Math.round((cotasComprometidas / safeTotal) * 100));
   const textoPorcentagem = document.getElementById('porcentagemVendida');
   const barraPreenchida = document.getElementById('barraProgresso');
 
@@ -210,16 +244,15 @@ function gerarGridCotas(total) {
 
     const btn = document.createElement("button");
     btn.type = "button";
-    
-    btn.style.cssText = "background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px; color: #fff; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: all 0.2s ease;";
+    btn.dataset.cota = numFormatado;
 
     if (estiloTemaCotas === "animais") {
       btn.innerHTML = `
         <span style="font-size: 20px; line-height: 1;">${emojiAnimal}</span>
-        <span style="font-size: 13px; font-weight: bold; color: #00ff88;">${numFormatado}</span>
+        <span style="font-size: 13px; font-weight: 800; color: #A6FF45;">${numFormatado}</span>
       `;
     } else {
-      btn.innerHTML = `<span style="font-size: 16px; font-weight: bold; color: #fff;">${numFormatado}</span>`;
+      btn.innerHTML = `<span style="font-size: 16px; font-weight: 800; color: #F5F8F4;">${numFormatado}</span>`;
     }
 
     btn.addEventListener("click", () => {
@@ -231,6 +264,8 @@ function gerarGridCotas(total) {
 }
 
 function alternarSelecaoCota(numero, elemento) {
+  if (elemento.disabled) return;
+
   const index = cotasSelecionadas.indexOf(numero);
 
   if (index > -1) {
@@ -242,10 +277,11 @@ function alternarSelecaoCota(numero, elemento) {
   }
 
   atualizarCarrinhoECalculadora();
+  atualizarProgressoAutomatico();
 }
 
 // =========================================================
-// CÁLCULO INTELIGENTE DE PACOTES PROMOCIONAIS (COMBOS PROPORCIONAIS)
+// CÁLCULO INTELIGENTE DE PACOTES PROMOCIONAIS
 // =========================================================
 function calcularPrecoTotal(qtd) {
   if (qtd <= 0) return 0;
@@ -254,7 +290,7 @@ function calcularPrecoTotal(qtd) {
 
   if (promocoesCampanha && promocoesCampanha.length > 0) {
     const promosOrdenadas = [...promocoesCampanha].sort((a, b) => parseInt(b.quantidade) - parseInt(a.quantidade));
-    
+
     let qtdRestante = qtd;
     let valorTotal = 0;
 
@@ -298,11 +334,11 @@ function atualizarCarrinhoECalculadora() {
 }
 
 // =========================================================
-// 4. FUNIL DE CHECKOUT (VALIDADO, BLINDADO E COM URGÊNCIA)
+// 4. FUNIL DE CHECKOUT
 // =========================================================
 function abrirPassoIdentificacao() {
   if (cotasSelecionadas.length === 0) {
-    alert("⚠️ Selecione pelo menos uma cota!");
+    alert("Selecione pelo menos uma cota.");
     return;
   }
   const elPasso1 = document.getElementById('etapaIdentificacao');
@@ -317,26 +353,24 @@ function abrirPassoIdentificacao() {
 function avancarParaPagamentoPix() {
   const nomeInput = document.getElementById('inputNomeComprador');
   const wppInput = document.getElementById('inputWppComprador');
-  
+
   const nome = nomeInput ? nomeInput.value.trim() : "";
   const wpp = wppInput ? wppInput.value.replace(/\D/g, '') : "";
 
-  // Validação estrita do Nome Completo (exige pelo menos duas palavras)
   if (!nome || nome.split(' ').length < 2) {
-    alert("⚠️ Por favor, digite seu Nome Completo (Nome e Sobrenome).");
+    alert("Por favor, digite seu Nome Completo (Nome e Sobrenome).");
     if (nomeInput) nomeInput.focus();
     return;
   }
 
-  // Validação estrita do WhatsApp (mínimo de 10 dígitos com DDD)
   if (!wpp || wpp.length < 10) {
-    alert("⚠️ Por favor, digite um número de WhatsApp válido com DDD (Ex: 21999999999).");
+    alert("Por favor, digite um número de WhatsApp válido com DDD (Ex: 21999999999).");
     if (wppInput) wppInput.focus();
     return;
   }
 
   if (cotasSelecionadas.length === 0) {
-    alert("⚠️ Selecione pelo menos uma cota para continuar!");
+    alert("Selecione pelo menos uma cota para continuar.");
     return;
   }
 
@@ -346,7 +380,6 @@ function avancarParaPagamentoPix() {
   if (elPasso1) elPasso1.style.display = 'none';
   if (elPasso2) elPasso2.style.display = 'block';
 
-  // Inicia o cronómetro regressivo específico de 10 minutos no modal de pagamento
   iniciarCronometroModalPix();
 }
 
@@ -358,11 +391,11 @@ function iniciarCronometroModalPix() {
   if (!avisoUrgencia) {
     avisoUrgencia = document.createElement('div');
     avisoUrgencia.id = 'avisoUrgenciaPix';
-    avisoUrgencia.style.cssText = "background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; color: #f59e0b; font-size: 13px; font-weight: bold;";
+    avisoUrgencia.style.cssText = "background: rgba(234, 179, 8, 0.12); border: 1px solid rgba(234, 179, 8, 0.4); padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; color: #eab308; font-size: 13px; font-weight: 700;";
     containerPix.prepend(avisoUrgencia);
   }
 
-  let segundosRestantes = 600; // 10 minutos
+  let segundosRestantes = 600;
 
   if (window.timerCheckoutInterval) {
     clearInterval(window.timerCheckoutInterval);
@@ -375,13 +408,13 @@ function iniciarCronometroModalPix() {
     min = min < 10 ? "0" + min : min;
     seg = seg < 10 ? "0" + seg : seg;
 
-    avisoUrgencia.innerHTML = `⏱️ Suas cotas estão reservadas por <span style="color: #fff;">${min}:${seg}</span>. Pague o Pix e envie o comprovante!`;
+    avisoUrgencia.innerHTML = `Suas cotas estão reservadas por <span style="color: #F5F8F4;">${min}:${seg}</span>. Pague o PIX e envie o comprovante.`;
 
     if (--segundosRestantes < 0) {
       clearInterval(window.timerCheckoutInterval);
-      avisoUrgencia.innerHTML = `⚠️ O tempo de reserva expirou. Suas cotas podem voltar a ficar disponíveis.`;
+      avisoUrgencia.innerHTML = `O tempo de reserva expirou. Suas cotas podem voltar a ficar disponíveis.`;
       avisoUrgencia.style.borderColor = '#ef4444';
-      avisoUrgencia.style.color = '#ef4444';
+      avisoUrgencia.style.color = '#fca5a5';
     }
   }, 1000);
 }
@@ -404,7 +437,7 @@ function copiarChavePix() {
   }
 
   navigator.clipboard.writeText(chavePixCampanha).then(() => {
-    alert("✅ Chave PIX copiada com sucesso! Cole no app do seu banco para pagar.");
+    alert("Chave PIX copiada com sucesso. Cole no app do seu banco para pagar.");
   }).catch(err => {
     console.error("Erro ao copiar PIX:", err);
     alert("Não foi possível copiar automaticamente. Selecione e copie a chave manualmente.");
@@ -418,15 +451,15 @@ function enviarComprovanteWpp() {
   const cotasTexto = cotasSelecionadas.sort((a, b) => parseInt(a) - parseInt(b)).join(', ');
   const valorTotal = calcularPrecoTotal(cotasSelecionadas.length).toFixed(2);
 
-  const mensagem = `Olá! Realizei o pedido das minhas cotas:\n\n` +
-                    `👤 *Nome:* ${nome}\n` +
-                    `📱 *WhatsApp:* ${wpp}\n` +
-                    `🎟️ *Cotas Reservadas:* ${cotasTexto}\n` +
-                    `💰 *Valor Total:* R$ ${valorTotal}\n\n` +
-                    `Segue em anexo o comprovante do PIX para confirmação!`;
+  const mensagem = `Olá. Realizei o pedido das minhas cotas:\n\n` +
+    `Nome: ${nome}\n` +
+    `WhatsApp: ${wpp}\n` +
+    `Cotas Reservadas: ${cotasTexto}\n` +
+    `Valor Total: R$ ${valorTotal}\n\n` +
+    `Segue o comprovante do PIX para confirmação.`;
 
   const numSuporteLimpo = wppSuporteOrganizador ? wppSuporteOrganizador.replace(/\D/g, '') : '';
-  const urlWpp = numSuporteLimpo 
+  const urlWpp = numSuporteLimpo
     ? `https://api.whatsapp.com/send?phone=55${numSuporteLimpo}&text=${encodeURIComponent(mensagem)}`
     : `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
 
@@ -449,18 +482,18 @@ function fecharModalComoFunciona() {
 function buscarMeusNumeros() {
   const wppBusca = document.getElementById('inputBuscarMeusNumeros')?.value.trim();
   const divResultado = document.getElementById('resultadoBuscaNumeros');
-  
+
   if (!wppBusca) {
     alert("Por favor, digite seu WhatsApp para buscar.");
     return;
   }
 
   if (divResultado) {
-    divResultado.innerHTML = `<p style="color: #00ff88; font-weight: bold; margin-top: 10px;">🔍 Buscando cotas registradas para ${wppBusca}...</p>`;
-    
+    divResultado.innerHTML = `<p style="color: #A6FF45; font-weight: 700; margin-top: 10px;">Buscando cotas registradas para ${wppBusca}...</p>`;
+
     setTimeout(() => {
-      divResultado.innerHTML = `<p style="color: #38bdf8; margin-top: 10px;">Nenhuma cota confirmada para este número no momento. Garanta suas cotas selecionando acima!</p>`;
-    }, 1200);
+      divResultado.innerHTML = `<p style="color: #9BA59C; margin-top: 10px;">Nenhuma cota confirmada para este número no momento. Garanta suas cotas selecionando acima.</p>`;
+    }, 900);
   }
 }
 
@@ -496,9 +529,9 @@ function atualizarExibicaoCarrossel() {
 
 function mudarFotoCarrossel(direcao) {
   if (imagensCampanhaPublica.length <= 1) return;
-  
+
   indiceFotoAtual += direcao;
-  
+
   if (indiceFotoAtual < 0) {
     indiceFotoAtual = imagensCampanhaPublica.length - 1;
   } else if (indiceFotoAtual >= imagensCampanhaPublica.length) {
@@ -509,7 +542,7 @@ function mudarFotoCarrossel(direcao) {
 }
 
 // =========================================================
-// SALVAR PEDIDO PENDENTE PARA O GESTOR CORRETO APROVAR
+// SALVAR PEDIDO PENDENTE PARA O GESTOR APROVAR
 // =========================================================
 function registrarPedidoNoGestor() {
   const nome = document.getElementById('inputNomeComprador')?.value.trim();
@@ -521,7 +554,7 @@ function registrarPedidoNoGestor() {
   }
 
   if (cotasSelecionadas.length === 0) {
-    alert("Nenhuma cota selecionada!");
+    alert("Nenhuma cota selecionada.");
     return;
   }
 
@@ -529,13 +562,11 @@ function registrarPedidoNoGestor() {
   const slugAcao = urlParams.get('acao') || 'geral';
   const gestorParam = urlParams.get('gestor');
 
-  // Identifica o prefixo do gestor dono da rifa
   let prefixoChave = 'pipeiro_pedido_';
   if (gestorParam) {
     const emailSanitizado = decodeURIComponent(gestorParam).replace(/[^a-z0-9]/g, '_');
     prefixoChave = `pipeiro_${emailSanitizado}_pedido_`;
   } else {
-    // Se não veio no link, varre o localStorage para achar de quem é a campanha
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.includes('campanha_' + slugAcao)) {
@@ -563,11 +594,12 @@ function registrarPedidoNoGestor() {
   };
 
   localStorage.setItem(idPedido, JSON.stringify(novoPedido));
+  marcarCotasOcupadas();
   avancarParaPagamentoPix();
 }
 
 // =========================================================
-// BLOQUEAR / MARCAR COTAS JÁ RESERVADAS OU PAGAS (CORRIGIDO)
+// BLOQUEAR / MARCAR COTAS JÁ RESERVADAS OU PAGAS + PROGRESSO
 // =========================================================
 function marcarCotasOcupadas() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -575,38 +607,24 @@ function marcarCotasOcupadas() {
   const gestorParam = urlParams.get('gestor');
   if (!slugAtual) return;
 
-  // Define o prefixo específico do gestor se houver no link
   let prefixoGestor = '';
   if (gestorParam) {
     const emailSanitizado = decodeURIComponent(gestorParam).replace(/[^a-z0-9]/g, '_');
     prefixoGestor = `pipeiro_${emailSanitizado}_pedido_`;
   }
 
+  const statusPorCota = new Map();
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    
-    // Varre todas as chaves de pedidos (globais e isoladas por gestor)
     if (key && (key.startsWith('pipeiro_pedido_') || (prefixoGestor && key.startsWith(prefixoGestor)) || key.includes('_pedido_'))) {
       try {
         const pedido = JSON.parse(localStorage.getItem(key));
-        
         if (pedido && pedido.slugAcao === slugAtual && (pedido.status === 'pendente' || pedido.status === 'aprovado')) {
           if (Array.isArray(pedido.cotas)) {
             pedido.cotas.forEach(cotaNum => {
-              const botoes = document.querySelectorAll('#gridCotas button');
-              botoes.forEach(btn => {
-                if (btn.textContent.includes(cotaNum)) {
-                  btn.disabled = true;
-                  btn.style.background = '#334155';
-                  btn.style.color = '#94a3b8';
-                  btn.style.cursor = 'not-allowed';
-                  if (pedido.status === 'aprovado') {
-                    btn.title = "Cota já paga";
-                  } else {
-                    btn.title = "Cota aguardando aprovação";
-                  }
-                }
-              });
+              const normalizada = String(cotaNum).padStart(2, '0');
+              statusPorCota.set(normalizada, pedido.status);
             });
           }
         }
@@ -615,50 +633,64 @@ function marcarCotasOcupadas() {
       }
     }
   }
+
+  const botoes = document.querySelectorAll('#gridCotas button');
+  botoes.forEach(btn => {
+    const cotaBtn = String(btn.dataset.cota || btn.textContent.trim().slice(-2)).padStart(2, '0');
+    const st = statusPorCota.get(cotaBtn);
+
+    if (st) {
+      btn.disabled = true;
+      btn.classList.remove('selecionado');
+      btn.style.background = '#141915';
+      btn.style.color = '#6B756D';
+      btn.style.borderColor = 'rgba(255,255,255,0.06)';
+      btn.style.cursor = 'not-allowed';
+      btn.title = st === 'aprovado' ? "Cota já paga" : "Cota aguardando aprovação";
+    }
+  });
+
+  atualizarProgressoAutomatico();
 }
 
 // =========================================================
-// MELHORIA: AVISO DE EXPIRAÇÃO DE RESERVA NA TELA DO COMPRADOR
+// AVISO DE EXPIRAÇÃO E DADOS DO ASSINANTE
 // =========================================================
 function adicionarAvisoTempoExpiracao() {
   const topo = document.getElementById('contadorRegressivoTopo');
-  if (topo) {
+  if (topo && !document.getElementById('avisoExpiracaoExtra')) {
     const avisoExtra = document.createElement('div');
+    avisoExtra.id = 'avisoExpiracaoExtra';
     avisoExtra.style.fontSize = '11px';
-    avisoExtra.style.color = '#94a3b8';
+    avisoExtra.style.color = '#9BA59C';
     avisoExtra.style.textAlign = 'center';
     avisoExtra.style.marginTop = '4px';
-    avisoExtra.textContent = '⏱️ Suas reservas expiram em caso de não envio do Pix.';
+    avisoExtra.textContent = 'Suas reservas expiram em caso de não envio do PIX.';
     if (topo.parentNode) {
       topo.parentNode.appendChild(avisoExtra);
     }
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  adicionarAvisoTempoExpiracao();
-});
+function aplicarDadosAssinanteSuporte() {
+  const whatsappAssinante = localStorage.getItem('pipeiro_whatsapp_ativo');
+  const nomeAssinante = localStorage.getItem('pipeiro_nome_ativo');
 
-// Automação para puxar o WhatsApp do Assinante para os botões de suporte da rifa
-document.addEventListener("DOMContentLoaded", function() {
-    const whatsappAssinante = localStorage.getItem('pipeiro_whatsapp_ativo');
-    const nomeAssinante = localStorage.getItem('pipeiro_nome_ativo');
-
-    if (whatsappAssinante) {
-        let numeroLimpo = whatsappAssinante.replace(/\D/g, '');
-        if (!numeroLimpo.startsWith('55') && numeroLimpo.length <= 11) {
-            numeroLimpo = '55' + numeroLimpo;
-        }
-
-        const mensagemSuporte = encodeURIComponent(`Olá ${nomeAssinante || 'Organizador'}, vim através da sua rifa e preciso de suporte com as cotas.`);
-        const urlWppFinal = `https://wa.me/${numeroLimpo}?text=${mensagemSuporte}`;
-
-        const btnSuporteHeader = document.getElementById('btnSuporteWppHeader');
-        const btnContatoOrg = document.getElementById('btnContatoOrganizador');
-        const nomeOrgDisplay = document.getElementById('nomeOrganizadorDisplay');
-
-        if (btnSuporteHeader) btnSuporteHeader.href = urlWppFinal;
-        if (btnContatoOrg) btnContatoOrg.href = urlWppFinal;
-        if (nomeOrgDisplay && nomeAssinante) nomeOrgDisplay.innerText = nomeAssinante;
+  if (whatsappAssinante) {
+    let numeroLimpo = whatsappAssinante.replace(/\D/g, '');
+    if (!numeroLimpo.startsWith('55') && numeroLimpo.length <= 11) {
+      numeroLimpo = '55' + numeroLimpo;
     }
-});
+
+    const mensagemSuporte = encodeURIComponent(`Olá ${nomeAssinante || 'Organizador'}, vim através da sua rifa e preciso de suporte com as cotas.`);
+    const urlWppFinal = `https://wa.me/${numeroLimpo}?text=${mensagemSuporte}`;
+
+    const btnSuporteHeader = document.getElementById('btnSuporteWppHeader');
+    const btnContatoOrg = document.getElementById('btnContatoOrganizador');
+    const nomeOrgDisplay = document.getElementById('nomeOrganizadorDisplay');
+
+    if (btnSuporteHeader) btnSuporteHeader.href = urlWppFinal;
+    if (btnContatoOrg) btnContatoOrg.href = urlWppFinal;
+    if (nomeOrgDisplay && nomeAssinante) nomeOrgDisplay.innerText = nomeAssinante;
+  }
+}
