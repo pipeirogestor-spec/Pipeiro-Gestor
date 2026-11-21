@@ -24,7 +24,7 @@
       --display: 'Space Grotesk', sans-serif;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
     }
 
@@ -212,7 +212,6 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--white);
-      box-sizing: border-box;
       font-size: 0.9rem;
       outline: none;
     }
@@ -264,6 +263,115 @@
       color: var(--green);
     }
 
+    /* TELA DE CONFIRMAÇÃO E LIBERAÇÃO APÓS PAGAMENTO */
+    .pg-status-box {
+      display: none;
+      text-align: left;
+    }
+
+    .pg-status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(166, 255, 69, 0.12);
+      border: 1px solid rgba(166, 255, 69, 0.35);
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .pg-status-title {
+      font-family: var(--display);
+      font-size: 1.45rem;
+      color: var(--white);
+      margin: 0 0 10px 0;
+    }
+
+    .pg-status-lead {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0 0 18px 0;
+    }
+
+    .pg-status-panel {
+      background: var(--bg2);
+      border: 1px solid rgba(166, 255, 69, 0.22);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pg-status-panel p {
+      margin: 0 0 10px 0;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: var(--white);
+    }
+
+    .pg-status-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pg-status-meta {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .pg-status-meta strong {
+      color: var(--green);
+    }
+
+    .pg-btn-login {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      padding: 14px;
+      background: var(--green);
+      color: #0b1208;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 0 22px rgba(166, 255, 69, 0.22);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .pg-btn-login:hover {
+      background: var(--green2);
+      transform: translateY(-2px);
+    }
+
+    .pg-btn-wpp-alt {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: transparent;
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .pg-btn-wpp-alt:hover {
+      background: rgba(74, 222, 128, 0.12);
+      color: #86efac;
+    }
+
     .pg-footer {
       position: fixed;
       bottom: 0;
@@ -307,52 +415,88 @@
         <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor Logo" class="pg-pay-logo" referrerpolicy="no-referrer">
       </div>
 
-      <h2 class="pg-pay-title">💳 Ativação Mensal do Gestor</h2>
-      <p class="pg-pay-desc">Efetue o pagamento via PIX para liberar o seu acesso completo:</p>
+      <!-- ETAPA 1: FORMULÁRIO DE PAGAMENTO PIX -->
+      <div id="etapaPagamentoFormulario">
+        <h2 class="pg-pay-title">💳 Ativação Mensal do Gestor</h2>
+        <p class="pg-pay-desc">Efetue o pagamento via PIX para liberar o seu acesso completo:</p>
 
-      <!-- Valor em Destaque -->
-      <div class="pg-pay-price-box">
-        <span class="pg-pay-price-label">Valor da Assinatura</span>
-        <strong class="pg-pay-price-val">R$ 49,90</strong>
-      </div>
+        <!-- Valor em Destaque -->
+        <div class="pg-pay-price-box">
+          <span class="pg-pay-price-label">Valor da Assinatura</span>
+          <strong class="pg-pay-price-val">R$ 49,90</strong>
+        </div>
 
-      <!-- QR Code Limpo Gerado via API -->
-      <div class="pg-qr-wrap">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126730014br.gov.bcb.pix0114577011690001960233Assinatura%20painel%20 Pipeiro%20Gestor520400005303986540549.905802BR592557701169%20ANDREA%20ANGELO%20FE6010bonsucesso62290525SU202611170004433219053906304C2FE" alt="QR Code Pix" class="pg-qr-img">
-      </div>
+        <!-- QR Code Limpo Gerado via API -->
+        <div class="pg-qr-wrap">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=00020126730014br.gov.bcb.pix0114577011690001960233Assinatura%20painel%20 Pipeiro%20Gestor520400005303986540549.905802BR592557701169%20ANDREA%20ANGELO%20FE6010bonsucesso62290525SU202611170004433219053906304C2FE" alt="QR Code Pix" class="pg-qr-img">
+        </div>
 
-      <!-- Chave PIX (CNPJ) Box -->
-      <div class="pg-pix-info-box">
-        <span class="pg-pix-meta-label">CHAVE PIX (CNPJ):</span>
-        <strong class="pg-pix-cnpj">57.701.169/0001-96</strong>
-        <span class="pg-pix-meta-label">FAVORECIDO / INSTITUIÇÃO:</span>
-        <span class="pg-pix-fav">SUMP SOC. DE CREDITO DIRETO SA</span>
-      </div>
+        <!-- Chave PIX (CNPJ) Box -->
+        <div class="pg-pix-info-box">
+          <span class="pg-pix-meta-label">CHAVE PIX (CNPJ):</span>
+          <strong class="pg-pix-cnpj">57.701.169/0001-96</strong>
+          <span class="pg-pix-meta-label">FAVORECIDO / INSTITUIÇÃO:</span>
+          <span class="pg-pix-fav">SUMP SOC. DE CREDITO DIRETO SA</span>
+        </div>
 
-      <!-- Campo Pix Copia e Cola -->
-      <div class="pg-copy-row">
-        <label for="pixCopiaECola" class="pg-copy-label">Pix Copia e Cola:</label>
-        <div class="pg-copy-group">
-          <input type="text" id="pixCopiaECola" value="00020126730014br.gov.bcb.pix0114577011690001960233Assinatura painel  Pipeiro Gestor520400005303986540549.905802BR592557701169 ANDREA ANGELO FE6010bonsucesso62290525SU202611170004433219053906304C2FE" readonly class="pg-copy-input">
-          <button type="button" onclick="copiarPix()" id="btnCopiar" class="pg-btn-copy">Copiar</button>
+        <!-- Campo Pix Copia e Cola -->
+        <div class="pg-copy-row">
+          <label for="pixCopiaECola" class="pg-copy-label">Pix Copia e Cola:</label>
+          <div class="pg-copy-group">
+            <input type="text" id="pixCopiaECola" value="00020126730014br.gov.bcb.pix0114577011690001960233Assinatura painel  Pipeiro Gestor520400005303986540549.905802BR592557701169 ANDREA ANGELO FE6010bonsucesso62290525SU202611170004433219053906304C2FE" readonly class="pg-copy-input">
+            <button type="button" onclick="copiarPix()" id="btnCopiar" class="pg-btn-copy">Copiar</button>
+          </div>
+        </div>
+
+        <!-- Nome do Titular do Pix -->
+        <div class="pg-titular-wrap">
+          <label for="nomeTitular" class="pg-titular-label">NOME DO TITULAR DA CONTA DO PIX *</label>
+          <input type="text" id="nomeTitular" placeholder="Ex: Nome de quem fez a transferência" class="pg-titular-input" required>
+          <span class="pg-titular-hint">Informe caso tenha pago pela conta de outra pessoa.</span>
+        </div>
+
+        <!-- Botão de Confirmação -->
+        <button type="button" onclick="enviarComprovante()" class="pg-btn-confirm">
+          Já Fiz o Pagamento / Enviar Comprovante
+        </button>
+
+        <!-- Voltar -->
+        <div class="pg-back-wrap">
+          <a href="cadastro.html" class="pg-back-link">← Voltar para o Login</a>
         </div>
       </div>
 
-      <!-- Nome do Titular do Pix -->
-      <div class="pg-titular-wrap">
-        <label for="nomeTitular" class="pg-titular-label">NOME DO TITULAR DA CONTA DO PIX *</label>
-        <input type="text" id="nomeTitular" placeholder="Ex: Nome de quem fez a transferência" class="pg-titular-input" required>
-        <span class="pg-titular-hint">Informe caso tenha pago pela conta de outra pessoa.</span>
-      </div>
+      <!-- ETAPA 2: TELA DE CONFIRMAÇÃO E COMO SERÁ A LIBERAÇÃO -->
+      <div id="etapaConfirmacaoLiberacao" class="pg-status-box">
+        <span class="pg-status-badge">Pagamento Informado</span>
+        <h2 class="pg-status-title">Como será a liberação do seu acesso</h2>
+        <p class="pg-status-lead">
+          Recebemos o registro do seu pagamento para análise do administrador.
+        </p>
 
-      <!-- Botão de Confirmação -->
-      <button type="button" onclick="enviarComprovante()" class="pg-btn-confirm">
-        Já Fiz o Pagamento / Enviar Comprovante
-      </button>
+        <div class="pg-status-panel">
+          <p>
+            <strong>1. Conferência do pagamento:</strong> nossa equipe confere o pagamento da assinatura de <strong>R$ 49,90</strong> vinculado ao titular informado.
+          </p>
+          <p>
+            <strong>2. Confirmação por WhatsApp e e-mail:</strong> assim que confirmarmos o pagamento, o cliente receberá <strong>pelo WhatsApp e pelo e-mail</strong> a confirmação do pagamento e do cadastro, com o acesso liberado na plataforma.
+          </p>
+          <div class="pg-status-meta" id="resumoTitularConfirmado"></div>
+        </div>
 
-      <!-- Voltar -->
-      <div class="pg-back-wrap">
-        <a href="cadastro.html" class="pg-back-link">← Voltar para o Login</a>
+        <a href="cadastro.html" class="pg-btn-login">
+          Voltar para a Página de Login →
+        </a>
+
+        <a
+          id="linkWppConfirmacao"
+          href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Efetuei%20o%20pagamento%20da%20assinatura%20mensal%20do%20PipeiroGestor%20(R%24%2049%2C90)%20e%20aguardo%20a%20confirma%C3%A7%C3%A3o%20do%20pagamento%20e%20do%20cadastro%20por%20WhatsApp%20e%20e-mail."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="pg-btn-wpp-alt"
+        >
+          💬 Enviar Comprovante / Falar no WhatsApp
+        </a>
       </div>
 
     </div>
@@ -399,9 +543,14 @@
       const emailPendente = localStorage.getItem('pipeiro_cliente_pendente');
 
       if (emailPendente) {
-        let listaAssinantes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-        let cliente = listaAssinantes.find(c => c.email === emailPendente);
+        let listaAssinantes = [];
+        try {
+          listaAssinantes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
+        } catch (e) {
+          listaAssinantes = [];
+        }
 
+        const cliente = listaAssinantes.find(c => c.email === emailPendente);
         if (cliente) {
           cliente.status = 'pendente';
           cliente.titularPix = titular;
@@ -409,10 +558,22 @@
         }
       }
 
-      alert('✅ Comprovante registado com sucesso! O seu acesso será liberado assim que o administrador confirmar o pagamento.');
-
       localStorage.removeItem('pipeiro_cliente_pendente');
-      window.location.href = 'cadastro.html';
+
+      const resumoEl = document.getElementById('resumoTitularConfirmado');
+      if (resumoEl) {
+        resumoEl.innerHTML = `<strong>Titular do PIX informado:</strong> ${titular.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`;
+      }
+
+      const linkWpp = document.getElementById('linkWppConfirmacao');
+      if (linkWpp) {
+        const msg = `Olá! Efetuei o pagamento da assinatura mensal do PipeiroGestor (R$ 49,90) em nome de "${titular}" e aguardo a confirmação do pagamento e do cadastro por WhatsApp e e-mail.`;
+        linkWpp.href = `https://api.whatsapp.com/send?phone=5521972056744&text=${encodeURIComponent(msg)}`;
+      }
+
+      document.getElementById('etapaPagamentoFormulario').style.display = 'none';
+      document.getElementById('etapaConfirmacaoLiberacao').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
 </body>
