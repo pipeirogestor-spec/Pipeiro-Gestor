@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080B09">
   <title>PipeiroGestor - Painel Master (Super Admin)</title>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <link rel="icon" type="image/png" href="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
     <!-- Cabeçalho do Master Admin -->
     <div style="display: flex; justify-content: space-between; align-items: center; background: #0D120F; padding: 20px 24px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.09); margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
       <div style="display: flex; align-items: center; gap: 15px;">
-        <img src="https://i.ibb.co/DDzwdcyV/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="Logo PipeiroGestor" style="max-width: 48px; height: auto; object-fit: contain;">
+        <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="Logo PipeiroGestor" style="max-width: 48px; height: auto; object-fit: contain;" referrerpolicy="no-referrer">
         <div>
           <span style="font-size: 11px; color: #A6FF45; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; display: block;">SUPER ADMIN</span>
           <h1 style="margin: 2px 0 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px; color: #F5F8F4;">PipeiroGestor - Painel Master</h1>
@@ -144,6 +144,15 @@
   <script>
     let filtroEstadoAtual = 'todos';
 
+    function escaparHTML(texto) {
+      return String(texto ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Proteção de Rota: Apenas o Super Admin pode aceder a este ficheiro
     (function verificarSegurancaAdmin() {
       const logado = localStorage.getItem('pipeiro_logado');
@@ -209,43 +218,48 @@
           return;
         }
 
+        const nomeSeguro = escaparHTML(cliente.nome);
+        const emailSeguro = escaparHTML(cliente.email);
+        const emailJs = encodeURIComponent(String(cliente.email ?? ''));
+        const wppTexto = cliente.whatsapp ? escaparHTML(cliente.whatsapp) : 'Não informado';
+
         let badgeStatus = '';
         let btnAcoes = '';
         const titularPixText = cliente.titularPix
-          ? `<span style="color: #A6FF45; font-weight: 700;">${cliente.titularPix}</span>`
+          ? `<span style="color: #A6FF45; font-weight: 700;">${escaparHTML(cliente.titularPix)}</span>`
           : `<span style="color: #6B756D; font-style: italic;">Não informado</span>`;
 
-        const wppLimpo = cliente.whatsapp ? cliente.whatsapp.replace(/\D/g, '') : '';
+        const wppLimpo = cliente.whatsapp ? String(cliente.whatsapp).replace(/\D/g, '') : '';
         const linkWpp = wppLimpo
-          ? `https://api.whatsapp.com/send?phone=55${wppLimpo}&text=${encodeURIComponent('Olá ' + cliente.nome + ', sobre a sua assinatura no PipeiroGestor:')}`
+          ? `https://api.whatsapp.com/send?phone=55${wppLimpo}&text=${encodeURIComponent('Olá ' + (cliente.nome || '') + ', sobre a sua assinatura no PipeiroGestor:')}`
           : '#';
 
         if (status === 'aprovado' || status === 'ativo') {
           badgeStatus = `<span style="background: rgba(166,255,69,0.1); color: #A6FF45; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(166,255,69,0.28);">Ativo / Aprovado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus('${cliente.email}', 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 5px;">Bloquear</button>
-            <button onclick="removerCliente('${cliente.email}')" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
+            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 5px;">Bloquear</button>
+            <button onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
           `;
         } else if (status === 'pendente') {
           badgeStatus = `<span style="background: rgba(234,179,8,0.12); color: #eab308; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(234,179,8,0.28);">Pagamento Informado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus('${cliente.email}', 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px; box-shadow: 0 0 10px rgba(166,255,69,0.25);">Aprovar Acesso</button>
-            <button onclick="alterarStatus('${cliente.email}', 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Recusar</button>
+            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px; box-shadow: 0 0 10px rgba(166,255,69,0.25);">Aprovar Acesso</button>
+            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Recusar</button>
           `;
         } else {
           badgeStatus = `<span style="background: rgba(239,68,68,0.12); color: #fca5a5; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(239,68,68,0.28);">Bloqueado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus('${cliente.email}', 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Reativar</button>
-            <button onclick="removerCliente('${cliente.email}')" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
+            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Reativar</button>
+            <button onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
           `;
         }
 
         htmlRows += `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.09);">
-            <td style="padding: 14px; color: #F5F8F4; font-weight: 700;">${cliente.nome}</td>
+            <td style="padding: 14px; color: #F5F8F4; font-weight: 700;">${nomeSeguro}</td>
             <td style="padding: 14px; font-size: 13px; color: #9BA59C;">
-              <div>E-mail: ${cliente.email}</div>
-              <div style="margin-top: 4px;">WhatsApp: <a href="${linkWpp}" target="_blank" style="color: #A6FF45; text-decoration: none; font-weight: 600;" title="Chamar no WhatsApp">${cliente.whatsapp || 'Não informado'}</a></div>
+              <div>E-mail: ${emailSeguro}</div>
+              <div style="margin-top: 4px;">WhatsApp: <a href="${linkWpp}" target="_blank" rel="noopener noreferrer" style="color: #A6FF45; text-decoration: none; font-weight: 600;" title="Chamar no WhatsApp">${wppTexto}</a></div>
             </td>
             <td style="padding: 14px; font-size: 13px;">${titularPixText}</td>
             <td style="padding: 14px;">${badgeStatus}</td>

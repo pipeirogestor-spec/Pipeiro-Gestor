@@ -14,6 +14,10 @@ function getChaveIsolada(chaveBase) {
   return `pipeiro_${emailSanitizado}_${chaveBase}`;
 }
 
+function getDiretorioBaseURL() {
+  return window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+}
+
 // Proteção de Rota: Verifica se o assinante está logado
 (function verificarAutenticacao() {
   const estaLogado = localStorage.getItem('pipeiro_logado');
@@ -181,7 +185,7 @@ function gerarLinkAcao() {
         return;
       }
 
-      const urlBase = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+      const urlBase = getDiretorioBaseURL();
       const urlFinal = `${urlBase}/rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}`;
 
       const boxLink = document.getElementById('boxLinkGerado');
@@ -278,8 +282,9 @@ function gerarLinkAcao() {
 // =========================================================
 let filtroCampanhaAtual = 'todas';
 
-function filtrarCampanhasGestor(tipo) {
+function filtrarCampanhasGestor(tipo, ev) {
   filtroCampanhaAtual = tipo;
+  const eventoAtual = ev || (typeof window !== 'undefined' ? window.event : null);
 
   document.querySelectorAll('.btn-filtro').forEach(btn => {
     btn.style.background = '#111813';
@@ -287,10 +292,10 @@ function filtrarCampanhasGestor(tipo) {
     btn.style.borderColor = 'rgba(255,255,255,0.09)';
   });
 
-  if (event && event.target) {
-    event.target.style.background = '#A6FF45';
-    event.target.style.color = '#0D140A';
-    event.target.style.borderColor = '#A6FF45';
+  if (eventoAtual && eventoAtual.target) {
+    eventoAtual.target.style.background = '#A6FF45';
+    eventoAtual.target.style.color = '#0D140A';
+    eventoAtual.target.style.borderColor = '#A6FF45';
   }
 
   carregarMinhasCampanhas();
@@ -853,6 +858,7 @@ function carregarResumoHomeCards() {
 
   const prefixoCampanha = getChaveIsolada('campanha_');
   const prefixoPedido = getChaveIsolada('pedido_');
+  const urlBase = getDiretorioBaseURL();
 
   if (containerCampanhas) {
     containerCampanhas.innerHTML = "";
@@ -867,6 +873,7 @@ function carregarResumoHomeCards() {
             countAtivas++;
             const slug = key.replace(prefixoCampanha, '');
             const imgPremio = campanha.imagem || 'https://via.placeholder.com/150';
+            const linkRifa = `${urlBase}/rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}`;
 
             const card = document.createElement('div');
             card.style.cssText = "background: #111813; border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 12px; display: flex; gap: 12px; align-items: center;";
@@ -876,8 +883,8 @@ function carregarResumoHomeCards() {
                 <h4 style="color: #F5F8F4; font-size: 14px; margin: 0 0 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${campanha.titulo}</h4>
                 <p style="color: #A6FF45; font-size: 12px; margin: 0 0 8px 0; font-weight: 700;">R$ ${parseFloat(campanha.preco || 0).toFixed(2)} a cota</p>
                 <div style="display: flex; gap: 6px;">
-                  <a href="rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}" target="_blank" style="padding: 4px 10px; background: #A6FF45; color: #0D140A; text-decoration: none; border-radius: 6px; font-size: 11px; font-weight: 800;">Ver</a>
-                  <button onclick="navigator.clipboard.writeText(window.location.origin + '/rifa.html?acao=${slug}&gestor=${encodeURIComponent(GESTOR_ATIVO_EMAIL)}'); alert('Link copiado!');" style="padding: 4px 10px; background: #0A0F0C; color: #F5F8F4; border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Copiar Link</button>
+                  <a href="${linkRifa}" target="_blank" style="padding: 4px 10px; background: #A6FF45; color: #0D140A; text-decoration: none; border-radius: 6px; font-size: 11px; font-weight: 800;">Ver</a>
+                  <button onclick="navigator.clipboard.writeText('${linkRifa}'); alert('Link copiado!');" style="padding: 4px 10px; background: #0A0F0C; color: #F5F8F4; border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Copiar Link</button>
                 </div>
               </div>
             `;

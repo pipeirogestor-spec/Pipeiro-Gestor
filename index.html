@@ -694,7 +694,7 @@
   <!-- BARRA DE TOPO EXCLUSIVA PARA CELULAR -->
   <header class="mobile-header">
     <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor" class="mobile-logo" referrerpolicy="no-referrer">
-    <button class="btn-menu-mobile" onclick="toggleMenuMobile()"><i class="fas fa-bars">☰</i></button>
+    <button type="button" class="btn-menu-mobile" onclick="toggleMenuMobile()">☰</button>
   </header>
 
   <div class="app">
@@ -735,7 +735,7 @@
 
       <!-- BOTÃO DE TERMINAR SESSÃO NO FINAL DA SIDEBAR -->
       <div class="pg-logout-wrap">
-        <button onclick="fazerLogout()" class="pg-btn-logout">
+        <button type="button" onclick="fazerLogout()" class="pg-btn-logout">
           🚪 Terminar Sessão
         </button>
       </div>
@@ -750,7 +750,7 @@
           <h1 id="page-title">Visão Geral</h1>
           <p class="muted">Gerencie suas rifas de pipas e validações manuais em um só lugar.</p>
         </div>
-        <button class="primary-button" id="new-campaign" onclick="navegarParaAba('form-container')">
+        <button type="button" class="primary-button" id="new-campaign" onclick="navegarParaAba('form-container')">
           + Nova campanha
         </button>
       </header>
@@ -954,7 +954,7 @@
             </button>
           </div>
 
-          <a id="btnShareWhatsapp" href="#" target="_blank" class="pg-btn-wa-share">
+          <a id="btnShareWhatsapp" href="#" target="_blank" rel="noopener noreferrer" class="pg-btn-wa-share">
             💬 Compartilhar no WhatsApp
           </a>
         </div>
@@ -1084,10 +1084,10 @@
           </div>
 
           <div class="pg-campanhas-toolbar">
-            <button onclick="filtrarCampanhasGestor('todas')" class="pg-btn-filter active-filtro">Todas</button>
-            <button onclick="filtrarCampanhasGestor('ativas')" class="pg-btn-filter">Ativas</button>
-            <button onclick="filtrarCampanhasGestor('pausadas')" class="pg-btn-filter">Pausadas</button>
-            <button onclick="exportarRelatorioCSV()" class="pg-btn-csv">📥 Exportar CSV</button>
+            <button type="button" onclick="filtrarCampanhasGestor('todas', event)" class="pg-btn-filter active-filtro">Todas</button>
+            <button type="button" onclick="filtrarCampanhasGestor('ativas', event)" class="pg-btn-filter">Ativas</button>
+            <button type="button" onclick="filtrarCampanhasGestor('pausadas', event)" class="pg-btn-filter">Pausadas</button>
+            <button type="button" onclick="exportarRelatorioCSV()" class="pg-btn-csv">📥 Exportar CSV</button>
           </div>
         </div>
 
@@ -1104,7 +1104,7 @@
     <div class="modal-content pg-modal-ajuda-box">
       <div class="pg-modal-head">
         <h2 class="pg-modal-title">Manual do PipeiroGestor</h2>
-        <button onclick="fecharModalAjuda()" class="pg-modal-close">&times;</button>
+        <button type="button" onclick="fecharModalAjuda()" class="pg-modal-close">&times;</button>
       </div>
 
       <div class="pg-modal-body">
@@ -1126,7 +1126,7 @@
         </div>
       </div>
 
-      <button onclick="fecharModalAjuda()" class="pg-btn-modal-ok">Entendido, Vamos Faturar!</button>
+      <button type="button" onclick="fecharModalAjuda()" class="pg-btn-modal-ok">Entendido, Vamos Faturar!</button>
     </div>
   </div>
 

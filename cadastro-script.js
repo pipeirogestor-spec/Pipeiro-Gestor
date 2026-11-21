@@ -15,7 +15,7 @@ function alternarParaLogin(event) {
   const boxLogin = document.getElementById('boxLogin');
   const switchText = document.getElementById('switchText');
 
-  if (authTitle) authTitle.innerText = 'Acessar ao Painel';
+ if (authTitle) authTitle.innerText = 'Acessar ao Painel';
   if (authDesc) authDesc.innerText = 'Entre com os seus dados para gerir o seu negócio.';
   if (boxCadastro) boxCadastro.style.display = 'none';
   if (boxLogin) boxLogin.style.display = 'block';
