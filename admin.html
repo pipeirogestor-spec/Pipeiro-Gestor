@@ -26,8 +26,8 @@
         </div>
       </div>
       <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button onclick="abrirModalNovoCliente()" style="background: #A6FF45; color: #0D140A; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; box-shadow: 0 0 14px rgba(166,255,69,0.22);">+ Novo Assinante</button>
-        <button onclick="fazerLogoutAdmin()" style="background: rgba(239,68,68,0.14); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px;">Terminar Sessão</button>
+        <button type="button" onclick="abrirModalNovoCliente()" style="background: #A6FF45; color: #0D140A; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 12px; box-shadow: 0 0 14px rgba(166,255,69,0.22);">+ Novo Assinante</button>
+        <button type="button" onclick="fazerLogoutAdmin()" style="background: rgba(239,68,68,0.14); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px;">Terminar Sessão</button>
       </div>
     </div>
 
@@ -64,16 +64,16 @@
         <!-- Barra de Pesquisa e Botão Atualizar -->
         <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
           <input type="text" id="inputPesquisaAdmin" placeholder="Pesquisar por nome ou e-mail..." onkeyup="filtrarAssinantesAdmin()" style="padding: 10px 14px; background: #0A0F0C; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; color: #F5F8F4; font-size: 13px; outline: none; width: 230px;">
-          <button onclick="carregarPainelMaster()" style="padding: 10px 14px; background: #111813; color: #A6FF45; border: 1px solid rgba(166,255,69,0.35); border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;" title="Atualizar dados">Atualizar</button>
+          <button type="button" onclick="carregarPainelMaster()" style="padding: 10px 14px; background: #111813; color: #A6FF45; border: 1px solid rgba(166,255,69,0.35); border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;" title="Atualizar dados">Atualizar</button>
         </div>
       </div>
 
       <!-- Filtros Rápidos por Estado -->
       <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
-        <button onclick="definirFiltroEstado('todos', event)" class="btn-filtro-admin ativo" style="padding: 6px 14px; background: #A6FF45; color: #0D140A; border: 1px solid #A6FF45; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">Todos</button>
-        <button onclick="definirFiltroEstado('pendente', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Pendentes</button>
-        <button onclick="definirFiltroEstado('aprovado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Ativos</button>
-        <button onclick="definirFiltroEstado('bloqueado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Bloqueados</button>
+        <button type="button" onclick="definirFiltroEstado('todos', event)" class="btn-filtro-admin ativo" style="padding: 6px 14px; background: #A6FF45; color: #0D140A; border: 1px solid #A6FF45; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">Todos</button>
+        <button type="button" onclick="definirFiltroEstado('pendente', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Pendentes</button>
+        <button type="button" onclick="definirFiltroEstado('aprovado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Ativos</button>
+        <button type="button" onclick="definirFiltroEstado('bloqueado', event)" class="btn-filtro-admin" style="padding: 6px 14px; background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Bloqueados</button>
       </div>
 
       <div style="overflow-x: auto;">
@@ -125,8 +125,8 @@
       </div>
 
       <div style="display: flex; gap: 10px;">
-        <button onclick="salvarClienteManual()" style="flex: 1; padding: 12px; background: #A6FF45; color: #0D140A; border: none; border-radius: 8px; font-weight: 800; cursor: pointer;">Criar e Aprovar</button>
-        <button onclick="fecharModalNovoCliente()" style="padding: 12px; background: #111813; color: #E2E8E3; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; font-weight: 700; cursor: pointer;">Cancelar</button>
+        <button type="button" onclick="salvarClienteManual()" style="flex: 1; padding: 12px; background: #A6FF45; color: #0D140A; border: none; border-radius: 8px; font-weight: 800; cursor: pointer;">Criar e Aprovar</button>
+        <button type="button" onclick="fecharModalNovoCliente()" style="padding: 12px; background: #111813; color: #E2E8E3; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; font-weight: 700; cursor: pointer;">Cancelar</button>
       </div>
     </div>
   </div>
@@ -153,10 +153,29 @@
         .replace(/'/g, '&#39;');
     }
 
+    function normalizarEmail(email) {
+      return String(email ?? '').trim().toLowerCase();
+    }
+
+    function lerListaAssinantes() {
+      const listaClientesStr = localStorage.getItem('pipeiro_assinantes');
+      if (!listaClientesStr) return [];
+      try {
+        const parsed = JSON.parse(listaClientesStr);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function salvarListaAssinantes(lista) {
+      localStorage.setItem('pipeiro_assinantes', JSON.stringify(lista));
+    }
+
     // Proteção de Rota: Apenas o Super Admin pode aceder a este ficheiro
     (function verificarSegurancaAdmin() {
       const logado = localStorage.getItem('pipeiro_logado');
-      const adminAtual = localStorage.getItem('pipeiro_admin_atual');
+      const adminAtual = normalizarEmail(localStorage.getItem('pipeiro_admin_atual'));
       const EMAIL_SUPER_ADMIN = "precision.digital.oficial@gmail.com";
 
       if (logado !== 'true' || adminAtual !== EMAIL_SUPER_ADMIN) {
@@ -191,8 +210,8 @@
       const tbody = document.getElementById('tabelaMasterBody');
       if (!tbody) return;
 
-      const listaClientesStr = localStorage.getItem('pipeiro_assinantes');
-      if (!listaClientesStr) {
+      const listaClientes = lerListaAssinantes();
+      if (listaClientes.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9BA59C; padding: 30px;">Nenhum assinante registrado.</td></tr>`;
         document.getElementById('statTotalAssinantes').innerText = '0';
         document.getElementById('statPendentes').innerText = '0';
@@ -201,7 +220,6 @@
         return;
       }
 
-      const listaClientes = JSON.parse(listaClientesStr);
       let totalAssinantes = listaClientes.length;
       let totalPendentes = 0;
       let totalAtivos = 0;
@@ -237,20 +255,20 @@
         if (status === 'aprovado' || status === 'ativo') {
           badgeStatus = `<span style="background: rgba(166,255,69,0.1); color: #A6FF45; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(166,255,69,0.28);">Ativo / Aprovado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 5px;">Bloquear</button>
-            <button onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
+            <button type="button" onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700; margin-right: 5px;">Bloquear</button>
+            <button type="button" onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
           `;
         } else if (status === 'pendente') {
           badgeStatus = `<span style="background: rgba(234,179,8,0.12); color: #eab308; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(234,179,8,0.28);">Pagamento Informado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px; box-shadow: 0 0 10px rgba(166,255,69,0.25);">Aprovar Acesso</button>
-            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Recusar</button>
+            <button type="button" onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px; box-shadow: 0 0 10px rgba(166,255,69,0.25);">Aprovar Acesso</button>
+            <button type="button" onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'bloqueado')" style="background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">Recusar</button>
           `;
         } else {
           badgeStatus = `<span style="background: rgba(239,68,68,0.12); color: #fca5a5; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid rgba(239,68,68,0.28);">Bloqueado</span>`;
           btnAcoes = `
-            <button onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Reativar</button>
-            <button onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
+            <button type="button" onclick="alterarStatus(decodeURIComponent('${emailJs}'), 'aprovado')" style="background: #A6FF45; color: #0D140A; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; margin-right: 5px;">Reativar</button>
+            <button type="button" onclick="removerCliente(decodeURIComponent('${emailJs}'))" style="background: #111813; color: #9BA59C; border: 1px solid rgba(255,255,255,0.12); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 700;" title="Excluir registro">Excluir</button>
           `;
         }
 
@@ -276,15 +294,22 @@
 
       const faturamentoTotal = totalAtivos * 49.90;
       document.getElementById('statFaturamento').innerText = `R$ ${faturamentoTotal.toFixed(2).replace('.', ',')}`;
+
+      filtrarAssinantesAdmin();
     }
 
     function filtrarAssinantesAdmin() {
-      const termo = document.getElementById('inputPesquisaAdmin').value.toLowerCase();
+      const input = document.getElementById('inputPesquisaAdmin');
+      const termo = input ? input.value.toLowerCase().trim() : '';
       const linhas = document.querySelectorAll('#tabelaMasterBody tr');
 
       linhas.forEach(linha => {
+        if (linha.children.length === 1 && linha.children[0].hasAttribute('colspan')) {
+          linha.style.display = "";
+          return;
+        }
         const texto = linha.textContent.toLowerCase();
-        linha.style.display = texto.includes(termo) ? "" : "none";
+        linha.style.display = !termo || texto.includes(termo) ? "" : "none";
       });
     }
 
@@ -298,7 +323,7 @@
 
     function salvarClienteManual() {
       const nome = document.getElementById('modalNome').value.trim();
-      const email = document.getElementById('modalEmail').value.trim();
+      const email = normalizarEmail(document.getElementById('modalEmail').value);
       const whatsapp = document.getElementById('modalWhatsapp').value.trim();
       const senha = document.getElementById('modalSenha').value.trim();
 
@@ -307,8 +332,8 @@
         return;
       }
 
-      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-      if (listaClientes.some(c => c.email === email)) {
+      const listaClientes = lerListaAssinantes();
+      if (listaClientes.some(c => normalizarEmail(c.email) === email)) {
         alert('Já existe um cliente cadastrado com este e-mail.');
         return;
       }
@@ -325,7 +350,12 @@
       };
 
       listaClientes.push(novoCliente);
-      localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+      salvarListaAssinantes(listaClientes);
+
+      document.getElementById('modalNome').value = '';
+      document.getElementById('modalEmail').value = '';
+      document.getElementById('modalWhatsapp').value = '';
+      document.getElementById('modalSenha').value = '';
 
       fecharModalNovoCliente();
       alert('Assinante criado e acesso aprovado com sucesso.');
@@ -333,14 +363,15 @@
     }
 
     function alterarStatus(emailCliente, novoStatus) {
-      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-      let cliente = listaClientes.find(c => c.email === emailCliente);
+      const emailAlvo = normalizarEmail(emailCliente);
+      const listaClientes = lerListaAssinantes();
+      const cliente = listaClientes.find(c => normalizarEmail(c.email) === emailAlvo);
 
       if (cliente) {
         cliente.status = novoStatus;
-        localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+        salvarListaAssinantes(listaClientes);
         carregarPainelMaster();
-        alert(`Acesso do cliente atualizado para: ${novoStatus.toUpperCase()}`);
+        alert(`Acesso do cliente atualizado para: ${novoStatus}`);
       } else {
         alert('Cliente não encontrado.');
       }
@@ -348,9 +379,9 @@
 
     function removerCliente(emailCliente) {
       if (!confirm('Deseja excluir permanentemente este cliente do sistema?')) return;
-      let listaClientes = JSON.parse(localStorage.getItem('pipeiro_assinantes') || '[]');
-      listaClientes = listaClientes.filter(c => c.email !== emailCliente);
-      localStorage.setItem('pipeiro_assinantes', JSON.stringify(listaClientes));
+      const emailAlvo = normalizarEmail(emailCliente);
+      const listaClientes = lerListaAssinantes().filter(c => normalizarEmail(c.email) !== emailAlvo);
+      salvarListaAssinantes(listaClientes);
       carregarPainelMaster();
     }
 

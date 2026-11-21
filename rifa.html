@@ -156,7 +156,7 @@
       <!-- PASSO 1: IDENTIFICAÇÃO -->
       <div id="etapaIdentificacao">
         <h3 class="modal-titulo">Seus Dados de Contato</h3>
-        <p class="modal-sub">Preencha para vincular seus números reservados:</p>
+        <p class="modal-sub">Preencha para vincular seus números reservados e receber a confirmação:</p>
 
         <div class="campo-grupo">
           <label for="inputNomeComprador">Nome Completo *</label>
@@ -168,15 +168,22 @@
           <input type="tel" id="inputWppComprador" placeholder="Ex: 21999999999" />
         </div>
 
+        <div class="campo-grupo">
+          <label for="inputEmailComprador">E-mail para Confirmação</label>
+          <input type="email" id="inputEmailComprador" placeholder="Digite seu e-mail" />
+        </div>
+
         <button type="button" onclick="registrarPedidoNoGestor()" class="btn-modal-primary">
           Avançar para Pagamento →
         </button>
       </div>
 
-      <!-- PASSO 2: PAGAMENTO PIX -->
+      <!-- PASSO 2: PAGAMENTO PIX E LIBERAÇÃO -->
       <div id="etapaPagamentoPix" style="display: none;">
-        <h3 class="modal-titulo">Pagamento via PIX</h3>
-        <p class="modal-sub">Copie a chave e faça o pagamento no app do seu banco:</p>
+        <h3 class="modal-titulo">Pagamento via PIX e Liberação</h3>
+        <p class="modal-sub">
+          Copie a chave PIX abaixo, realize o pagamento no aplicativo do seu banco e clique para informar que efetuou o pagamento. A liberação das cotas passa pela conferência do pagamento.
+        </p>
 
         <div class="pix-box">
           <span id="tipoChavePixDisplay" class="pix-tipo">Tipo: PIX</span>
@@ -184,12 +191,30 @@
           <span id="titularPixDisplay" class="pix-titular">Titular: -</span>
         </div>
 
+        <div style="margin: 12px 0 16px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09); font-size: 12px; line-height: 1.6; color: #C5CFC7;">
+          <strong style="color: #A6FF45; display: block; margin-bottom: 4px;">Como funciona o pagamento e a liberação:</strong>
+          Após você fazer o PIX e clicar que efetuou o pagamento, nossa equipe confere a transação. <strong>Após confirmarmos o pagamento, o cliente receberá pelo WhatsApp e pelo e-mail a confirmação do pagamento e do cadastro</strong>, garantindo o registro válido das cotas.
+        </div>
+
+        <!-- MENSAGEM EXIBIDA ASSIM QUE CLICAR QUE EFETUOU O PAGAMENTO -->
+        <div
+          id="avisoPagamentoEfetuadoRifa"
+          role="status"
+          aria-live="polite"
+          style="display: none; margin: 12px 0 16px; padding: 14px 16px; border-radius: 10px; background: rgba(166,255,69,0.11); border: 1px solid rgba(166,255,69,0.45); font-size: 12.5px; line-height: 1.65; color: #F5F8F4;"
+        >
+          <strong style="color: #A6FF45; display: block; margin-bottom: 4px; font-size: 13px;">
+            Pagamento informado! Entenda o que acontece agora:
+          </strong>
+          Seu aviso de pagamento foi registrado. <strong>Após confirmarmos o pagamento, o cliente receberá pelo WhatsApp e pelo e-mail a confirmação do pagamento e do cadastro</strong> com os detalhes da validação.
+        </div>
+
         <button type="button" onclick="copiarChavePix()" class="btn-modal-primary">
           Copiar Chave PIX
         </button>
 
-        <button type="button" onclick="enviarComprovanteWpp()" class="btn-modal-wpp">
-          Enviar Comprovante no WhatsApp
+        <button type="button" id="btnJaEfetueiPagamento" onclick="confirmarPagamentoEEnviarWpp()" class="btn-modal-wpp">
+          Já Efetuei o Pagamento / Enviar Comprovante
         </button>
 
         <button type="button" onclick="location.reload()" class="btn-modal-sec">
@@ -208,9 +233,9 @@
 
       <div class="como-funciona-lista">
         <p><strong>1. Escolha seus números:</strong> Toque sobre as cotas desejadas para selecioná-las.</p>
-        <p><strong>2. Confirme seus dados:</strong> Digite seu Nome e WhatsApp para vincular a reserva.</p>
-        <p><strong>3. Faça o PIX:</strong> Copie a chave PIX do organizador e realize o pagamento no seu banco.</p>
-        <p><strong>4. Envie o Comprovante:</strong> Clique no botão verde para enviar o comprovante no WhatsApp e confirmar sua participação.</p>
+        <p><strong>2. Confirme seus dados:</strong> Digite seu Nome, WhatsApp e e-mail para vincular a reserva.</p>
+        <p><strong>3. Faça o PIX e informe o pagamento:</strong> Copie a chave PIX do organizador, faça o pagamento no seu banco e clique que efetuou o pagamento.</p>
+        <p><strong>4. Confirmação por WhatsApp e e-mail:</strong> Após confirmarmos o pagamento, o cliente receberá pelo WhatsApp e pelo e-mail a confirmação do pagamento e do cadastro.</p>
       </div>
 
       <button type="button" onclick="fecharModalComoFunciona()" class="btn-modal-sec">
@@ -230,6 +255,18 @@
     </div>
   </footer>
 
+  <script>
+    function confirmarPagamentoEEnviarWpp() {
+      const aviso = document.getElementById('avisoPagamentoEfetuadoRifa');
+      if (aviso) {
+        aviso.style.display = 'block';
+        aviso.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      if (typeof enviarComprovanteWpp === 'function') {
+        enviarComprovanteWpp();
+      }
+    }
+  </script>
   <script src="rifa-script.js"></script>
 </body>
 </html>
