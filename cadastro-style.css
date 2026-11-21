@@ -13,9 +13,11 @@
   --font-main: 'DM Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
 }
-* {
+
+*, *::before, *::after {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -44,6 +46,16 @@ body {
   max-width: 180px;
   height: auto;
   filter: drop-shadow(0 0 15px var(--neon-glow));
+  animation: flutuarLogo 3.4s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+/* Caso a logo do painel lateral não tenha a classe .auth-logo */
+.auth-benefits-card img,
+.auth-grid > div:last-child img {
+  filter: drop-shadow(0 0 16px var(--neon-glow));
+  animation: flutuarLogo 3.4s ease-in-out infinite;
+  will-change: transform, filter;
 }
 
 .auth-subtitle {
@@ -176,19 +188,15 @@ body {
   color: var(--text-main);
 }
 
-/* ANIMAÇÃO DE PULSAÇÃO E BRILHO NEON PARA A LOGOTIPO */
-@keyframes pulseLogo {
-  0% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(166, 255, 69, 0.2));
+/* ANIMAÇÃO DE FLUTUAÇÃO SUAVE (CIMA E BAIXO) E BRILHO NEON */
+@keyframes flutuarLogo {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 6px 14px rgba(166, 255, 69, 0.22));
   }
   50% {
-    transform: scale(1.04);
-    filter: drop-shadow(0 0 26px rgba(166, 255, 69, 0.42));
-  }
-  100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(166, 255, 69, 0.2));
+    transform: translateY(-7px);
+    filter: drop-shadow(0 16px 26px rgba(166, 255, 69, 0.42));
   }
 }
 

@@ -24,7 +24,7 @@
       --display: 'Space Grotesk', sans-serif;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
     }
 
@@ -219,11 +219,24 @@
       margin: 0;
     }
 
+    @keyframes flutuarLogoLogin {
+      0%, 100% {
+        transform: translateY(0px);
+        filter: drop-shadow(0 6px 14px rgba(166,255,69,.22));
+      }
+      50% {
+        transform: translateY(-7px);
+        filter: drop-shadow(0 16px 26px rgba(166,255,69,.42));
+      }
+    }
+
     .pg-logo-img {
       max-width: 150px;
       width: 100%;
       height: auto;
       filter: drop-shadow(0 0 18px rgba(166,255,69,.28));
+      animation: flutuarLogoLogin 3.4s ease-in-out infinite;
+      will-change: transform, filter;
     }
 
     .mobile-brand-header {
