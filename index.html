@@ -4,1160 +4,607 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080b09">
-  <title>PipeiroGestor - Painel do Organizador</title>
-  <link rel="icon" type="image/png" href="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png">
+  <meta name="description" content="PipeiroGestor: Plataforma SaaS para gerenciamento e automação de campanhas de pipas, linhas, rifas e prêmios.">
+  <title>PipeiroGestor | Plataforma SaaS de Gestão de Campanhas e Vendas</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="gestor-style.css">
-  <style>
-    .pg-sidebar-layout {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .pg-logout-wrap {
-      padding: 15px;
-    }
-
-    .pg-btn-logout {
-      background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.32);
-      padding: 12px;
-      width: 100%;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .pg-accent-green {
-      color: #A6FF45 !important;
-    }
-
-    .pg-accent-amber {
-      color: #f59e0b !important;
-    }
-
-    .pg-accent-soft {
-      color: #c0ff81 !important;
-    }
-
-    .pg-home-widgets {
-      margin-top: 25px;
-    }
-
-    .pg-surface-box {
-      background: #111813;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-
-    .pg-box-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #F5F8F4;
-      font-size: 18px;
-      margin: 0 0 15px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pg-box-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .pg-box-header-row .pg-box-title {
-      margin-bottom: 0;
-    }
-
-    .pg-grid-auto {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 15px;
-    }
-
-    .pg-list-col {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .pg-empty-msg {
-      color: #9BA59C;
-      font-size: 13px;
-      margin: 0;
-    }
-
-    .pg-btn-clear-sm {
-      background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.45);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .pg-tip-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #A6FF45;
-      font-size: 16px;
-      margin: 0 0 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pg-tip-text {
-      color: #9BA59C;
-      font-size: 13px;
-      line-height: 1.55;
-      margin: 0;
-    }
-
-    .pg-upload-dropzone {
-      border: 2px dashed rgba(166, 255, 69, 0.45);
-      padding: 20px;
-      text-align: center;
-      border-radius: 10px;
-      background: #0A0F0C;
-      cursor: pointer;
-    }
-
-    .pg-upload-label {
-      color: #A6FF45;
-      font-weight: 700;
-      pointer-events: none;
-    }
-
-    .pg-section-help {
-      color: #9BA59C;
-      font-size: 13px;
-      margin-top: 0;
-      margin-bottom: 14px;
-    }
-
-    .pg-submit-wrap {
-      margin-top: 25px;
-    }
-
-    .pg-btn-publish {
-      width: 100%;
-      padding: 16px;
-      background: #A6FF45;
-      color: #0b1208;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      font-weight: 800;
-      font-size: 15px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 20px rgba(166, 255, 69, 0.24);
-    }
-
-    .pg-link-box {
-      display: none;
-      background: #0D120F;
-      border: 1px solid rgba(166, 255, 69, 0.28);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      box-sizing: border-box;
-      width: 100%;
-    }
-
-    .pg-link-box-head {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .pg-link-badge {
-      background: rgba(166, 255, 69, 0.14);
-      color: #A6FF45;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .pg-link-title {
-      color: #F5F8F4;
-      font-size: 16px;
-      margin: 10px 0 5px 0;
-    }
-
-    .pg-link-desc {
-      color: #9BA59C;
-      font-size: 12px;
-      margin: 0;
-    }
-
-    .pg-link-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-    }
-
-    .pg-link-input {
-      width: 100%;
-      background: #0A0F0C;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      color: #A6FF45;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      box-sizing: border-box;
-      outline: none;
-      text-align: center;
-    }
-
-    .pg-btn-copy-link {
-      width: 100%;
-      background: #A6FF45;
-      color: #0b1208;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
-      font-size: 14px;
-      box-shadow: 0 0 18px rgba(166, 255, 69, 0.22);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-sizing: border-box;
-    }
-
-    .pg-btn-wa-share {
-      display: block;
-      width: 100%;
-      background: #22c55e;
-      color: #08120b;
-      text-decoration: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 14px;
-      text-align: center;
-      box-sizing: border-box;
-      box-shadow: 0 0 16px rgba(34, 197, 94, 0.25);
-    }
-
-    .pg-pedidos-filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .pg-search-input {
-      padding: 12px;
-      flex: 1;
-      min-width: 220px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      background: #0A0F0C;
-      color: #F5F8F4;
-    }
-
-    .pg-filter-select {
-      padding: 12px;
-      background: #0A0F0C;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 8px;
-      color: #F5F8F4;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .pg-empty-td {
-      text-align: center;
-      color: #9BA59C;
-      padding: 25px;
-    }
-
-    .pg-cfg-header {
-      margin-bottom: 25px;
-    }
-
-    .pg-cfg-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #A6FF45;
-      font-size: 22px;
-      margin: 0 0 5px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pg-cfg-desc {
-      color: #9BA59C;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    .pg-cfg-fieldset {
-      background: #111813;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .pg-cfg-legend {
-      color: #A6FF45;
-      font-weight: 700;
-      padding: 0 10px;
-    }
-
-    .pg-cfg-label {
-      color: #F5F8F4;
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 700;
-    }
-
-    .pg-cfg-input,
-    .pg-cfg-select {
-      width: 100%;
-      padding: 12px;
-      background: #0A0F0C;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 8px;
-      color: #F5F8F4;
-    }
-
-    .pg-cfg-help {
-      color: #9BA59C;
-      font-size: 13px;
-      margin-top: 0;
-      margin-bottom: 15px;
-    }
-
-    .pg-cfg-row {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
-
-    .pg-cfg-col-sm {
-      flex: 1;
-      min-width: 200px;
-    }
-
-    .pg-cfg-col-lg {
-      flex: 2;
-      min-width: 250px;
-    }
-
-    .pg-cfg-save-wrap {
-      text-align: right;
-      margin-top: 10px;
-    }
-
-    .pg-btn-save-cfg {
-      padding: 14px 28px;
-      background: #A6FF45;
-      color: #0b1208;
-      border: none;
-      border-radius: 8px;
-      font-weight: 800;
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 18px rgba(166, 255, 69, 0.22);
-    }
-
-    .pg-danger-zone {
-      margin-top: 30px;
-      padding: 20px;
-      background: rgba(239, 68, 68, 0.05);
-      border: 1px solid #ef4444;
-      border-radius: 12px;
-    }
-
-    .pg-danger-title {
-      color: #ef4444;
-      font-size: 16px;
-      margin: 0 0 8px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pg-danger-desc {
-      color: #9BA59C;
-      font-size: 13px;
-      margin: 0 0 15px 0;
-      line-height: 1.45;
-    }
-
-    .pg-btn-danger {
-      background-color: #ef4444;
-      color: #ffffff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 13px;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.28);
-    }
-
-    .pg-campanhas-section {
-      display: none;
-      margin-top: 40px;
-      padding: 20px;
-      background: #0D120F;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-    }
-
-    .pg-campanhas-header {
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .pg-campanhas-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #F5F8F4;
-      font-size: 20px;
-      margin: 0 0 4px 0;
-    }
-
-    .pg-campanhas-sub {
-      color: #9BA59C;
-      font-size: 13px;
-      margin: 0;
-    }
-
-    .pg-campanhas-toolbar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .pg-btn-filter {
-      padding: 6px 12px;
-      background: #111813;
-      color: #9BA59C;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .pg-btn-filter.active-filtro {
-      background: #A6FF45;
-      color: #0b1208;
-      border-color: #A6FF45;
-    }
-
-    .pg-btn-csv {
-      padding: 6px 12px;
-      background: rgba(166, 255, 69, 0.14);
-      color: #A6FF45;
-      border: 1px solid rgba(166, 255, 69, 0.35);
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .pg-modal-ajuda {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(8, 11, 9, 0.88);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 300;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .pg-modal-ajuda-box {
-      background: #111813;
-      border: 1px solid rgba(166, 255, 69, 0.35);
-      border-radius: 16px;
-      width: 90%;
-      max-width: 600px;
-      padding: 30px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
-      max-height: 85vh;
-      overflow-y: auto;
-      color: #F5F8F4;
-    }
-
-    .pg-modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .pg-modal-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #A6FF45;
-      font-size: 20px;
-      margin: 0;
-    }
-
-    .pg-modal-close {
-      background: none;
-      border: none;
-      color: #9BA59C;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .pg-modal-body {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #A1AAA2;
-    }
-
-    .pg-modal-intro {
-      margin: 0 0 15px 0;
-    }
-
-    .pg-modal-step {
-      background: #0A0F0C;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border-left: 3px solid #A6FF45;
-      color: #F5F8F4;
-    }
-
-    .pg-modal-step-last {
-      margin-bottom: 15px;
-    }
-
-    .pg-btn-modal-ok {
-      width: 100%;
-      background: #A6FF45;
-      color: #0b1208;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .pg-modal-reset {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(8, 11, 9, 0.88);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 500;
-    }
-
-    .pg-modal-reset-box {
-      background: #111813;
-      border: 1px solid rgba(166, 255, 69, 0.35);
-      border-radius: 16px;
-      width: 90%;
-      max-width: 420px;
-      padding: 25px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
-      text-align: center;
-      color: #F5F8F4;
-    }
-
-    .pg-reset-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .pg-reset-title {
-      font-family: 'Space Grotesk', 'DM Sans', sans-serif;
-      color: #A6FF45;
-      font-size: 18px;
-      margin: 0 0 10px 0;
-    }
-
-    .pg-reset-text {
-      color: #9BA59C;
-      font-size: 14px;
-      line-height: 1.5;
-      margin: 0 0 20px 0;
-    }
-
-    .pg-reset-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .pg-btn-cancel {
-      flex: 1;
-      background: #0A0F0C;
-      color: #F5F8F4;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .pg-btn-confirm-reset {
-      flex: 1;
-      background: #A6FF45;
-      color: #0b1208;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 0 16px rgba(166, 255, 69, 0.22);
-    }
-
-    .pg-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(8, 11, 9, 0.96);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(255, 255, 255, 0.09);
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999999;
-      box-sizing: border-box;
-      font-size: 12px;
-      color: #9BA59C;
-    }
-
-    .pg-footer-links {
-      display: flex;
-      gap: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- TELA DE CARREGAMENTO (SPLASH SCREEN) -->
-  <div id="splash-screen">
-    <div class="splash-content">
-      <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" class="splash-logo" alt="PipeiroGestor" referrerpolicy="no-referrer" />
-      <p id="splash-frase" class="splash-frase">Preparando o festival de pipas...</p>
-      <div class="splash-progress-bar">
-        <div id="splash-progress-fill" class="splash-progress-fill"></div>
-      </div>
-    </div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container nav-container">
+    <a href="#" class="logo">
+      <img
+        src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png"
+        
+        alt="Logo PipeiroGestor"
+        class="logo-img"
+        referrerpolicy="no-referrer"
+      >
+      <span>PIPEIRO<span class="green">GESTOR</span></span>
+    </a>
+
+    <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menu de navegação">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav" id="nav">
+      <a href="#sobre">A plataforma</a>
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#demonstracao">Demonstração</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#planos">Assinatura</a>
+      <a href="#faq">Dúvidas</a>
+      <a href="https://pipeirogestor.com/cadastro.html" class="nav-cta">QUERO ACESSAR <span>↗</span></a>
+    </nav>
   </div>
+</header>
 
-  <!-- BARRA DE TOPO EXCLUSIVA PARA CELULAR -->
-  <header class="mobile-header">
-    <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" alt="PipeiroGestor" class="mobile-logo" referrerpolicy="no-referrer">
-    <button type="button" class="btn-menu-mobile" onclick="toggleMenuMobile()">☰</button>
-  </header>
+<main>
 
-  <div class="app">
-    <!-- BARRA LATERAL (SIDEBAR) -->
-    <aside class="sidebar pg-sidebar-layout">
-      <div>
-        <div class="brand">
-          <img src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png" class="brand-logo" alt="PipeiroGestor Logo" referrerpolicy="no-referrer" />
-        </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid container">
+    <div class="hero-content reveal">
+      <div class="eyebrow"><span class="pulse"></span> ASSINATURA MENSAL R$ 49,90 • PAGAMENTO MANUAL VIA WHATSAPP</div>
 
-        <nav class="nav">
-          <a href="#visao-geral" class="nav-item active" onclick="event.preventDefault(); navegarParaAba('visao-geral')">
-            <span class="icon">📊</span>
-            <span>Visão Geral</span>
-          </a>
-          <a href="#nova-campanha" class="nav-item" onclick="event.preventDefault(); navegarParaAba('form-container')">
-            <span class="icon">🚀</span>
-            <span>Criar Campanha</span>
-          </a>
-          <a href="#minhas-campanhas-section" class="nav-item" onclick="event.preventDefault(); navegarParaAba('minhas-campanhas-section')">
-            <span class="icon">📁</span>
-            <span>Minhas Campanhas</span>
-          </a>
-          <a href="#pedidos" class="nav-item" onclick="event.preventDefault(); navegarParaAba('pedidos')">
-            <span class="icon">🧾</span>
-            <span>Pedidos & Comprovantes</span>
-          </a>
-          <a href="#configuracoes" class="nav-item" onclick="event.preventDefault(); navegarParaAba('configuracoes')">
-            <span class="icon">⚙️</span>
-            <span>Configurações</span>
-          </a>
-          <a href="#ajuda" class="nav-item" onclick="abrirModalAjuda(event)">
-            <span class="icon">📖</span>
-            <span>Como Usar / Tutorial</span>
-          </a>
-        </nav>
+      <h1>
+        Sua operação em um novo patamar de
+        <span class="gradient-text">controle e eficiência.</span>
+      </h1>
+
+      <p class="hero-description">
+        Crie campanhas de pipas, linhas, rifas ou qualquer prêmio, compartilhe o link de venda, receba via PIX e valide comprovantes no painel em tempo real.
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://pipeirogestor.com/cadastro.html" class="btn btn-primary">
+          ASSINAR E CRIAR ACESSO <span>→</span>
+        </a>
+        <a href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Quero%20assinar%20o%20PipeiroGestor%20de%20R%24%2049%2C90%20e%20finalizar%20meu%20pagamento%20com%20o%20admin." target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+          <span class="play-icon">💬</span> FECHAR NO WHATSAPP
+        </a>
       </div>
 
-      <!-- BOTÃO DE TERMINAR SESSÃO NO FINAL DA SIDEBAR -->
-      <div class="pg-logout-wrap">
-        <button type="button" onclick="fazerLogout()" class="pg-btn-logout">
-          🚪 Terminar Sessão
-        </button>
-      </div>
-    </aside>
-
-    <!-- CONTEÚDO PRINCIPAL (MAIN) -->
-    <main class="main">
-      <!-- CABEÇALHO DO PAINEL -->
-      <header class="topbar">
+      <div class="hero-proof">
+        <div class="proof-symbol">■</div>
         <div>
-          <span class="eyebrow">PIPEIROGESTOR / ADMINISTRAÇÃO</span>
-          <h1 id="page-title">Visão Geral</h1>
-          <p class="muted">Gerencie suas rifas de pipas e validações manuais em um só lugar.</p>
-        </div>
-        <button type="button" class="primary-button" id="new-campaign" onclick="navegarParaAba('form-container')">
-          + Nova campanha
-        </button>
-      </header>
-
-      <!-- SEÇÃO DE MÉTRICAS / RESUMO (PARTE DA VISÃO GERAL) -->
-      <section class="stats-grid">
-        <div class="stat-card" onclick="gerenciarArrecadacaoHoje()" title="Clique para gerenciar ou zerar">
-          <span class="stat-label">Arrecadado Hoje</span>
-          <h2 class="stat-value" id="totalHojeDisplay">R$ 0,00</h2>
-          <span class="stat-sub">Vendas registradas hoje (Clique para zerar)</span>
-        </div>
-
-        <div class="stat-card" onclick="gerenciarTotalArrecadado()" title="Clique para gerenciar ou zerar">
-          <span class="stat-label">Total Arrecadado</span>
-          <h2 class="stat-value" id="totalGeralDisplay">R$ 0,00</h2>
-          <span class="stat-sub">Soma de todas as ações (Clique para zerar)</span>
-        </div>
-
-        <div class="stat-card" onclick="gerenciarCotasVendidas()" title="Clique para gerenciar ou zerar">
-          <span class="stat-label">Cotas Vendidas</span>
-          <h2 class="stat-value" id="cotasVendidasDisplay">0</h2>
-          <span class="stat-sub">Total de bilhetes vendidos (Clique para zerar)</span>
-        </div>
-
-        <div class="stat-card" onclick="navegarParaAba('minhas-campanhas-section')">
-          <span class="stat-label">Campanhas Ativas</span>
-          <h2 class="stat-value pg-accent-green" id="totalAtivasDisplay">0</h2>
-          <span class="stat-sub">Campanhas rodando agora</span>
-        </div>
-
-        <div class="stat-card" onclick="navegarParaAba('minhas-campanhas-section')">
-          <span class="stat-label">Campanhas Inativas</span>
-          <h2 class="stat-value pg-accent-amber" id="totalInativasDisplay">0</h2>
-          <span class="stat-sub">Pausadas ou encerradas</span>
-        </div>
-
-        <div class="stat-card warning" onclick="navegarParaAba('pedidos')">
-          <span class="stat-label">Pagamentos Pendentes</span>
-          <h2 class="stat-value pg-accent-soft" id="pedidosPendentesDisplay">0 Pedidos</h2>
-          <span class="stat-sub">Aguardando validação</span>
-        </div>
-      </section>
-
-      <!-- PAINEL DE DASHBOARD DA HOME (PARTE DA VISÃO GERAL) -->
-      <section id="home-dashboard-widgets" class="pg-home-widgets">
-        <div class="pg-surface-box">
-          <h3 class="pg-box-title">
-            🚀 Campanhas Ativas em Destaque
-          </h3>
-          <div id="homeCampanhasAtivasGrid" class="pg-grid-auto">
-            <p class="pg-empty-msg">Carregando campanhas ativas...</p>
-          </div>
-        </div>
-
-        <div class="pg-surface-box">
-          <div class="pg-box-header-row">
-            <h3 class="pg-box-title">
-              💵 Últimas Vendas Aprovadas
-            </h3>
-            <button type="button" onclick="limparHistoricoVendas()" class="pg-btn-clear-sm">
-              🗑️ Limpar Histórico
-            </button>
-          </div>
-          <div id="homeUltimasVendasList" class="lista-vendas-scroll pg-list-col">
-            <p class="pg-empty-msg">Nenhuma venda recente registrada.</p>
-          </div>
-        </div>
-
-        <div class="pg-surface-box">
-          <div class="pg-box-header-row">
-            <h3 class="pg-box-title">
-              🏆 Top Ganhadores / Sorteios Realizados
-            </h3>
-            <button type="button" onclick="limparTopGanhadores()" class="pg-btn-clear-sm">
-              🗑️ Limpar Ganhadores
-            </button>
-          </div>
-          <div id="homeTopGanhadoresList" class="pg-list-col">
-            <p class="pg-empty-msg">Nenhum ganhador registrado no momento.</p>
-          </div>
-        </div>
-
-        <div class="pg-surface-box">
-          <h4 class="pg-tip-title">
-            💡 Dica de Ouro para Vender Mais
-          </h4>
-          <p class="pg-tip-text">
-            Divulgue o link da sua rifa nos grupos de WhatsApp e compartilhe fotos ou vídeos reais dos prêmios no story do Instagram para gerar desejo imediato e esgotar suas cotas rapidamente!
-          </p>
-        </div>
-      </section>
-
-      <!-- FORMULÁRIO DE CADASTRO DE NOVA AÇÃO -->
-      <div id="form-container" class="card-form-container" style="display: none;">
-        <div class="form-header">
-          <h2>Criar Nova Ação / Campanha</h2>
-          <p>Preencha os dados abaixo para publicar sua rifa e gerar o link de vendas para seus compradores.</p>
-        </div>
-
-        <form id="formCriarAcao" onsubmit="event.preventDefault();">
-          <fieldset class="form-section">
-            <legend>Informações Principais</legend>
-
-            <div class="form-group">
-              <label for="tituloAcao">Título da Ação *</label>
-              <input type="text" id="tituloAcao" placeholder="Ex: Porco Premiado R$ 5.000 no PIX" required />
-            </div>
-
-            <div class="form-group">
-              <label for="descricaoAcao">Descrição / Regulamento</label>
-              <textarea id="descricaoAcao" rows="3" placeholder="Descreva os prêmios, data do sorteio e regras..."></textarea>
-            </div>
-
-            <div class="form-group">
-              <label>Fotos do Prêmio / Banner da Ação (Até 3 fotos) *</label>
-              <div class="file-upload-box pg-upload-dropzone" onclick="document.getElementById('fotoPremio').click()">
-                <input type="file" id="fotoPremio" accept="image/*" multiple onchange="atualizarNomeFoto(this)" style="display: none;" />
-                <span id="textoUploadFoto" class="pg-upload-label">
-                  📷 Clique aqui para selecionar as fotos do prêmio (até 3 fotos)
-                </span>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="precoUnitario">Preço por Número (R$) *</label>
-                <input type="number" id="precoUnitario" step="0.01" min="0.10" placeholder="10.00" required />
-              </div>
-
-              <div class="form-group">
-                <label for="temaCotas">Estilo Visual das Cotas *</label>
-                <select id="temaCotas" required>
-                  <option value="numeros">Apenas Números (Padrão)</option>
-                  <option value="animais">Números com Animais (Fazendinha/Porquinho)</option>
-                </select>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset class="form-section">
-            <legend>2. Tabela de Promoções (Pacotes de Desconto)</legend>
-            <p class="section-help pg-section-help">Configure descontos automáticos quando o comprador selecionar mais cotas.</p>
-
-            <div id="containerPromocoes">
-              <div class="promocao-item">
-                <input type="number" placeholder="Qtd Cotas (Ex: 3)" class="promocao-qtd" />
-                <span>cotas por R$</span>
-                <input type="number" step="0.01" placeholder="Valor Total (Ex: 25.00)" class="promocao-valor" />
-              </div>
-            </div>
-
-            <button type="button" class="btn-secondary" onclick="adicionarLinhaPromocao()">+ Adicionar Nova Promoção</button>
-          </fieldset>
-
-          <fieldset class="form-section">
-            <legend>3. Dados de Recebimento PIX</legend>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="tipoChavePix">Tipo de Chave *</label>
-                <select id="tipoChavePix" required>
-                  <option value="CPF">CPF / CNPJ</option>
-                  <option value="Celular">Telefone / WhatsApp</option>
-                  <option value="E-mail">E-mail</option>
-                  <option value="Chave Aleatória">Chave Aleatória / Copia e Cola</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="chavePix">Chave PIX / Código Copia e Cola *</label>
-                <input type="text" id="chavePix" placeholder="Digite a chave PIX ou cole o código" required />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="titularPix">Nome do Titular da Conta *</label>
-              <input type="text" id="titularPix" placeholder="Nome completo que aparece no banco" required />
-            </div>
-          </fieldset>
-
-          <div class="pg-submit-wrap">
-            <button type="button" onclick="gerarLinkAcao()" class="pg-btn-publish">
-              💾 Publicar Ação e Gerar Link
-            </button>
-          </div>
-        </form>
-
-        <!-- CAIXA DE LINK GERADO RESPONSIVA -->
-        <div id="boxLinkGerado" class="pg-link-box">
-          <div class="pg-link-box-head">
-            <span class="pg-link-badge">🎉 Ação Criada com Sucesso!</span>
-            <h3 class="pg-link-title">Sua campanha já está online</h3>
-            <p class="pg-link-desc">Copie o link abaixo e divulgue para seus clientes:</p>
-          </div>
-
-          <div class="pg-link-actions">
-            <input type="text" id="inputUrlGerada" readonly class="pg-link-input">
-
-            <button type="button" onclick="copiarLink()" class="pg-btn-copy-link">
-              📋 Copiar Link da Campanha
-            </button>
-          </div>
-
-          <a id="btnShareWhatsapp" href="#" target="_blank" rel="noopener noreferrer" class="pg-btn-wa-share">
-            💬 Compartilhar no WhatsApp
-          </a>
+          <strong>Assinatura mensal de R$ 49,90 • Pagamento direto com o admin</strong>
+          <span>Após confirmarmos o pagamento, você recebe a confirmação do pagamento e do cadastro por WhatsApp e e-mail.</span>
         </div>
       </div>
-
-      <!-- TABELA DE PEDIDOS E PENDÊNCIAS DE VALIDAÇÃO -->
-      <section id="pedidos" class="data-section" style="display: none;">
-        <div class="pg-pedidos-filters">
-          <input type="text" id="inputBuscaPedidos" onkeyup="filtrarPedidosGestor()" placeholder="🔍 Pesquisar por nome ou WhatsApp..." class="pg-search-input">
-
-          <select id="filtroCampanhaPedidos" onchange="carregarPedidosEComprovantes()" class="pg-filter-select">
-            <option value="todas">🎯 Todas as Campanhas</option>
-          </select>
-        </div>
-
-        <div class="section-header">
-          <div class="pendentes-header-group">
-            <span class="section-tag-verde">3 Aguardando Validação</span>
-            <h2 class="editorial-title-pendentes">Pedidos & Validações Pendentes</h2>
-          </div>
-        </div>
-
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Comprador</th>
-                <th>Telefone / WhatsApp</th>
-                <th>Cotas Reservadas</th>
-                <th>Valor Total</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="6" class="pg-empty-td">
-                  Nenhum pedido pendente no momento.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- SEÇÃO CONFIGURAÇÕES DO GESTOR -->
-      <section id="configuracoes" class="section-container" style="display: none;">
-        <div class="section-header pg-cfg-header">
-          <h2 class="pg-cfg-title">
-            ⚙️ Configurações do Gestor
-          </h2>
-          <p class="pg-cfg-desc">
-            Personalize seus dados de perfil, chave PIX padrão e informações de suporte.
-          </p>
-        </div>
-
-        <form id="formConfiguracoes" onsubmit="salvarConfiguracoes(event)">
-          <fieldset class="form-section pg-cfg-fieldset">
-            <legend class="pg-cfg-legend">Perfil e Marca</legend>
-
-            <div class="form-group">
-              <label for="cfgNomeOrganizador" class="pg-cfg-label">Nome do Organizador / Marca *</label>
-              <input type="text" id="cfgNomeOrganizador" placeholder="Ex: Pipeiro Gestor" required class="pg-cfg-input" />
-            </div>
-
-            <div class="form-group">
-              <label for="cfgWhatsappSuporte" class="pg-cfg-label">WhatsApp de Suporte (para compradores) *</label>
-              <input type="tel" id="cfgWhatsappSuporte" placeholder="Ex: 21974056744" required class="pg-cfg-input" />
-            </div>
-          </fieldset>
-
-          <fieldset class="form-section pg-cfg-fieldset">
-            <legend class="pg-cfg-legend">2. Configuração PIX Padrão</legend>
-            <p class="pg-cfg-help">
-              Esses dados serão usados como padrão para preencher automaticamente as novas rifas que você criar.
-            </p>
-
-            <div class="form-row pg-cfg-row">
-              <div class="form-group pg-cfg-col-sm">
-                <label for="cfgTipoChavePix" class="pg-cfg-label">Tipo de Chave Padrão</label>
-                <select id="cfgTipoChavePix" class="pg-cfg-select">
-                  <option value="CPF">CPF / CNPJ</option>
-                  <option value="CELULAR">Telefone / Celular</option>
-                  <option value="EMAIL">E-mail</option>
-                  <option value="ALEATORIA">Chave Aleatória</option>
-                </select>
-              </div>
-
-              <div class="form-group pg-cfg-col-lg">
-                <label for="cfgChavePix" class="pg-cfg-label">Chave PIX Padrão *</label>
-                <input type="text" id="cfgChavePix" placeholder="Digite sua chave PIX" required class="pg-cfg-input" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="cfgTitularPix" class="pg-cfg-label">Nome do Titular da Conta *</label>
-              <input type="text" id="cfgTitularPix" placeholder="Ex: Vinícius Silva" required class="pg-cfg-input" />
-            </div>
-          </fieldset>
-
-          <div class="pg-cfg-save-wrap">
-            <button type="submit" class="pg-btn-save-cfg">
-              💾 Salvar Configurações
-            </button>
-          </div>
-        </form>
-
-        <div class="pg-danger-zone">
-          <h3 class="pg-danger-title">
-            ⚠️ Zona de Perigo / Manutenção
-          </h3>
-          <p class="pg-danger-desc">
-            Precisa de reiniciar o sistema ou limpar os dados de teste? Esta ação limpa o histórico local do gestor de forma permanente.
-          </p>
-          <button type="button" onclick="confirmarLimpezaTotalSistema()" class="pg-btn-danger">
-            🗑️ Limpar Todos os Dados / Reset do Sistema
-          </button>
-        </div>
-      </section>
-
-      <!-- SEÇÃO: MINHAS CAMPANHAS CRIADAS -->
-      <section id="minhas-campanhas-section" class="dashboard-section pg-campanhas-section">
-        <div class="section-header pg-campanhas-header">
-          <div>
-            <h2 class="pg-campanhas-title">📁 Minhas Campanhas Criadas</h2>
-            <p class="pg-campanhas-sub">Gerencie, edite, pause ou exclua suas ações ativas.</p>
-          </div>
-
-          <div class="pg-campanhas-toolbar">
-            <button type="button" onclick="filtrarCampanhasGestor('todas', event)" class="pg-btn-filter active-filtro">Todas</button>
-            <button type="button" onclick="filtrarCampanhasGestor('ativas', event)" class="pg-btn-filter">Ativas</button>
-            <button type="button" onclick="filtrarCampanhasGestor('pausadas', event)" class="pg-btn-filter">Pausadas</button>
-            <button type="button" onclick="exportarRelatorioCSV()" class="pg-btn-csv">📥 Exportar CSV</button>
-          </div>
-        </div>
-
-        <div id="listaMinhasCampanhas" class="pg-grid-auto">
-          <p class="pg-empty-msg">Nenhuma campanha criada ainda. Crie uma preenchendo o formulário!</p>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- MODAL DE GUIA / TUTORIAL DO GESTOR -->
-  <div class="modal-overlay pg-modal-ajuda" id="modalAjuda">
-    <div class="modal-content pg-modal-ajuda-box">
-      <div class="pg-modal-head">
-        <h2 class="pg-modal-title">Manual do PipeiroGestor</h2>
-        <button type="button" onclick="fecharModalAjuda()" class="pg-modal-close">&times;</button>
-      </div>
-
-      <div class="pg-modal-body">
-        <p class="pg-modal-intro">Bem-vindo ao <strong>PipeiroGestor</strong>! Aqui está o passo a passo completo para você criar suas ações de sucesso e lucrar com zero taxa:</p>
-
-        <div class="pg-modal-step">
-          <strong>🚀 1. Criando uma Campanha:</strong><br>
-          Vá em "Criar Campanha", preencha o título, o valor por cota e selecione o tipo de chave PIX e estilo de cotas. Insira sua chave PIX e clique em publicar.
-        </div>
-
-        <div class="pg-modal-step">
-          <strong>📢 2. Divulgando para os Compradores:</strong><br>
-          Copie o link gerado ou clique no botão direto do WhatsApp.
-        </div>
-
-        <div class="pg-modal-step pg-modal-step-last">
-          <strong>🧾 3. Validando Comprovantes:</strong><br>
-          Gerencie os pedidos na tabela para dar baixa na sua arrecadação.
-        </div>
-      </div>
-
-      <button type="button" onclick="fecharModalAjuda()" class="pg-btn-modal-ok">Entendido, Vamos Faturar!</button>
     </div>
-  </div>
 
-  <!-- MODAL CUSTOMIZADA PARA CONFIRMAÇÃO DE RESET -->
-  <div id="modalResetPersonalizado" class="pg-modal-reset">
-    <div class="pg-modal-reset-box">
-      <div class="pg-reset-icon">⚠️</div>
-      <h3 id="modalResetTitulo" class="pg-reset-title">Confirmação de Reset</h3>
-      <p id="modalResetTexto" class="pg-reset-text">Desejas realmente zerar este valor?</p>
+    <div class="hero-visual reveal">
+      <div class="visual-orbit orbit-one"></div>
+      <div class="visual-orbit orbit-two"></div>
 
-      <div class="pg-reset-actions">
-        <button type="button" onclick="fecharModalReset()" class="pg-btn-cancel">
-          Cancelar
-        </button>
-        <button type="button" id="btnConfirmarResetModal" class="pg-btn-confirm-reset">
-          Sim, Zerar
-        </button>
+      <div class="hero-showcase-media">
+        <img
+          src="https://i.ibb.co/qYYDcBW4/Painel-Pipino-Gestor-em-destaque.png"
+          alt="Painel PipeiroGestor em destaque"
+          class="hero-panel-img"
+          referrerpolicy="no-referrer"
+        >
       </div>
     </div>
   </div>
 
-  <footer class="pg-footer">
-    <div class="pg-footer-links">
-      <span>Termos de Uso</span>
-      <span>Política de Privacidade</span>
+  <div class="hero-bottom container">
+    <span>ESTRUTURA DIRETA PARA O SEU NEGÓCIO</span>
+    <span class="scroll-line"></span>
+    <a href="#planos">VER ASSINATURA ↓</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>ASSINATURA MENSAL R$ 49,90</span><b>•</b>
+    <span>PAGAMENTO MANUAL COM O ADMIN NO WHATSAPP</span><b>•</b>
+    <span>CONTROLE DE CAMPANHAS E PIX</span><b>•</b>
+    <span>PIPEIROGESTOR</span><b>•</b>
+    <span>ASSINATURA MENSAL R$ 49,90</span><b>•</b>
+    <span>PAGAMENTO MANUAL COM O ADMIN NO WHATSAPP</span><b>•</b>
+    <span>CONTROLE DE CAMPANHAS E PIX</span><b>•</b>
+    <span>PIPEIROGESTOR</span><b>•</b>
+  </div>
+</div>
+
+<!-- APRESENTAÇÃO DA PLATAFORMA -->
+<section class="section about-section" id="sobre">
+  <div class="container">
+    <div class="section-grid">
+      <div class="about-visual reveal">
+        <div class="about-image image-placeholder">
+          <img
+            src="https://i.ibb.co/TBbc956j/Painel-Pipeiro-Gestor-em-Escrit-rio-Neon.png"
+            alt="Painel PipeiroGestor em escritório escuro com detalhes em verde-neon"
+            class="about-panel-img"
+            referrerpolicy="no-referrer"
+          >
+          <div class="image-overlay">
+            <span class="image-label">ARQUITETURA SaaS MODERNA</span>
+            <strong>Nascido nas pipas e linhas, pronto para qualquer campanha.</strong>
+          </div>
+        </div>
+        <div class="about-stamp">
+          <span>PG</span>
+          <small>SISTEMA<br>EXCLUSIVO</small>
+        </div>
+      </div>
+
+      <div class="about-content reveal">
+        <span class="section-tag">01 — APRESENTAÇÃO DA PLATAFORMA</span>
+        <h2>Gestão especializada para <span class="gradient-text">organização absoluta.</span></h2>
+
+        <p>
+          Administrar campanhas de pipas, linhas, rifas e outros produtos exige precisão. Planilhas manuais e anotações soltas abrem margem para falhas e tomam tempo precioso da sua rotina.
+        </p>
+
+        <p>
+          O PipeiroGestor consolida todo o seu fluxo operacional em um ambiente digital seguro e intuitivo, permitindo acompanhar lotes, reservas e pagamentos em tempo real pelo celular ou computador.
+        </p>
+
+        <a href="https://pipeirogestor.com/cadastro.html" class="text-link">IR PARA CADASTRO E ASSINATURA <span>↗</span></a>
+      </div>
     </div>
-    <div>
+  </div>
+</section>
+
+<!-- FUNCIONALIDADES (CARROSSEL EM LOOP) -->
+<section class="section features-section" id="funcionalidades">
+  <div class="container">
+    <div class="section-heading center reveal">
+      <span class="section-tag">02 — RECURSOS E FUNCIONALIDADES</span>
+      <h2>Ferramentas desenvolvidas para a sua <span class="gradient-text">máxima performance.</span></h2>
+      <p>Conheça os recursos integrados ao sistema para organizar sua rotina de campanhas e vendas.</p>
+    </div>
+  </div>
+
+  <div class="features-carousel reveal">
+    <div class="features-track">
+      <!-- LOTE 1 -->
+      <article class="feature-card">
+        <div class="feature-icon">01</div>
+        <span class="feature-number">CAMPANHAS</span>
+        <h3>Criação de Campanhas e Lotes</h3>
+        <p>Monte campanhas de pipas, linhas, prêmios ou qualquer produto com organização por lotes e controle das cotas sem planilhas.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">02</div>
+        <span class="feature-number">DIVULGAÇÃO</span>
+        <h3>Link Pronto para Divulgar</h3>
+        <p>Gere e compartilhe o link da sua campanha em poucos cliques para os participantes acompanharem e reservarem.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">03</div>
+        <span class="feature-number">PAGAMENTOS</span>
+        <h3>Recebimento via PIX</h3>
+        <p>Centralize os pagamentos via PIX da sua operação e mantenha o controle do que entrou com muito mais agilidade.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">04</div>
+        <span class="feature-number">CONFERÊNCIA</span>
+        <h3>Validação de Comprovantes</h3>
+        <p>Confira pedidos pendentes e valide comprovantes direto no painel, reduzindo erros e confusão no WhatsApp.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">05</div>
+        <span class="feature-number">FINANCEIRO</span>
+        <h3>Fluxo de Caixa em Tempo Real</h3>
+        <p>Veja o valor arrecadado no dia, o total acumulado e as cotas vendidas atualizados na hora para decidir rápido.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card feature-highlight">
+        <div class="feature-icon">06</div>
+        <span class="feature-number">VERSATILIDADE</span>
+        <h3>Versátil para Qualquer Ação</h3>
+        <p>Nasceu no universo das pipas e linhas, mas se adapta a rifas, sorteios e diversos tipos de campanha no celular ou PC.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <!-- LOTE 2 (DUPLICADO PARA LOOP CONTÍNUO) -->
+      <article class="feature-card">
+        <div class="feature-icon">01</div>
+        <span class="feature-number">CAMPANHAS</span>
+        <h3>Criação de Campanhas e Lotes</h3>
+        <p>Monte campanhas de pipas, linhas, prêmios ou qualquer produto com organização por lotes e controle das cotas sem planilhas.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">02</div>
+        <span class="feature-number">DIVULGAÇÃO</span>
+        <h3>Link Pronto para Divulgar</h3>
+        <p>Gere e compartilhe o link da sua campanha em poucos cliques para os participantes acompanharem e reservarem.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">03</div>
+        <span class="feature-number">PAGAMENTOS</span>
+        <h3>Recebimento via PIX</h3>
+        <p>Centralize os pagamentos via PIX da sua operação e mantenha o controle do que entrou com muito mais agilidade.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">04</div>
+        <span class="feature-number">CONFERÊNCIA</span>
+        <h3>Validação de Comprovantes</h3>
+        <p>Confira pedidos pendentes e valide comprovantes direto no painel, reduzindo erros e confusão no WhatsApp.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon">05</div>
+        <span class="feature-number">FINANCEIRO</span>
+        <h3>Fluxo de Caixa em Tempo Real</h3>
+        <p>Veja o valor arrecadado no dia, o total acumulado e as cotas vendidas atualizados na hora para decidir rápido.</p>
+        <div class="feature-line"></div>
+      </article>
+
+      <article class="feature-card feature-highlight">
+        <div class="feature-icon">06</div>
+        <span class="feature-number">VERSATILIDADE</span>
+        <h3>Versátil para Qualquer Ação</h3>
+        <p>Nasceu no universo das pipas e linhas, mas se adapta a rifas, sorteios e diversos tipos de campanha no celular ou PC.</p>
+        <div class="feature-line"></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER DE CONTROLE -->
+<section class="statement-section">
+  <div class="statement-glow"></div>
+  <div class="container statement-content reveal">
+    <span class="section-tag">03 — ORGANIZAÇÃO E CONTROLE</span>
+    <h2>Eleve o padrão do seu negócio.<br><span class="gradient-text">Substitua o improviso por um sistema.</span></h2>
+    <p>Assinatura mensal de <strong>R$ 49,90</strong> com pagamento manual e atendimento direto com o administrador no WhatsApp.</p>
+    <a href="https://pipeirogestor.com/cadastro.html" class="btn btn-primary">FAZER CADASTRO E ASSINAR →</a>
+  </div>
+</section>
+
+<!-- DEMONSTRAÇÃO EM VÍDEO -->
+<section class="section video-section" id="demonstracao">
+  <div class="container">
+    <div class="section-heading center reveal">
+      <span class="section-tag">04 — DEMONSTRAÇÃO PRÁTICA</span>
+      <h2>Veja o PipeiroGestor <span class="gradient-text">em funcionamento.</span></h2>
+      <p>Confira a criação da campanha na prática e como o participante visualiza e conclui a compra.</p>
+    </div>
+
+    <div class="video-frame reveal" id="videoFrame">
+      <video
+        src="demonstracao.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+      ></video>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA DO SISTEMA -->
+<section class="section gallery-section" id="galeria">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="section-tag">05 — GALERIA DA PLATAFORMA</span>
+      <h2>Conheça as telas oficiais do <span class="gradient-text">PipeiroGestor.</span></h2>
+      <p>Design escuro, direto e responsivo pensado para você acompanhar toda a operação em segundos.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item gallery-large reveal">
+        <img
+          src="https://i.ibb.co/LfM32Q8/Painel-Pipino-Gestor-em-Vis-o-Geral.png"
+          alt="Painel PipeiroGestor em Visão Geral mostrando finanças e vendas"
+          class="gallery-photo-img"
+          referrerpolicy="no-referrer"
+        >
+        <div class="gallery-placeholder gallery-overlay-caption">
+          <span>TELA PRINCIPAL 01</span>
+          <strong>Visão Geral e Fluxo de Caixa</strong>
+          <small>Arrecadação do dia, total acumulado, cotas vendidas e lotes em tempo real.</small>
+        </div>
+      </div>
+
+      <div class="gallery-item reveal">
+        <img
+          src="https://i.ibb.co/20tXyW65/Carretilha-Pro-Max-Campanha-Ativa.png"
+          alt="Página da campanha Carretilha Pro Max ativa no PipeiroGestor"
+          class="gallery-photo-img"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        >
+        <div class="gallery-placeholder gallery-overlay-caption">
+          <span>MÓDULO 02</span>
+          <strong>Campanhas, Lotes e Link de Venda</strong>
+          <small>Crie ações de pipas, linhas ou carretilhas e compartilhe o link pronto.</small>
+        </div>
+      </div>
+
+      <div class="gallery-item reveal">
+        <img
+          src="https://i.ibb.co/N2RZnRBS/Painel-Neon-de-N-meros-e-Reservas.png"
+          alt="Painel neon de seleção de números, reservas e pagamentos via PIX"
+          class="gallery-photo-img"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        >
+        <div class="gallery-placeholder gallery-overlay-caption">
+          <span>MÓDULO 03</span>
+          <strong>Cotas, Reservas e Comprovantes PIX</strong>
+          <small>Seleção rápida de números, reservas automáticas e validação de PIX no painel.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS E DIFERENCIAIS -->
+<section class="section benefits-section">
+  <div class="container benefits-layout">
+    <div class="benefits-intro reveal">
+      <span class="section-tag">06 — BENEFÍCIOS E DIFERENCIAIS</span>
+      <h2>Por que gestores escolhem o <span class="gradient-text">PipeiroGestor?</span></h2>
+      <p>Mais controle no PIX, menos confusão no WhatsApp e um painel organizado para campanhas de pipas, linhas, prêmios e muito mais.</p>
+      <a href="https://pipeirogestor.com/cadastro.html" class="btn btn-primary">GARANTIR MEU ACESSO →</a>
+    </div>
+
+    <div class="benefits-list">
+      <div class="benefit-item reveal">
+        <span>01</span>
+        <div><h3>Fim do Caos nas Mensagens</h3><p>Em vez de anotar cotas no caderno ou se perder em conversas soltas, cada pedido fica registrado direto no painel.</p></div>
+        <b>↗</b>
+      </div>
+      <div class="benefit-item reveal">
+        <span>02</span>
+        <div><h3>Conferência Rápida de PIX</h3><p>Visualize pagamentos pendentes e valide comprovantes em segundos, sabendo exatamente o que já entrou no caixa.</p></div>
+        <b>↗</b>
+      </div>
+      <div class="benefit-item reveal">
+        <span>03</span>
+        <div><h3>Versátil para Várias Campanhas</h3><p>Ideal para o universo das pipas e linhas, mas pronto para rifas, sorteios e ações de qualquer produto.</p></div>
+        <b>↗</b>
+      </div>
+      <div class="benefit-item reveal">
+        <span>04</span>
+        <div><h3>Acesso Direto pelo Celular ou PC</h3><p>Acompanhe lotes, cotas vendidas e o faturamento do dia em tempo real de onde você estiver, sem instalar nada.</p></div>
+        <b>↗</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARAÇÃO -->
+<section class="section comparison-section">
+  <div class="container">
+    <div class="section-heading center reveal">
+      <span class="section-tag">TRANSFORMAÇÃO NA ROTINA</span>
+      <h2>A diferença entre gerenciar com e sem o <span class="gradient-text">PipeiroGestor.</span></h2>
+    </div>
+
+    <div class="comparison-grid">
+      <div class="comparison-card old reveal">
+        <span class="comparison-label">MÉTODOS TRADICIONAIS</span>
+        <h3>Caderno, Planilha & WhatsApp</h3>
+        <ul>
+          <li>- Cotas anotadas à mão ou espalhadas em planilhas</li>
+          <li>- Comprovantes perdidos no meio de dezenas de mensagens</li>
+          <li>- Risco de reserva duplicada ou erro na contagem dos lotes</li>
+          <li>- Dificuldade para saber quanto entrou de verdade no dia</li>
+        </ul>
+      </div>
+
+      <div class="comparison-card new reveal">
+        <span class="comparison-label">COM O PIPEIROGESTOR</span>
+        <h3>Gestão Digital Organizada</h3>
+        <ul>
+          <li>• Campanhas por lotes com link pronto para divulgar</li>
+          <li>• Pedidos e comprovantes PIX centralizados no painel</li>
+          <li>• Acompanhamento das cotas em tempo real no celular ou PC</li>
+          <li>• Pronto para pipas, linhas, rifas, prêmios e outras ações</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASSINATURA MENSAL E PAGAMENTO MANUAL -->
+<section class="section pricing-section" id="planos">
+  <div class="container">
+    <div class="section-heading center reveal">
+      <span class="section-tag">07 — ASSINATURA MENSAL E PAGAMENTO</span>
+      <h2>Assinatura mensal de R$ 49,90 e <span class="gradient-text">fechamento direto no WhatsApp.</span></h2>
+      <p>Valor mensal fixo de <strong>R$ 49,90</strong>, com pagamento manual combinado e validado diretamente com o administrador.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="pricing-card reveal">
+        <span class="pricing-top">ASSINATURA MENSAL • PAGAMENTO MANUAL</span>
+        <h3>Plano Mensal PipeiroGestor</h3>
+        <p>Acesso completo ao painel do organizador, link de divulgação, controle de lotes e validação de PIX.</p>
+
+        <div class="price-area">
+          <span class="price-placeholder">R$ 49,90 <span class="price-unit">/ mês</span></span>
+          <p class="price-subnote">Pagamento manual feito direto com o admin via WhatsApp.</p>
+        </div>
+
+        <div class="pricing-divider"></div>
+
+        <ul>
+          <li>• Valor da assinatura: <strong>R$ 49,90 por mês</strong></li>
+          <li>• Pagamento manual combinado direto com o admin no WhatsApp</li>
+          <li>• Criação de campanhas, promoções e organização por lotes</li>
+          <li>• Link de venda pronto para compartilhar com compradores</li>
+          <li>• Controle de pedidos, comprovantes PIX e caixa em tempo real</li>
+        </ul>
+
+        <a href="https://pipeirogestor.com/cadastro.html" class="btn btn-primary btn-full">ACESSAR CADASTRO DO GESTOR →</a>
+        <a href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Quero%20fazer%20a%20assinatura%20mensal%20do%20PipeiroGestor%20(R%24%2049%2C90)%20e%20finalizar%20o%20pagamento%20manual%20com%20voc%C3%AA." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-full btn-wpp-secondary">
+          💬 PAGAR E FECHAR DIRETO NO WHATSAPP
+        </a>
+        <small>Após confirmarmos o pagamento, você recebe por WhatsApp e e-mail a confirmação do pagamento e do cadastro.</small>
+      </div>
+
+      <div class="pricing-side reveal">
+        <div class="pricing-side-icon">PIX / ZAP</div>
+        <span>COMO FUNCIONA O PAGAMENTO</span>
+        <h3>Simples, direto e sem burocracia com o admin.</h3>
+        <p>1. Clique em acessar cadastro para registrar seus dados.<br>2. Fale com o admin no WhatsApp <strong>(21) 97205-6744</strong>.<br>3. Finalize o pagamento manual da assinatura mensal de <strong>R$ 49,90</strong> — após confirmarmos o pagamento, você recebe a confirmação do pagamento e do cadastro por WhatsApp e e-mail.</p>
+        <a href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Vim%20pela%20se%C3%A7%C3%A3o%20de%20assinatura%20do%20PipeiroGestor%20e%20quero%20finalizar%20meu%20pagamento%20de%20R%24%2049%2C90." target="_blank" rel="noopener noreferrer" class="text-link">FALAR COM O ADMIN NO WHATSAPP ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERGUNTAS FREQUENTES -->
+<section class="section faq-section" id="faq">
+  <div class="container faq-layout">
+    <div class="faq-intro reveal">
+      <span class="section-tag">08 — PERGUNTAS FREQUENTES</span>
+      <h2>Tire suas dúvidas sobre o <span class="gradient-text">PipeiroGestor.</span></h2>
+      <p>Assinatura mensal de <strong>R$ 49,90</strong> com pagamento manual finalizado direto com o admin no WhatsApp.</p>
+      <a href="https://pipeirogestor.com/cadastro.html" class="text-link">ACESSAR CADASTRO ↗</a>
+      <br>
+      <a
+        href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Tenho%20d%C3%BAvidas%20sobre%20a%20assinatura%20mensal%20de%20R%24%2049%2C90%20do%20PipeiroGestor."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="pg-wpp-inline-btn"
+      >
+        💬 Finalizar pagamento / Tirar dúvida no WhatsApp ↗
+      </a>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button type="button" class="faq-question">Qual é o valor da assinatura mensal do PipeiroGestor?<span>+</span></button>
+        <div class="faq-answer"><p>A assinatura mensal custa <strong>R$ 49,90</strong> por mês para uso da plataforma e gerenciamento das suas campanhas.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-question">Como funciona o pagamento da assinatura?<span>+</span></button>
+        <div class="faq-answer"><p>O pagamento é feito de forma manual e finalizado diretamente com o administrador pelo WhatsApp <strong>(21) 97205-6744</strong>, após o seu cadastro em pipeirogestor.com/cadastro.html. Após confirmarmos o pagamento, você recebe pelo WhatsApp e pelo e-mail a confirmação do pagamento e do cadastro.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-question">Serve apenas para pipas e linhas ou posso usar em outras campanhas?<span>+</span></button>
+        <div class="faq-answer"><p>Ele nasceu pensado na rotina das pipas e linhas, mas sua estrutura de lotes, link de compra e controle de PIX funciona perfeitamente para rifas, sorteios e campanhas de outros produtos.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-question">Preciso instalar algum programa ou aplicativo?<span>+</span></button>
+        <div class="faq-answer"><p>Não. O PipeiroGestor funciona direto pelo navegador do seu celular, tablet ou computador.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-question">Como funciona o controle de PIX e comprovantes nas minhas campanhas?<span>+</span></button>
+        <div class="faq-answer"><p>Cada reserva fica registrada no seu painel com status de pagamento para você conferir e validar os comprovantes rapidamente, sem perder o controle no WhatsApp.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-question">Como falo direto com o admin para ativar ou tirar dúvidas?<span>+</span></button>
+        <div class="faq-answer"><p>Basta chamar no WhatsApp oficial <strong>(21) 97205-6744</strong> para concluir o pagamento manual e receber orientação na configuração da sua conta.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final-cta">
+  <div class="final-cta-glow"></div>
+  <div class="container final-cta-content reveal">
+    <span class="section-tag">SEU PRÓXIMO PASSO</span>
+    <h2>Assinatura mensal de <span class="gradient-text">R$ 49,90</span> com pagamento direto no WhatsApp.</h2>
+    <p>Faça seu cadastro agora e finalize o pagamento manual diretamente com o administrador no WhatsApp.</p>
+    <div class="final-cta-actions">
+      <a href="https://pipeirogestor.com/cadastro.html" class="btn btn-primary btn-large">FAZER CADASTRO AGORA <span>↗</span></a>
+      <a href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Quero%20finalizar%20meu%20pagamento%20mensal%20de%20R%24%2049%2C90%20do%20PipeiroGestor%20com%20o%20admin." target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-large">FINALIZAR NO WHATSAPP ↗</a>
+    </div>
+    <span class="cta-note">PIPEIROGESTOR — ASSINATURA MENSAL R$ 49,90 • PAGAMENTO MANUAL VIA WHATSAPP (21) 97205-6744.</span>
+  </div>
+</section>
+
+</main>
+
+<!-- RODAPÉ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <img
+            src="https://i.ibb.co/tT4xcDMg/Log-tipo-Neon-Pipeiro-Gestor-removebg-preview.png"
+            alt="Logo PipeiroGestor"
+            class="logo-img"
+            referrerpolicy="no-referrer"
+          >
+          <span>PIPEIRO<span class="green">GESTOR</span></span>
+        </a>
+        <p>Plataforma para gestão especializada de campanhas de pipas, linhas, rifas e produtos. Assinatura mensal de R$ 49,90 com pagamento manual via WhatsApp.</p>
+      </div>
+
+      <div class="footer-column">
+        <strong>NAVEGAÇÃO</strong>
+        <a href="#sobre">A plataforma</a>
+        <a href="#funcionalidades">Funcionalidades</a>
+        <a href="#demonstracao">Demonstração</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#planos">Assinatura mensal</a>
+      </div>
+
+      <div class="footer-column">
+        <strong>CADASTRO & ADMIN (WHATSAPP)</strong>
+        <a href="https://pipeirogestor.com/cadastro.html">Acessar cadastro (pipeirogestor.com)</a>
+        <a href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Quero%20finalizar%20meu%20pagamento%20mensal%20de%20R%24%2049%2C90%20do%20PipeiroGestor%20com%20o%20admin." target="_blank" rel="noopener noreferrer">Pagamento & Admin: (21) 97205-6744 ↗</a>
+        <a href="#faq">Perguntas frequentes</a>
+      </div>
+    </div>
+</div>
+
+    <div class="footer-bottom">
       <span>© 2026 PipeiroGestor. Todos os direitos reservados.</span>
+      <span>• ATENDIMENTO E CONFIRMAÇÃO VIA WHATSAPP E E-MAIL</span>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script src="gestor-script.js"></script>
+<!-- BOTÃO FLUTUANTE DE WHATSAPP -->
+<a
+  href="https://api.whatsapp.com/send?phone=5521972056744&text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20PipeiroGestor%20e%20quero%20finalizar%20a%20assinatura%20mensal%20de%20R%24%2049%2C90%20com%20o%20admin."
+  target="_blank"
+  rel="noopener noreferrer"
+  class="pg-wpp-float"
+  aria-label="Finalizar assinatura e falar com o admin no WhatsApp"
+>
+  <span class="pg-wpp-dot"></span>
+  <span>Admin WhatsApp</span>
+</a>
+
+<!-- BOTÃO DE CADASTRO FLUTUANTE -->
+<a href="https://pipeirogestor.com/cadastro.html" class="floating-cta" aria-label="Acessar cadastro do PipeiroGestor">CADASTRO ↗</a>
+
+<script src="script.js"></script>
 </body>
-</html>
+</html>,
