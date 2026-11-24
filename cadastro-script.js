@@ -192,6 +192,6 @@ function realizarLogin(event) {
   if (emailInput === adminEmailNorm) {
     window.location.href = "admin.html";
   } else {
-    window.location.href = "index.html";
+    window.location.href = "gestor.html";
   }
 }
